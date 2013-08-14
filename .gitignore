@@ -213,3 +213,14 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+!dist/
+dist/*
+!dist/Debug/
+dist/Debug/*
+!dist/Release/
+dist/Release/*
+!dist/Debug/*.exe
+!dist/Release/*.exe
+!dist/Debug/*.dll
+!dist/Release/*.dll
