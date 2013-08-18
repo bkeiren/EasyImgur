@@ -45,6 +45,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.checkBoxLaunchAtBoot = new System.Windows.Forms.CheckBox();
             this.buttonFormatHelp = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -55,6 +56,7 @@
             this.textBoxTitleFormat = new System.Windows.Forms.TextBox();
             this.checkBoxCopyLinks = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonForgetTokens = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -78,7 +80,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.buttonForgetTokens = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -205,6 +207,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.checkBoxLaunchAtBoot);
             this.tabPage1.Controls.Add(this.buttonFormatHelp);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.label7);
@@ -223,6 +227,17 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLaunchAtBoot
+            // 
+            this.checkBoxLaunchAtBoot.AutoSize = true;
+            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(8, 159);
+            this.checkBoxLaunchAtBoot.Name = "checkBoxLaunchAtBoot";
+            this.checkBoxLaunchAtBoot.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxLaunchAtBoot.Size = new System.Drawing.Size(255, 21);
+            this.checkBoxLaunchAtBoot.TabIndex = 14;
+            this.checkBoxLaunchAtBoot.Text = "Launch EasyImgur at Windows start";
+            this.checkBoxLaunchAtBoot.UseVisualStyleBackColor = true;
             // 
             // buttonFormatHelp
             // 
@@ -333,6 +348,17 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Account";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // buttonForgetTokens
+            // 
+            this.buttonForgetTokens.Enabled = false;
+            this.buttonForgetTokens.Location = new System.Drawing.Point(258, 64);
+            this.buttonForgetTokens.Name = "buttonForgetTokens";
+            this.buttonForgetTokens.Size = new System.Drawing.Size(180, 27);
+            this.buttonForgetTokens.TabIndex = 11;
+            this.buttonForgetTokens.Text = "Forget tokens";
+            this.buttonForgetTokens.UseVisualStyleBackColor = true;
+            this.buttonForgetTokens.Click += new System.EventHandler(this.buttonForgetTokens_Click);
             // 
             // label15
             // 
@@ -566,16 +592,15 @@
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // buttonForgetTokens
+            // label4
             // 
-            this.buttonForgetTokens.Enabled = false;
-            this.buttonForgetTokens.Location = new System.Drawing.Point(258, 64);
-            this.buttonForgetTokens.Name = "buttonForgetTokens";
-            this.buttonForgetTokens.Size = new System.Drawing.Size(180, 27);
-            this.buttonForgetTokens.TabIndex = 11;
-            this.buttonForgetTokens.Text = "Forget tokens";
-            this.buttonForgetTokens.UseVisualStyleBackColor = true;
-            this.buttonForgetTokens.Click += new System.EventHandler(this.buttonForgetTokens_Click);
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label4.Location = new System.Drawing.Point(269, 160);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(408, 17);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Moving the .exe requires one manual launch to restore the path";
             // 
             // Form1
             // 
@@ -656,6 +681,8 @@
         private System.Windows.Forms.ToolStripMenuItem uploadFromFileAnonymousToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.Button buttonForgetTokens;
+        private System.Windows.Forms.CheckBox checkBoxLaunchAtBoot;
+        private System.Windows.Forms.Label label4;
     }
 }
 

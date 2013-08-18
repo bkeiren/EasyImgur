@@ -247,6 +247,18 @@ namespace EasyImgur
             textBoxTitleFormat.Text = Properties.Settings.Default.titleFormat;
             textBoxDescriptionFormat.Text = Properties.Settings.Default.descriptionFormat;
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
+
+
+            // Check the registry for a key describing whether EasyImgur should be started on boot.
+            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            string value = (string)registryKey.GetValue("EasyImgur", string.Empty); // string.Empty is returned if no key is present.
+            checkBoxLaunchAtBoot.Checked = value != string.Empty;
+            if (value != string.Empty && value != Application.ExecutablePath)
+            {
+                // A key exists, make sure we're using the most up-to-date path!
+                registryKey.SetValue("EasyImgur", Application.ExecutablePath);
+                notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
+            }
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -270,6 +282,25 @@ namespace EasyImgur
             Properties.Settings.Default.titleFormat = textBoxTitleFormat.Text;
             Properties.Settings.Default.descriptionFormat = textBoxDescriptionFormat.Text;
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
+
+            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (checkBoxLaunchAtBoot.Checked)
+            {
+                // If the checkbox was marked, set a value which will make EasyImgur start at boot.
+                registryKey.SetValue("EasyImgur", Application.ExecutablePath);
+            }
+            else
+            {
+                try
+                {
+                    // Delete our value if one is present.
+                    registryKey.DeleteValue("EasyImgur");
+                }
+                catch (ArgumentException ex)
+                {
+                    // Don't care at all.
+                }
+            }
 
             Properties.Settings.Default.Save();
         }
