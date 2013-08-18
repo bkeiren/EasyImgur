@@ -50,6 +50,7 @@
             this.textBoxPIN.Name = "textBoxPIN";
             this.textBoxPIN.Size = new System.Drawing.Size(244, 22);
             this.textBoxPIN.TabIndex = 5;
+            this.textBoxPIN.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonOK
             // 
@@ -85,7 +86,7 @@
             this.Controls.Add(this.textBoxPIN);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AuthorizeForm";
-            this.Text = "AccountCredentialsForm";
+            this.Text = "Authorization PIN";
             this.Load += new System.EventHandler(this.AccountCredentialsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

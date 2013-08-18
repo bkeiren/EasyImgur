@@ -97,13 +97,25 @@ namespace EasyImgur.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool useAccount {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string accessToken {
             get {
-                return ((bool)(this["useAccount"]));
+                return ((string)(this["accessToken"]));
             }
             set {
-                this["useAccount"] = value;
+                this["accessToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string refreshToken {
+            get {
+                return ((string)(this["refreshToken"]));
+            }
+            set {
+                this["refreshToken"] = value;
             }
         }
     }

@@ -16,41 +16,59 @@ namespace EasyImgur
         public Form1()
         {
             InitializeComponent();
+            
+            Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.VisibleChanged += new System.EventHandler(this.Form1_VisibleChanged);
             notifyIcon1.BalloonTipClicked += new System.EventHandler(this.NotifyIcon1_BalloonTipClicked);
             notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
+            tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
 
-            ImgurAPI.obtainedAuthorization += new ImgurAPI.ObtainedAuthorization(this.ObtainedAPIAuthorization);
-            ImgurAPI.lostAuthorization += new ImgurAPI.LostAuthorization(this.LostAPIAuthorization);
+            ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
+            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
+            ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
 
-            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Right-click EasyImgur's icon here to use it!", ToolTipIcon.Info);
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
+
+            ImgurAPI.AttemptRefreshTokensFromDisk();
+        }
+
+        private void ApplicationExit( object sender, EventArgs e )
+        {
+            ImgurAPI.OnMainThreadExit();
         }
 
         private void ObtainedAPIAuthorization()
         {
-            checkBoxUseAccount.Enabled = true;
-            label4.Visible = false;
+            uploadClipboardToolStripMenuItem.Enabled = true;
+            uploadFromFileToolStripMenuItem.Enabled = true;
             label13.Text = "Authorized";
             label13.ForeColor = System.Drawing.Color.Green;
+            buttonForceTokenRefresh.Enabled = true;
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
         private void LostAPIAuthorization()
         {
-            checkBoxUseAccount.Enabled = false;
-            label4.Visible = true;
+            uploadClipboardToolStripMenuItem.Enabled = false;
+            uploadFromFileToolStripMenuItem.Enabled = false;
             label13.Text = "Not authorized";
             label13.ForeColor = System.Drawing.Color.DarkBlue;
+            buttonForceTokenRefresh.Enabled = false;
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 2)
+            {
+                SelectedHistoryItemChanged();
+            }
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void trayMenu_Opening(object sender, CancelEventArgs e)
         {
 
         }
@@ -63,14 +81,21 @@ namespace EasyImgur
 
         private void uploadClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UploadClipboard(false);
+        }
+
+        private void UploadClipboard( bool _Anonymous )
+        {
             APIResponses.ImageResponse resp = null;
             Image clipboardImage = null;
             string clipboardURL = string.Empty;
+            //bool anonymous = !Properties.Settings.Default.useAccount || !ImgurAPI.HasBeenAuthorized();
+            bool anonymous = _Anonymous;
             if (Clipboard.ContainsImage())
             {
                 clipboardImage = Clipboard.GetImage();
                 notifyIcon1.ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                resp = ImgurAPI.UploadImage(clipboardImage, GetTitleString(), GetDescriptionString());
+                resp = ImgurAPI.UploadImage(clipboardImage, GetTitleString(), GetDescriptionString(), _Anonymous);
             }
             else if (Clipboard.ContainsText())
             {
@@ -79,7 +104,7 @@ namespace EasyImgur
                 if (Uri.TryCreate(clipboardURL, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
                 {
                     notifyIcon1.ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                    resp = ImgurAPI.UploadImage(clipboardURL, GetTitleString(), GetDescriptionString());
+                    resp = ImgurAPI.UploadImage(clipboardURL, GetTitleString(), GetDescriptionString(), _Anonymous);
                 }
                 else
                 {
@@ -107,6 +132,7 @@ namespace EasyImgur
                 item.deletehash = resp.data.deletehash;
                 item.title = resp.data.title;
                 item.description = resp.data.description;
+                item.anonymous = anonymous;
                 if (clipboardImage != null)
                 {
                     item.thumbnail = clipboardImage.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
@@ -133,6 +159,11 @@ namespace EasyImgur
 
         private void uploadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UploadFile(false);
+        }
+
+        private void UploadFile( bool _Anonymous )
+        {
             OpenFileDialog dialog = new OpenFileDialog();
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
@@ -141,7 +172,7 @@ namespace EasyImgur
                 {
                     Image img = System.Drawing.Image.FromStream(stream);
                     notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                    APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString());
+                    APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
                     if (Properties.Settings.Default.copyLinks)
                     {
                         Clipboard.SetText(resp.data.link);
@@ -214,7 +245,6 @@ namespace EasyImgur
             textBoxTitleFormat.Text = Properties.Settings.Default.titleFormat;
             textBoxDescriptionFormat.Text = Properties.Settings.Default.descriptionFormat;
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
-            checkBoxUseAccount.Checked = Properties.Settings.Default.useAccount;
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -226,6 +256,7 @@ namespace EasyImgur
         {
             SaveSettings();
             this.Hide();
+
             e.Cancel = !CloseCommandWasSentFromExitButton;  // Don't want to *actually* close the form unless the Exit button was used.
         }
 
@@ -237,7 +268,6 @@ namespace EasyImgur
             Properties.Settings.Default.titleFormat = textBoxTitleFormat.Text;
             Properties.Settings.Default.descriptionFormat = textBoxDescriptionFormat.Text;
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
-            Properties.Settings.Default.useAccount = checkBoxUseAccount.Checked;
 
             Properties.Settings.Default.Save();
         }
@@ -257,7 +287,7 @@ namespace EasyImgur
             }
         }
 
-        private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        private void SelectedHistoryItemChanged()
         {
             HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
             if (item != null)
@@ -266,8 +296,9 @@ namespace EasyImgur
                 textBoxLink.Text = item.link;
                 textBoxDeleteHash.Text = item.deletehash;
                 pictureBox1.Image = item.thumbnail;
+                checkBoxTiedToAccount.Checked = !item.anonymous;
 
-                buttonRemoveFromImgur.Enabled = true;
+                buttonRemoveFromImgur.Enabled = !(!item.anonymous && !ImgurAPI.HasBeenAuthorized());
             }
             else
             {
@@ -275,24 +306,20 @@ namespace EasyImgur
                 textBoxLink.Text = string.Empty;
                 textBoxDeleteHash.Text = string.Empty;
                 pictureBox1.Image = null;
+                checkBoxTiedToAccount.Checked = false;
 
                 buttonRemoveFromImgur.Enabled = false;
             }
         }
 
+        private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedHistoryItemChanged();
+        }
+
         private string FormatInfoString( string _Input )
         {
-            string formatted = _Input;
-            formatted = formatted.Replace("%n%", ImgurAPI.numSuccessfulUploads.ToString());
-            formatted = formatted.Replace("%date%", "%day%-%month%-%year%");
-            formatted = formatted.Replace("%time%", "%hour%:%minute%:%second%");
-            formatted = formatted.Replace("%day%", System.DateTime.Now.Day.ToString());
-            formatted = formatted.Replace("%month%", System.DateTime.Now.Month.ToString());
-            formatted = formatted.Replace("%year%", System.DateTime.Now.Year.ToString());
-            formatted = formatted.Replace("%hour%", System.DateTime.Now.Hour.ToString());
-            formatted = formatted.Replace("%minute%", System.DateTime.Now.Minute.ToString());
-            formatted = formatted.Replace("%second%", System.DateTime.Now.Second.ToString());
-            return formatted;
+            return FormattingHelper.Format(_Input);
         }
 
         private string GetTitleString()
@@ -314,7 +341,7 @@ namespace EasyImgur
             }
 
             notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to remove image from Imgur...", ToolTipIcon.None);
-            if (ImgurAPI.DeleteImage(item.deletehash))
+            if (ImgurAPI.DeleteImage(item.deletehash, item.anonymous))
             {
                 listBoxHistory.Items.Remove(item);
                 notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed image from Imgur and history", ToolTipIcon.None);
@@ -331,6 +358,31 @@ namespace EasyImgur
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
         {
             ImgurAPI.ForceRefreshTokens();
+        }
+
+        private void buttonFormatHelp_Click(object sender, EventArgs e)
+        {
+            FormattingHelper.FormattingScheme[] formattingSchemes = FormattingHelper.GetSchemes();
+            string helpString = "You can use strings consisting of either static characters or the following dynamic symbols, or a combination of both:\n\n";
+            foreach (FormattingHelper.FormattingScheme scheme in formattingSchemes)
+            {
+                helpString += scheme.symbol + "  :  " + scheme.description + "\n";
+            }
+            string exampleFormattedString = "Image_%date%_%time%";
+            helpString += "\n\nEx.: '" + exampleFormattedString + "' would become: '" + FormattingHelper.Format(exampleFormattedString);
+            Point loc = this.Location;
+            loc.Offset(buttonFormatHelp.Location.X, buttonFormatHelp.Location.Y);
+            Help.ShowPopup(this, helpString, loc);
+        }
+
+        private void uploadClipboardAnonymousToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadClipboard(true);
+        }
+
+        private void uploadFromFileAnonymousToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadFile(true);
         }
     }
 }

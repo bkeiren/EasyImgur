@@ -13,6 +13,7 @@ namespace EasyImgur
         public string title;
         public string description;
         public System.Drawing.Image thumbnail;
+        public bool anonymous;
 
         public string listName
         {

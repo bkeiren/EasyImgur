@@ -23,10 +23,10 @@ namespace EasyImgur
 
         static private System.Threading.Thread m_TokenThread = null;
 
-        static public event ObtainedAuthorization obtainedAuthorization;
-        public delegate void ObtainedAuthorization();
-        static public event LostAuthorization lostAuthorization;
-        public delegate void LostAuthorization();
+        static public event AuthorizationEventHandler obtainedAuthorization;
+        static public event AuthorizationEventHandler lostAuthorization;
+        static public event AuthorizationEventHandler refreshedAuthorization;
+        public delegate void AuthorizationEventHandler();
 
         static public int numSuccessfulUploads
         {
@@ -36,7 +36,7 @@ namespace EasyImgur
             }
         }
 
-        static private APIResponses.ImageResponse InternalUploadImage( object _Obj, bool _URL, string _Title, string _Description )
+        static private APIResponses.ImageResponse InternalUploadImage( object _Obj, bool _URL, string _Title, string _Description, bool _Anonymous )
         {
             if (_Obj == null)
             {
@@ -125,7 +125,7 @@ namespace EasyImgur
 
             using (WebClient t = new WebClient())
             {
-                t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader();
+                t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
                 try
                 {
                     var values = new System.Collections.Specialized.NameValueCollection
@@ -184,24 +184,30 @@ namespace EasyImgur
             return resp;
         }
 
-        static public APIResponses.ImageResponse UploadImage( Image _Image, string _Title, string _Description )
+        static public APIResponses.ImageResponse UploadImage( Image _Image, string _Title, string _Description, bool _Anonymous )
         {
-            return InternalUploadImage(_Image, false, _Title, _Description);
+            return InternalUploadImage(_Image, false, _Title, _Description, _Anonymous);
         }
 
-        static public APIResponses.ImageResponse UploadImage( string _URL, string _Title, string _Description )
+        static public APIResponses.ImageResponse UploadImage( string _URL, string _Title, string _Description, bool _Anonymous )
         {
-            return InternalUploadImage(_URL, true, _Title, _Description);
+            return InternalUploadImage(_URL, true, _Title, _Description, _Anonymous);
         }
 
-        static public bool DeleteImage( string _DeleteHash )
+        static public bool DeleteImage( string _DeleteHash, bool _AnonymousImage )
         {
             string url = m_EndPoint + "image/" + _DeleteHash;
+
+            if (!_AnonymousImage && !HasBeenAuthorized())
+            {
+                Log.Error("Can't delete an image that belongs to an account while the app is no longer authorized!");
+                return false;
+            }
 
             string responseString = string.Empty;
             using (WebClient wc = new WebClient())
             {
-                wc.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader();
+                wc.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(false);
                 try
                 {
                     responseString = wc.UploadString(url, "DELETE", string.Empty);
@@ -211,7 +217,7 @@ namespace EasyImgur
                     Log.Error("An exception was thrown while trying to delete an image from Imgur (" + ex.Status + ") [deletehash: " + _DeleteHash + "]");
                 }
             }
-        
+
             APIResponses.BaseResponse resp = null;
             try
             {
@@ -290,14 +296,13 @@ namespace EasyImgur
             APIResponses.TokenResponse resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
             if (resp != null && resp.access_token != null && resp.refresh_token != null)
             {
-                m_TokensExpireAt = System.DateTime.Now.AddSeconds(resp.expires_in / 2);
-                m_CurrentAccessToken = resp.access_token;
-                m_CurrentRefreshToken = resp.refresh_token;
+                StoreNewTokens(resp.expires_in, resp.access_token, resp.refresh_token);
+
                 Log.Info("Received tokens from PIN");
 
                 StartTokenThread();
 
-                obtainedAuthorization.Invoke();
+                if (obtainedAuthorization != null) obtainedAuthorization.Invoke();
             }
             else
             {
@@ -309,15 +314,22 @@ namespace EasyImgur
         {
             Log.Info("Forcing token refresh...");
             m_TokenThread.Abort();
-            RefreshTokens();
-            StartTokenThread();
+            RefreshTokensAndStartTokenThread();
         }
 
-        static private void RefreshTokens()
+        static private void RefreshTokensAndStartTokenThread()
+        {
+            if (RefreshTokens())
+            {
+                StartTokenThread();
+            }
+        }
+
+        static private bool RefreshTokens()
         {
             if (!HasBeenAuthorized())
             {
-                return;
+                return false;
             }
 
             string url = "https://api.imgur.com/oauth2/token";
@@ -325,7 +337,6 @@ namespace EasyImgur
             string responseString = string.Empty;
             using (WebClient wc = new WebClient())
             {
-                //t.Headers[HttpRequestHeader.Authorization] = "Client-ID " + m_ClientID;
                 try
                 {
                     var values = new System.Collections.Specialized.NameValueCollection
@@ -361,26 +372,43 @@ namespace EasyImgur
 
             if (responseString == string.Empty)
             {
-                return;
+                return false;
             }
 
             APIResponses.TokenResponse resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
             if (resp != null && resp.access_token != null && resp.refresh_token != null)
             {
-                m_TokensExpireAt = System.DateTime.Now.AddSeconds(resp.expires_in / 2);
-                m_CurrentAccessToken = resp.access_token;
-                m_CurrentRefreshToken = resp.refresh_token;
+                StoreNewTokens(resp.expires_in, resp.access_token, resp.refresh_token);
+
                 Log.Info("Refreshed tokens");
-            }
-            else
-            {
-                Log.Error("Something went wrong while trying to refresh access and refresh tokens");
 
-                m_CurrentAccessToken = null;
-                m_CurrentRefreshToken = null;
+                if (refreshedAuthorization != null) refreshedAuthorization.Invoke();
 
-                lostAuthorization.Invoke();
+                return true;
             }
+            
+            Log.Error("Something went wrong while trying to refresh access- and refresh-tokens");
+
+            m_CurrentAccessToken = null;
+            m_CurrentRefreshToken = null;
+
+            Properties.Settings.Default.accessToken = null;
+            Properties.Settings.Default.refreshToken = null;
+
+            if (lostAuthorization != null) lostAuthorization.Invoke();
+
+            return false;
+        }
+
+        static private void StoreNewTokens( int _ExpiresInSeconds, string _AccessToken, string _RefreshToken )
+        {
+            m_TokensExpireAt = System.DateTime.Now.AddSeconds(_ExpiresInSeconds / 2);
+
+            m_CurrentAccessToken = _AccessToken;
+            m_CurrentRefreshToken = _RefreshToken;
+
+            Properties.Settings.Default.accessToken = m_CurrentAccessToken;
+            Properties.Settings.Default.refreshToken = m_CurrentRefreshToken;
         }
 
         static private void StartTokenThread()
@@ -397,13 +425,39 @@ namespace EasyImgur
                 TimeSpan timeSpan = (m_TokensExpireAt - DateTime.Now);
                 Log.Info("Token thread will refresh in " + timeSpan.TotalSeconds + " seconds");
                 System.Threading.Thread.Sleep(timeSpan);
-                RefreshTokens();
+                if (!RefreshTokens())
+                {
+                    Log.Error("Could not refresh tokens on token thread, thread aborting");
+                    break;
+                }
             }
         }
 
-        static private string GetAuthorizationHeader()
+        // This function attempts to read any old refresh and access tokens from the settings file
+        // and then tries to use these to obtain new ones. This method should be called at the start of the application
+        // in order to be able to persistently keep the app authorized after the user doing so once.
+        static public void AttemptRefreshTokensFromDisk()
         {
-            if (HasBeenAuthorized() && Properties.Settings.Default.useAccount)
+            string accessToken = Properties.Settings.Default.accessToken;
+            string refreshToken = Properties.Settings.Default.refreshToken;
+
+            if (accessToken != null && 
+                accessToken != string.Empty && 
+                refreshToken != null && 
+                refreshToken != string.Empty)
+            {
+                Log.Info("Detected old tokens on disk, attempting to exchange tokens for fresh ones...");
+
+                m_CurrentAccessToken = accessToken;
+                m_CurrentRefreshToken = refreshToken;
+                //m_TokensExpireAt = DateTime.Now.AddHours(1337.0);   // Just so the tokens appear to expire way in the future when we call RefreshTokens.
+                RefreshTokensAndStartTokenThread();
+            }
+        }
+
+        static private string GetAuthorizationHeader( bool _Anonymous )
+        {
+            if (!_Anonymous && HasBeenAuthorized())
             {
                 return "Bearer " + m_CurrentAccessToken;
             }
@@ -412,7 +466,17 @@ namespace EasyImgur
 
         static public bool HasBeenAuthorized()
         {
-            return (m_CurrentAccessToken != null && m_CurrentAccessToken != string.Empty && m_CurrentRefreshToken != null && m_CurrentRefreshToken != string.Empty);
+            return (m_CurrentAccessToken != null && m_CurrentAccessToken != string.Empty && m_CurrentRefreshToken != null && m_CurrentRefreshToken != string.Empty && m_TokensExpireAt != null /*&& m_TokensExpireAt > DateTime.Now*/);
+        }
+
+        static public void OnMainThreadExit()
+        {
+            if (m_TokenThread != null)
+            {
+                Log.Info("Waiting for token thread to abort due to main thread exiting...");
+                m_TokenThread.Abort();
+                m_TokenThread.Join();
+            }
         }
     }
 }
