@@ -47,6 +47,7 @@ namespace EasyImgur
             label13.Text = "Authorized";
             label13.ForeColor = System.Drawing.Color.Green;
             buttonForceTokenRefresh.Enabled = true;
+            buttonForgetTokens.Enabled = true;
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
@@ -57,6 +58,7 @@ namespace EasyImgur
             label13.Text = "Not authorized";
             label13.ForeColor = System.Drawing.Color.DarkBlue;
             buttonForceTokenRefresh.Enabled = false;
+            buttonForgetTokens.Enabled = false;
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
@@ -383,6 +385,15 @@ namespace EasyImgur
         private void uploadFromFileAnonymousToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UploadFile(true);
+        }
+
+        private void buttonForgetTokens_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to discard the tokens?\n\nWithout tokens, the app can no longer use your Imgur account.", "Forget tokens", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                ImgurAPI.ForgetTokens();
+                MessageBox.Show("Tokens have been forgotten. Remember that the app has still technically been authorized on the Imgur website, we can't change this for you!\n\nGo to http://imgur.com/account/settings/apps to revoke access.", "Tokens discarded", MessageBoxButtons.OK);
+            }
         }
     }
 }

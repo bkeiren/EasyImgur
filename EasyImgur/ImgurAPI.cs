@@ -394,6 +394,7 @@ namespace EasyImgur
 
             Properties.Settings.Default.accessToken = null;
             Properties.Settings.Default.refreshToken = null;
+            Properties.Settings.Default.Save();
 
             if (lostAuthorization != null) lostAuthorization.Invoke();
 
@@ -409,6 +410,7 @@ namespace EasyImgur
 
             Properties.Settings.Default.accessToken = m_CurrentAccessToken;
             Properties.Settings.Default.refreshToken = m_CurrentRefreshToken;
+            Properties.Settings.Default.Save();
         }
 
         static private void StartTokenThread()
@@ -477,6 +479,17 @@ namespace EasyImgur
                 m_TokenThread.Abort();
                 m_TokenThread.Join();
             }
+        }
+
+        static public void ForgetTokens()
+        {
+            m_TokenThread.Abort();
+            m_CurrentAccessToken = string.Empty;
+            m_CurrentRefreshToken = string.Empty;
+            Properties.Settings.Default.accessToken = string.Empty;
+            Properties.Settings.Default.refreshToken = string.Empty;
+            Properties.Settings.Default.Save();
+            if (lostAuthorization != null) lostAuthorization.Invoke();
         }
     }
 }

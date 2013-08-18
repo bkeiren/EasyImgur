@@ -78,6 +78,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.buttonForgetTokens = new System.Windows.Forms.Button();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -101,7 +102,7 @@
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(322, 188);
+            this.trayMenu.Size = new System.Drawing.Size(322, 166);
             // 
             // uploadClipboardToolStripMenuItem
             // 
@@ -319,6 +320,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.buttonForgetTokens);
             this.tabPage2.Controls.Add(this.label15);
             this.tabPage2.Controls.Add(this.label13);
             this.tabPage2.Controls.Add(this.label10);
@@ -365,7 +367,7 @@
             // buttonForceTokenRefresh
             // 
             this.buttonForceTokenRefresh.Enabled = false;
-            this.buttonForceTokenRefresh.Location = new System.Drawing.Point(258, 64);
+            this.buttonForceTokenRefresh.Location = new System.Drawing.Point(258, 97);
             this.buttonForceTokenRefresh.Name = "buttonForceTokenRefresh";
             this.buttonForceTokenRefresh.Size = new System.Drawing.Size(180, 27);
             this.buttonForceTokenRefresh.TabIndex = 6;
@@ -564,6 +566,17 @@
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // buttonForgetTokens
+            // 
+            this.buttonForgetTokens.Enabled = false;
+            this.buttonForgetTokens.Location = new System.Drawing.Point(258, 64);
+            this.buttonForgetTokens.Name = "buttonForgetTokens";
+            this.buttonForgetTokens.Size = new System.Drawing.Size(180, 27);
+            this.buttonForgetTokens.TabIndex = 11;
+            this.buttonForgetTokens.Text = "Forget tokens";
+            this.buttonForgetTokens.UseVisualStyleBackColor = true;
+            this.buttonForgetTokens.Click += new System.EventHandler(this.buttonForgetTokens_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -642,6 +655,7 @@
         private System.Windows.Forms.ToolStripMenuItem uploadClipboardAnonymousToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uploadFromFileAnonymousToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.Button buttonForgetTokens;
     }
 }
 
