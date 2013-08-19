@@ -35,6 +35,8 @@ NOTE: To revoke access, you can visit http://imgur.com/account/settings/apps, wh
 
 NOTE: EasyImgur will periodically refresh its authorization codes. When this happens, a balloon popup will appear to inform you that EasyImgur has successfully done so (or not, if that should be the case).
 
+**Uploaded images (and their URLs) can be found under the** ***History*** **tab. From here you can select images, see information about the selected image including a thumbnail preview of the selected image, its Imgur ID, its Imgur URL, its deletehash, and whether it was uploaded anonymously or to an account. Also, there is a convenient button here that allows you to remove an uploaded image from Imgur.**
+
 Settings
 ---
 
