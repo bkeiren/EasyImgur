@@ -26,8 +26,10 @@ namespace EasyImgur
             notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
             tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
 
+            ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedOrRefreshedAPIAuthorization);
             ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
-            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
+            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedOrRefreshedAPIAuthorization);
+            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
             ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
 
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
@@ -40,7 +42,7 @@ namespace EasyImgur
             ImgurAPI.OnMainThreadExit();
         }
 
-        private void ObtainedAPIAuthorization()
+        private void ObtainedOrRefreshedAPIAuthorization()
         {
             uploadClipboardToolStripMenuItem.Enabled = true;
             uploadFromFileToolStripMenuItem.Enabled = true;
@@ -48,7 +50,16 @@ namespace EasyImgur
             label13.ForeColor = System.Drawing.Color.Green;
             buttonForceTokenRefresh.Enabled = true;
             buttonForgetTokens.Enabled = true;
+        }
+
+        private void ObtainedAPIAuthorization()
+        {
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
+        }
+
+        private void RefreshedAPIAuthorization()
+        {
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has successfully refreshed authorization tokens!", ToolTipIcon.Info);
         }
 
         private void LostAPIAuthorization()
