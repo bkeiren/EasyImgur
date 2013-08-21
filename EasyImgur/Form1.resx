@@ -177,8 +177,8 @@
     <value>Authorizing this app enables you to add uploaded images to your 
 account, rather than uploading them anonymously.
 
-To revoke authorization, visit http://imgur.com/account/settings/apps
-(Temporarily disabling the use of your Imgur account can be done from the General Settings tab)</value>
+To discard all current authorization tokens, press Forget Tokens.
+To revoke authorization of any tokens this application has, visit http://imgur.com/account/settings/apps</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

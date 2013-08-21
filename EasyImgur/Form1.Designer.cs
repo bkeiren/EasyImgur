@@ -45,6 +45,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
             this.checkBoxLaunchAtBoot = new System.Windows.Forms.CheckBox();
             this.buttonFormatHelp = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -80,7 +81,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -228,6 +228,16 @@
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label4.Location = new System.Drawing.Point(269, 160);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(408, 17);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Moving the .exe requires one manual launch to restore the path";
+            // 
             // checkBoxLaunchAtBoot
             // 
             this.checkBoxLaunchAtBoot.AutoSize = true;
@@ -363,9 +373,9 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(42, 179);
+            this.label15.Location = new System.Drawing.Point(27, 181);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(618, 85);
+            this.label15.Size = new System.Drawing.Size(651, 85);
             this.label15.TabIndex = 10;
             this.label15.Text = resources.GetString("label15.Text");
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -591,16 +601,6 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label4.Location = new System.Drawing.Point(269, 160);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(408, 17);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Moving the .exe requires one manual launch to restore the path";
             // 
             // Form1
             // 
