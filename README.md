@@ -16,7 +16,7 @@ Using EasyImgur
 - Upload a file or an image on your clipboard (for example a screenshot or a text URL that you copied) anonymously (*not* to an Imgur account) by using the *Upload from file...* and *Upload from clipboard* options.
 
 - To upload images to an Imgur account, you must first authorize EasyImgur to use your account. To do so, open the settings dialog by selecting *Settings* from the right-click menu. This opens an EasyImgur window. Go to the *Account* tab:
-![](http://i.imgur.com/ufg4xwr.png)
+![](http://i.imgur.com/i34VILO.png)
 
 - Select *Authorize this app...*. This will open the Imgur authorization page in your browser. If you are already logged in, you will see this message:
 - ![](http://i.imgur.com/zdcWcp0.png)
@@ -27,7 +27,7 @@ Using EasyImgur
 ![](http://i.imgur.com/wdxlEPC.png)
 
 - Select *OK* and wait while the application talks to Imgur to receive authorization codes. Once the authorization is successful, a balloon popup will appear from the system tray to tell you this, and the EasyImgur window will display *Status: Authorized*:
-![](http://i.imgur.com/KmjFwYl.png)
+![](http://i.imgur.com/U11116k.png)
 
 NOTE: To revoke access, you can visit http://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Note that the *Forget Tokens* button in EasyImgur only makes EasyImgur discard the current codes needed to access your account. If these codes have somehow been captured by malicious software or persons, they might still be able use them to access your account unless you revoke access completely!
 
