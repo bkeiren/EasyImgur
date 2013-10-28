@@ -81,6 +81,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.checkBoxShowTokenRefreshNotification = new System.Windows.Forms.CheckBox();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -207,6 +208,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBoxShowTokenRefreshNotification);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.checkBoxLaunchAtBoot);
             this.tabPage1.Controls.Add(this.buttonFormatHelp);
@@ -602,6 +604,17 @@
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // checkBoxShowTokenRefreshNotification
+            // 
+            this.checkBoxShowTokenRefreshNotification.AutoSize = true;
+            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(19, 186);
+            this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
+            this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(244, 21);
+            this.checkBoxShowTokenRefreshNotification.TabIndex = 16;
+            this.checkBoxShowTokenRefreshNotification.Text = "Show notification on token refresh";
+            this.checkBoxShowTokenRefreshNotification.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -683,6 +696,7 @@
         private System.Windows.Forms.Button buttonForgetTokens;
         private System.Windows.Forms.CheckBox checkBoxLaunchAtBoot;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBoxShowTokenRefreshNotification;
     }
 }
 

@@ -375,7 +375,16 @@ namespace EasyImgur
                 return false;
             }
 
-            APIResponses.TokenResponse resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            APIResponses.TokenResponse resp = null;
+            try
+            {
+                resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            }
+            catch (Newtonsoft.Json.JsonReaderException ex)
+            {
+                Log.Error("Newtonsoft.Json.JsonReaderException occurred while trying to deserialize the following string:\n" + responseString + " (Line: " + ex.LineNumber + ", Position: " + ex.LinePosition + ", Message: " + ex.Message + ")");
+                resp = null;
+            }
             if (resp != null && resp.access_token != null && resp.refresh_token != null)
             {
                 StoreNewTokens(resp.expires_in, resp.access_token, resp.refresh_token);

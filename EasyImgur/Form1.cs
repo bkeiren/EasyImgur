@@ -26,13 +26,11 @@ namespace EasyImgur
             notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
             tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
 
-            ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedOrRefreshedAPIAuthorization);
             ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
-            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedOrRefreshedAPIAuthorization);
             ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
             ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
 
-            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
         }
@@ -42,34 +40,34 @@ namespace EasyImgur
             ImgurAPI.OnMainThreadExit();
         }
 
-        private void ObtainedOrRefreshedAPIAuthorization()
-        {
-            uploadClipboardToolStripMenuItem.Enabled = true;
-            uploadFromFileToolStripMenuItem.Enabled = true;
-            label13.Text = "Authorized";
-            label13.ForeColor = System.Drawing.Color.Green;
-            buttonForceTokenRefresh.Enabled = true;
-            buttonForgetTokens.Enabled = true;
-        }
-
         private void ObtainedAPIAuthorization()
         {
+            SetAuthorizationStatusUI(true);
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
         private void RefreshedAPIAuthorization()
         {
-            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has successfully refreshed authorization tokens!", ToolTipIcon.Info);
+            SetAuthorizationStatusUI(true);
+            if (Properties.Settings.Default.showNotificationOnTokenRefresh)
+            {
+                notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has successfully refreshed authorization tokens!", ToolTipIcon.Info);
+            }
+        }
+
+        private void SetAuthorizationStatusUI( bool _IsAuthorized )
+        {
+            uploadClipboardToolStripMenuItem.Enabled = _IsAuthorized;
+            uploadFromFileToolStripMenuItem.Enabled = _IsAuthorized;
+            label13.Text = _IsAuthorized ? "Authorized" : "Not authorized";
+            label13.ForeColor = _IsAuthorized ? System.Drawing.Color.Green : System.Drawing.Color.DarkBlue;
+            buttonForceTokenRefresh.Enabled = _IsAuthorized;
+            buttonForgetTokens.Enabled = _IsAuthorized;
         }
 
         private void LostAPIAuthorization()
         {
-            uploadClipboardToolStripMenuItem.Enabled = false;
-            uploadFromFileToolStripMenuItem.Enabled = false;
-            label13.Text = "Not authorized";
-            label13.ForeColor = System.Drawing.Color.DarkBlue;
-            buttonForceTokenRefresh.Enabled = false;
-            buttonForgetTokens.Enabled = false;
+            SetAuthorizationStatusUI(false);
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
@@ -258,6 +256,7 @@ namespace EasyImgur
             textBoxTitleFormat.Text = Properties.Settings.Default.titleFormat;
             textBoxDescriptionFormat.Text = Properties.Settings.Default.descriptionFormat;
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
+            checkBoxShowTokenRefreshNotification.Checked = Properties.Settings.Default.showNotificationOnTokenRefresh;
 
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
@@ -293,6 +292,7 @@ namespace EasyImgur
             Properties.Settings.Default.titleFormat = textBoxTitleFormat.Text;
             Properties.Settings.Default.descriptionFormat = textBoxDescriptionFormat.Text;
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
+            Properties.Settings.Default.showNotificationOnTokenRefresh = checkBoxShowTokenRefreshNotification.Checked;
 
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (checkBoxLaunchAtBoot.Checked)
@@ -401,6 +401,7 @@ namespace EasyImgur
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
         {
+            SetAuthorizationStatusUI(false);
             ImgurAPI.ForceRefreshTokens();
         }
 

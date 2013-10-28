@@ -118,5 +118,17 @@ namespace EasyImgur.Properties {
                 this["refreshToken"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool showNotificationOnTokenRefresh {
+            get {
+                return ((bool)(this["showNotificationOnTokenRefresh"]));
+            }
+            set {
+                this["showNotificationOnTokenRefresh"] = value;
+            }
+        }
     }
 }
