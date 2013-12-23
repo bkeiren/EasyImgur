@@ -29,6 +29,7 @@ namespace EasyImgur
             ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
             ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
             ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
+            ImgurAPI.networkRequestFailed += new ImgurAPI.NetworkEventHandler(this.APINetworkRequestFailed);
 
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
@@ -69,6 +70,11 @@ namespace EasyImgur
         {
             SetAuthorizationStatusUI(false);
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
+        }
+
+        private void APINetworkRequestFailed()
+        {
+            notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Network request failed. Check your internet connection.", ToolTipIcon.Error);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -198,6 +204,7 @@ namespace EasyImgur
                         item.deletehash = resp.data.deletehash;
                         item.title = resp.data.title;
                         item.description = resp.data.description;
+                        item.anonymous = _Anonymous;
                         item.thumbnail = img.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
                         listBoxHistory.Items.Add(item);
                     }
@@ -342,7 +349,7 @@ namespace EasyImgur
                 pictureBox1.Image = item.thumbnail;
                 checkBoxTiedToAccount.Checked = !item.anonymous;
 
-                buttonRemoveFromImgur.Enabled = !(!item.anonymous && !ImgurAPI.HasBeenAuthorized());
+                buttonRemoveFromImgur.Enabled = item.anonymous || (!item.anonymous && ImgurAPI.HasBeenAuthorized());
             }
             else
             {
@@ -401,8 +408,8 @@ namespace EasyImgur
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
         {
-            SetAuthorizationStatusUI(false);
             ImgurAPI.ForceRefreshTokens();
+            SetAuthorizationStatusUI(ImgurAPI.HasBeenAuthorized());
         }
 
         private void buttonFormatHelp_Click(object sender, EventArgs e)

@@ -19,14 +19,16 @@ namespace EasyImgur
 
         static private string m_CurrentAccessToken = string.Empty;
         static private string m_CurrentRefreshToken = string.Empty;
-        static private DateTime m_TokensExpireAt;
-
+        static private DateTime m_TokensExpireAt = DateTime.MinValue;
+        
         static private System.Threading.Thread m_TokenThread = null;
 
         static public event AuthorizationEventHandler obtainedAuthorization;
         static public event AuthorizationEventHandler lostAuthorization;
         static public event AuthorizationEventHandler refreshedAuthorization;
+        static public event NetworkEventHandler networkRequestFailed;
         public delegate void AuthorizationEventHandler();
+        public delegate void NetworkEventHandler();
 
         static public int numSuccessfulUploads
         {
@@ -148,14 +150,25 @@ namespace EasyImgur
                 }
                 catch (System.Net.WebException ex)
                 {
-                    System.IO.Stream stream = ex.Response.GetResponseStream();
-                    int currByte = -1;
-                    StringBuilder strBuilder = new StringBuilder();
-                    while ((currByte = stream.ReadByte()) != -1)
+                    if (ex.Response == null)
                     {
-                        strBuilder.Append((char)currByte);
+                        if (networkRequestFailed != null) networkRequestFailed.Invoke();
                     }
-                    responseString = strBuilder.ToString();
+                    else
+                    {
+                        System.IO.Stream stream = ex.Response.GetResponseStream();
+                        int currByte = -1;
+                        StringBuilder strBuilder = new StringBuilder();
+                        while ((currByte = stream.ReadByte()) != -1)
+                        {
+                            strBuilder.Append((char)currByte);
+                        }
+                        responseString = strBuilder.ToString();
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
                 }
             }
 
@@ -167,6 +180,11 @@ namespace EasyImgur
             catch (System.Exception ex)
             {
                 Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                resp = null;
+            }
+
+            if (resp == null || responseString == null || responseString == string.Empty)
+            {
                 resp = new APIResponses.ImageResponse();
                 resp.success = false;
             }
@@ -214,7 +232,15 @@ namespace EasyImgur
                 }
                 catch (System.Net.WebException ex)
                 {
+                    if (ex.Status != WebExceptionStatus.Success)
+                    {
+                        if (networkRequestFailed != null) networkRequestFailed.Invoke();
+                    }
                     Log.Error("An exception was thrown while trying to delete an image from Imgur (" + ex.Status + ") [deletehash: " + _DeleteHash + "]");
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
                 }
             }
 
@@ -226,6 +252,11 @@ namespace EasyImgur
             catch (System.Exception ex)
             {
                 Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                resp = null;
+            }
+
+            if (resp == null || responseString == null || responseString == string.Empty)
+            {
                 resp = new APIResponses.ImageResponse();
                 resp.success = false;
             }
@@ -277,14 +308,25 @@ namespace EasyImgur
                 }
                 catch (System.Net.WebException ex)
                 {
-                    System.IO.Stream stream = ex.Response.GetResponseStream();
-                    int currByte = -1;
-                    StringBuilder strBuilder = new StringBuilder();
-                    while ((currByte = stream.ReadByte()) != -1)
+                    if (ex.Response == null)
                     {
-                        strBuilder.Append((char)currByte);
+                        if (networkRequestFailed != null) networkRequestFailed.Invoke();
                     }
-                    responseString = strBuilder.ToString();
+                    else
+                    {
+                        System.IO.Stream stream = ex.Response.GetResponseStream();
+                        int currByte = -1;
+                        StringBuilder strBuilder = new StringBuilder();
+                        while ((currByte = stream.ReadByte()) != -1)
+                        {
+                            strBuilder.Append((char)currByte);
+                        }
+                        responseString = strBuilder.ToString();
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
                 }
             }
 
@@ -313,7 +355,7 @@ namespace EasyImgur
         static public void ForceRefreshTokens()
         {
             Log.Info("Forcing token refresh...");
-            m_TokenThread.Abort();
+            if (m_TokenThread != null) m_TokenThread.Abort();
             RefreshTokensAndStartTokenThread();
         }
 
@@ -359,14 +401,25 @@ namespace EasyImgur
                 }
                 catch (System.Net.WebException ex)
                 {
-                    System.IO.Stream stream = ex.Response.GetResponseStream();
-                    int currByte = -1;
-                    StringBuilder strBuilder = new StringBuilder();
-                    while ((currByte = stream.ReadByte()) != -1)
+                    if (ex.Response == null)
                     {
-                        strBuilder.Append((char)currByte);
+                        if (networkRequestFailed != null) networkRequestFailed.Invoke();
                     }
-                    responseString = strBuilder.ToString();
+                    else
+                    {
+                        System.IO.Stream stream = ex.Response.GetResponseStream();
+                        int currByte = -1;
+                        StringBuilder strBuilder = new StringBuilder();
+                        while ((currByte = stream.ReadByte()) != -1)
+                        {
+                            strBuilder.Append((char)currByte);
+                        }
+                        responseString = strBuilder.ToString();
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
                 }
             }
 
@@ -384,6 +437,10 @@ namespace EasyImgur
             {
                 Log.Error("Newtonsoft.Json.JsonReaderException occurred while trying to deserialize the following string:\n" + responseString + " (Line: " + ex.LineNumber + ", Position: " + ex.LinePosition + ", Message: " + ex.Message + ")");
                 resp = null;
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error("Unexpected Exception: " + ex.ToString());
             }
             if (resp != null && resp.access_token != null && resp.refresh_token != null)
             {
@@ -433,7 +490,7 @@ namespace EasyImgur
             Log.Info("Token thread started");
             while (true)
             {
-                TimeSpan timeSpan = (m_TokensExpireAt - DateTime.Now);
+                TimeSpan timeSpan = (m_TokensExpireAt > DateTime.Now) ? (m_TokensExpireAt - DateTime.Now) : (DateTime.Now.AddSeconds(60.0) - DateTime.Now);
                 Log.Info("Token thread will refresh in " + timeSpan.TotalSeconds + " seconds");
                 System.Threading.Thread.Sleep(timeSpan);
                 if (!RefreshTokens())
@@ -477,7 +534,7 @@ namespace EasyImgur
 
         static public bool HasBeenAuthorized()
         {
-            return (m_CurrentAccessToken != null && m_CurrentAccessToken != string.Empty && m_CurrentRefreshToken != null && m_CurrentRefreshToken != string.Empty && m_TokensExpireAt != null /*&& m_TokensExpireAt > DateTime.Now*/);
+            return (m_CurrentAccessToken != null && m_CurrentAccessToken != string.Empty && m_CurrentRefreshToken != null && m_CurrentRefreshToken != string.Empty && m_TokensExpireAt > DateTime.MinValue/*&& m_TokensExpireAt > DateTime.Now*/);
         }
 
         static public void OnMainThreadExit()
