@@ -182,36 +182,74 @@ namespace EasyImgur
         private void UploadFile( bool _Anonymous )
         {
             OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {
-                using (System.IO.Stream stream = dialog.OpenFile())
+                int success = 0;
+                int failure = 0;
+                int i = 0;
+                foreach (string fileName in dialog.FileNames)
                 {
-                    Image img = System.Drawing.Image.FromStream(stream);
-                    notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                    APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
-                    if (Properties.Settings.Default.copyLinks)
-                    {
-                        Clipboard.SetText(resp.data.link);
-                    }
-                    if (resp.success)
-                    {
-                        notifyIcon1.ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
+                    ++i;
 
-                        HistoryItem item = new HistoryItem();
-                        item.id = resp.data.id;
-                        item.link = resp.data.link;
-                        item.deletehash = resp.data.deletehash;
-                        item.title = resp.data.title;
-                        item.description = resp.data.description;
-                        item.anonymous = _Anonymous;
-                        item.thumbnail = img.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
-                        listBoxHistory.Items.Add(item);
-                    }
-                    else
+                    if (fileName == null || fileName == string.Empty)
                     {
-                        notifyIcon1.ShowBalloonTip(2000, "Failed", "Could not upload image (" + resp.status + "):", ToolTipIcon.None);
+                        continue;
                     }
+
+                    string fileCounterString = (dialog.FileNames.Length > 1) ? (" (" + i.ToString() + "/" + dialog.FileNames.Length.ToString() + ") ") : (string.Empty);
+
+                    //using (System.IO.Stream stream = dialog.OpenFile())
+                    System.IO.FileStream stream = null;
+                    try
+                    {
+                        stream = System.IO.File.Open(fileName, System.IO.FileMode.Open);
+                        Image img = System.Drawing.Image.FromStream(stream);
+                        notifyIcon1.ShowBalloonTip(2000, "Hold on..." + fileCounterString, "Attempting to upload image to Imgur...", ToolTipIcon.None);
+                        APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
+                        if (Properties.Settings.Default.copyLinks)
+                        {
+                            Clipboard.SetText(resp.data.link);
+                        }
+                        if (resp.success)
+                        {
+                            success++;
+
+                            notifyIcon1.ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
+
+                            HistoryItem item = new HistoryItem();
+                            item.id = resp.data.id;
+                            item.link = resp.data.link;
+                            item.deletehash = resp.data.deletehash;
+                            item.title = resp.data.title;
+                            item.description = resp.data.description;
+                            item.anonymous = _Anonymous;
+                            item.thumbnail = img.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
+                            listBoxHistory.Items.Add(item);
+                        }
+                        else
+                        {
+                            failure++;
+                            notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.status + "):", ToolTipIcon.None);
+                        }
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        failure++;
+                        notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error);
+                    }
+                    finally
+                    {
+                        if (stream != null)
+                        {
+                            stream.Close();
+                        }
+                    }
+                }
+                if (dialog.FileNames.Length > 1)
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info);
                 }
             }
         }
