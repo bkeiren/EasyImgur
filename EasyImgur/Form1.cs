@@ -31,6 +31,12 @@ namespace EasyImgur
             ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
             ImgurAPI.networkRequestFailed += new ImgurAPI.NetworkEventHandler(this.APINetworkRequestFailed);
 
+            HistoryItem[] history = GetHistoryFromDisk();
+            if (history != null)
+            {
+                listBoxHistory.Items.AddRange(history);
+            }
+
             notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
@@ -101,6 +107,73 @@ namespace EasyImgur
             UploadClipboard(false);
         }
 
+        private HistoryItem[] GetHistoryFromDisk()
+        {
+            string jsonString = string.Empty;
+            try
+            {
+                jsonString = System.IO.File.ReadAllText("history");
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+                Log.Info("Couldn't find a history file.");
+                return null;
+            }
+            catch (System.IO.IOException ex)
+            {
+                Log.Error("An I/O error occurred while opening the history file.");
+                return null;
+            }
+            catch (System.UnauthorizedAccessException ex)
+            {
+                Log.Error("Not authorized to open the history file.");
+                return null;
+            }
+
+            if (jsonString == null || jsonString == string.Empty)
+            {
+                return null;
+            }
+            
+            HistoryItem[] history = Newtonsoft.Json.JsonConvert.DeserializeObject<HistoryItem[]>(jsonString, new ImageConverter());
+            return history;
+        }
+
+        private void StoreHistoryItem(HistoryItem _Item)
+        {
+            listBoxHistory.Items.Add(_Item);
+
+            HistoryItem[] history = listBoxHistory.Items.Cast<HistoryItem>().ToArray();
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(history, Newtonsoft.Json.Formatting.None, new ImageConverter());
+            System.IO.File.WriteAllText("history", jsonString);
+        }
+
+        private void RemoveHistoryItem(HistoryItem _Item)
+        {
+            listBoxHistory.Items.Remove(_Item);
+
+            HistoryItem[] history = GetHistoryFromDisk();
+            if (history == null)
+            {
+                Log.Warning("Failed to obtain history from disk to remove an item");
+                return;
+            }
+
+            var historyList = new List<HistoryItem>(history);
+            foreach (HistoryItem item in historyList)
+            {
+                if (item.id == _Item.id)
+                {
+                    historyList.Remove(item);
+                    break;
+                }
+            }
+
+            history = historyList.ToArray();
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(history, Newtonsoft.Json.Formatting.None, new ImageConverter());
+            System.IO.File.WriteAllText("history", jsonString);
+        }
+
         private void UploadClipboard( bool _Anonymous )
         {
             APIResponses.ImageResponse resp = null;
@@ -154,7 +227,7 @@ namespace EasyImgur
                 {
                     item.thumbnail = clipboardImage.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
                 }
-                listBoxHistory.Items.Add(item);
+                StoreHistoryItem(item);
             }
             else
             {
@@ -226,7 +299,7 @@ namespace EasyImgur
                             item.description = resp.data.description;
                             item.anonymous = _Anonymous;
                             item.thumbnail = img.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
-                            listBoxHistory.Items.Add(item);
+                            StoreHistoryItem(item);
                         }
                         else
                         {
@@ -388,6 +461,7 @@ namespace EasyImgur
                 checkBoxTiedToAccount.Checked = !item.anonymous;
 
                 buttonRemoveFromImgur.Enabled = item.anonymous || (!item.anonymous && ImgurAPI.HasBeenAuthorized());
+                buttonRemoveFromHistory.Enabled = true;
             }
             else
             {
@@ -398,6 +472,7 @@ namespace EasyImgur
                 checkBoxTiedToAccount.Checked = false;
 
                 buttonRemoveFromImgur.Enabled = false;
+                buttonRemoveFromHistory.Enabled = false;
             }
         }
 
@@ -482,6 +557,20 @@ namespace EasyImgur
                 ImgurAPI.ForgetTokens();
                 MessageBox.Show("Tokens have been forgotten. Remember that the app has still technically been authorized on the Imgur website, we can't change this for you!\n\nGo to http://imgur.com/account/settings/apps to revoke access.", "Tokens discarded", MessageBoxButtons.OK);
             }
+        }
+
+        private void buttonRemoveFromHistory_Click(object sender, EventArgs e)
+        {
+            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
+            if (item == null)
+            {
+                return;
+            }
+
+            RemoveHistoryItem(item);
+
+            listBoxHistory.SelectedItem = null;
+            listBoxHistory_SelectedIndexChanged(null, null);
         }
     }
 }

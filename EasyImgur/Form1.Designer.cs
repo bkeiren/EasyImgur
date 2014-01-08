@@ -45,6 +45,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.checkBoxShowTokenRefreshNotification = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.checkBoxLaunchAtBoot = new System.Windows.Forms.CheckBox();
             this.buttonFormatHelp = new System.Windows.Forms.Button();
@@ -81,7 +82,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.checkBoxShowTokenRefreshNotification = new System.Windows.Forms.CheckBox();
+            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -229,6 +230,17 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowTokenRefreshNotification
+            // 
+            this.checkBoxShowTokenRefreshNotification.AutoSize = true;
+            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(19, 186);
+            this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
+            this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(244, 21);
+            this.checkBoxShowTokenRefreshNotification.TabIndex = 16;
+            this.checkBoxShowTokenRefreshNotification.Text = "Show notification on token refresh";
+            this.checkBoxShowTokenRefreshNotification.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -436,6 +448,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonRemoveFromHistory);
             this.groupBox1.Controls.Add(this.checkBoxTiedToAccount);
             this.groupBox1.Controls.Add(this.buttonRemoveFromImgur);
             this.groupBox1.Controls.Add(this.textBoxDeleteHash);
@@ -604,16 +617,17 @@
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // checkBoxShowTokenRefreshNotification
+            // buttonRemoveFromHistory
             // 
-            this.checkBoxShowTokenRefreshNotification.AutoSize = true;
-            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(19, 186);
-            this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
-            this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(244, 21);
-            this.checkBoxShowTokenRefreshNotification.TabIndex = 16;
-            this.checkBoxShowTokenRefreshNotification.Text = "Show notification on token refresh";
-            this.checkBoxShowTokenRefreshNotification.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromHistory.Enabled = false;
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(304, 104);
+            this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
+            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(155, 30);
+            this.buttonRemoveFromHistory.TabIndex = 16;
+            this.buttonRemoveFromHistory.Text = "Remove from history";
+            this.buttonRemoveFromHistory.UseMnemonic = false;
+            this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
             // 
             // Form1
             // 
@@ -697,6 +711,7 @@
         private System.Windows.Forms.CheckBox checkBoxLaunchAtBoot;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBoxShowTokenRefreshNotification;
+        private System.Windows.Forms.Button buttonRemoveFromHistory;
     }
 }
 
