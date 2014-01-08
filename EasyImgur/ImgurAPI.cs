@@ -102,14 +102,14 @@ namespace EasyImgur
                         // Auto mode.
                         {
                             // Check whether it is a valid format.
-                            if (format == System.Drawing.Imaging.ImageFormat.Bmp ||
-                                format == System.Drawing.Imaging.ImageFormat.Gif ||
-                                format == System.Drawing.Imaging.ImageFormat.Jpeg ||
-                                format == System.Drawing.Imaging.ImageFormat.Icon ||
-                                format == System.Drawing.Imaging.ImageFormat.Png ||
-                                format == System.Drawing.Imaging.ImageFormat.Tiff ||
-                                format == System.Drawing.Imaging.ImageFormat.Emf ||
-                                format == System.Drawing.Imaging.ImageFormat.Wmf)
+                            if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Gif) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Icon) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Png) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Tiff) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Emf) ||
+                                format.Equals(System.Drawing.Imaging.ImageFormat.Wmf))
                             {
                                 // It's fine.
                             }
