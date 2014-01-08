@@ -45,6 +45,7 @@ namespace EasyImgur
         private void ApplicationExit( object sender, EventArgs e )
         {
             ImgurAPI.OnMainThreadExit();
+            notifyIcon1.Visible = false;
         }
 
         private void ObtainedAPIAuthorization()
