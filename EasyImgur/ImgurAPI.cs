@@ -516,6 +516,9 @@ namespace EasyImgur
             {
                 Log.Info("Detected old tokens on disk, attempting to exchange tokens for fresh ones...");
 
+                // Super hacky way of getting old tokens to be used. But it works!
+                m_TokensExpireAt = System.DateTime.Now.AddSeconds(10.0);
+
                 m_CurrentAccessToken = accessToken;
                 m_CurrentRefreshToken = refreshToken;
                 //m_TokensExpireAt = DateTime.Now.AddHours(1337.0);   // Just so the tokens appear to expire way in the future when we call RefreshTokens.
