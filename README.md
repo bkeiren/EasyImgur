@@ -7,7 +7,10 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 Using EasyImgur
 ---
 
-- Run EasyImgur.exe, the EasyImgur icon will appear in your system tray:
+- [Download EasyImgur](https://github.com/Rycul/EasyImgur/releases)(zip file), extract to a folder of your choosing (For example: C:\Program Files\EasyImgur\).
+
+- Run EasyImgur.exe, the EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
+
 ![](http://i.imgur.com/3UL7hBe.png)
 
 - Open the EasyImgur menu by right-clicking on the tray icon:
