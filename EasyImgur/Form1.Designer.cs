@@ -66,6 +66,7 @@
             this.buttonAuthorize = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.checkBoxTiedToAccount = new System.Windows.Forms.CheckBox();
             this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
             this.textBoxDeleteHash = new System.Windows.Forms.TextBox();
@@ -82,7 +83,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.trayMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -106,7 +106,8 @@
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(322, 166);
+            this.trayMenu.Size = new System.Drawing.Size(322, 188);
+            this.trayMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayMenu_Opening);
             // 
             // uploadClipboardToolStripMenuItem
             // 
@@ -121,7 +122,7 @@
             this.uploadFromFileToolStripMenuItem.Enabled = false;
             this.uploadFromFileToolStripMenuItem.Name = "uploadFromFileToolStripMenuItem";
             this.uploadFromFileToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadFromFileToolStripMenuItem.Text = "Upload from file...  (to account)";
+            this.uploadFromFileToolStripMenuItem.Text = "Upload from file(s)...  (to account)";
             this.uploadFromFileToolStripMenuItem.Click += new System.EventHandler(this.uploadFromFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
@@ -140,7 +141,7 @@
             // 
             this.uploadFromFileAnonymousToolStripMenuItem.Name = "uploadFromFileAnonymousToolStripMenuItem";
             this.uploadFromFileAnonymousToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadFromFileAnonymousToolStripMenuItem.Text = "Upload from file... (anonymous)";
+            this.uploadFromFileAnonymousToolStripMenuItem.Text = "Upload from file(s)... (anonymous)";
             this.uploadFromFileAnonymousToolStripMenuItem.Click += new System.EventHandler(this.uploadFromFileAnonymousToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
@@ -465,6 +466,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
             // 
+            // buttonRemoveFromHistory
+            // 
+            this.buttonRemoveFromHistory.Enabled = false;
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(304, 104);
+            this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
+            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(155, 30);
+            this.buttonRemoveFromHistory.TabIndex = 16;
+            this.buttonRemoveFromHistory.Text = "Remove from history";
+            this.buttonRemoveFromHistory.UseMnemonic = false;
+            this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
+            // 
             // checkBoxTiedToAccount
             // 
             this.checkBoxTiedToAccount.AutoSize = true;
@@ -616,18 +629,6 @@
             this.button2.TabIndex = 5;
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
-            // 
-            // buttonRemoveFromHistory
-            // 
-            this.buttonRemoveFromHistory.Enabled = false;
-            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(304, 104);
-            this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
-            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(155, 30);
-            this.buttonRemoveFromHistory.TabIndex = 16;
-            this.buttonRemoveFromHistory.Text = "Remove from history";
-            this.buttonRemoveFromHistory.UseMnemonic = false;
-            this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
-            this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
             // 
             // Form1
             // 

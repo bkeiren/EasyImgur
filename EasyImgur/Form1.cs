@@ -573,5 +573,10 @@ namespace EasyImgur
             listBoxHistory.SelectedItem = null;
             listBoxHistory_SelectedIndexChanged(null, null);
         }
+
+        private void trayMenu_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
     }
 }
