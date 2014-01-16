@@ -510,6 +510,7 @@ namespace EasyImgur
             {
                 listBoxHistory.Items.Remove(item);
                 notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed image from Imgur and history", ToolTipIcon.None);
+                RemoveHistoryItem(item);
             }
             else
             {
