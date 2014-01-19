@@ -30,16 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.uploadClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uploadFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.uploadClipboardAnonymousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uploadFromFileAnonymousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.checkBoxClearClipboard = new System.Windows.Forms.CheckBox();
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
@@ -83,7 +73,16 @@
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.trayMenu.SuspendLayout();
+            this.trayMenu = new System.Windows.Forms.ContextMenu();
+            this.uploadClipboardAccountTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.uploadFileAccountTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem9 = new System.Windows.Forms.MenuItem();
+            this.uploadClipboardAnonymousTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.uploadFileAnonymousTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -93,84 +92,8 @@
             this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // trayMenu
-            // 
-            this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.uploadClipboardToolStripMenuItem,
-            this.uploadFromFileToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.uploadClipboardAnonymousToolStripMenuItem,
-            this.uploadFromFileAnonymousToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.settingsToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.exitToolStripMenuItem});
-            this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(322, 188);
-            this.trayMenu.Opening += new System.ComponentModel.CancelEventHandler(this.trayMenu_Opening);
-            // 
-            // uploadClipboardToolStripMenuItem
-            // 
-            this.uploadClipboardToolStripMenuItem.Enabled = false;
-            this.uploadClipboardToolStripMenuItem.Name = "uploadClipboardToolStripMenuItem";
-            this.uploadClipboardToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadClipboardToolStripMenuItem.Text = "Upload from clipboard (to account)";
-            this.uploadClipboardToolStripMenuItem.Click += new System.EventHandler(this.uploadClipboardToolStripMenuItem_Click);
-            // 
-            // uploadFromFileToolStripMenuItem
-            // 
-            this.uploadFromFileToolStripMenuItem.Enabled = false;
-            this.uploadFromFileToolStripMenuItem.Name = "uploadFromFileToolStripMenuItem";
-            this.uploadFromFileToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadFromFileToolStripMenuItem.Text = "Upload from file(s)...  (to account)";
-            this.uploadFromFileToolStripMenuItem.Click += new System.EventHandler(this.uploadFromFileToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(318, 6);
-            // 
-            // uploadClipboardAnonymousToolStripMenuItem
-            // 
-            this.uploadClipboardAnonymousToolStripMenuItem.Name = "uploadClipboardAnonymousToolStripMenuItem";
-            this.uploadClipboardAnonymousToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadClipboardAnonymousToolStripMenuItem.Text = "Upload from clipboard (anonymous)";
-            this.uploadClipboardAnonymousToolStripMenuItem.Click += new System.EventHandler(this.uploadClipboardAnonymousToolStripMenuItem_Click);
-            // 
-            // uploadFromFileAnonymousToolStripMenuItem
-            // 
-            this.uploadFromFileAnonymousToolStripMenuItem.Name = "uploadFromFileAnonymousToolStripMenuItem";
-            this.uploadFromFileAnonymousToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.uploadFromFileAnonymousToolStripMenuItem.Text = "Upload from file(s)... (anonymous)";
-            this.uploadFromFileAnonymousToolStripMenuItem.Click += new System.EventHandler(this.uploadFromFileAnonymousToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(318, 6);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(318, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(321, 24);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
             // notifyIcon1
             // 
-            this.notifyIcon1.ContextMenuStrip = this.trayMenu;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "EasyImgur";
             this.notifyIcon1.Visible = true;
@@ -630,6 +553,72 @@
             this.button2.Text = "Authorize this app...";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // trayMenu
+            // 
+            this.trayMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.uploadClipboardAccountTrayMenuItem,
+            this.uploadFileAccountTrayMenuItem,
+            this.menuItem9,
+            this.uploadClipboardAnonymousTrayMenuItem,
+            this.uploadFileAnonymousTrayMenuItem,
+            this.menuItem8,
+            this.settingsTrayMenuItem,
+            this.menuItem7,
+            this.exitTrayMenuItem});
+            // 
+            // uploadClipboardAccountTrayMenuItem
+            // 
+            this.uploadClipboardAccountTrayMenuItem.Enabled = false;
+            this.uploadClipboardAccountTrayMenuItem.Index = 0;
+            this.uploadClipboardAccountTrayMenuItem.Text = "Upload from clipboard (to account)";
+            this.uploadClipboardAccountTrayMenuItem.Click += new System.EventHandler(this.uploadClipboardAccountTrayMenuItem_Click);
+            // 
+            // uploadFileAccountTrayMenuItem
+            // 
+            this.uploadFileAccountTrayMenuItem.Enabled = false;
+            this.uploadFileAccountTrayMenuItem.Index = 1;
+            this.uploadFileAccountTrayMenuItem.Text = "Upload from file(s)... (to account)";
+            this.uploadFileAccountTrayMenuItem.Click += new System.EventHandler(this.uploadFileAccountTrayMenuItem_Click);
+            // 
+            // menuItem9
+            // 
+            this.menuItem9.Index = 2;
+            this.menuItem9.Text = "-";
+            // 
+            // uploadClipboardAnonymousTrayMenuItem
+            // 
+            this.uploadClipboardAnonymousTrayMenuItem.Index = 3;
+            this.uploadClipboardAnonymousTrayMenuItem.Text = "Upload from clipboard (anonymously)";
+            this.uploadClipboardAnonymousTrayMenuItem.Click += new System.EventHandler(this.uploadClipboardAnonymousTrayMenuItem_Click);
+            // 
+            // uploadFileAnonymousTrayMenuItem
+            // 
+            this.uploadFileAnonymousTrayMenuItem.Index = 4;
+            this.uploadFileAnonymousTrayMenuItem.Text = "Upload from file(s)... (anonymously)";
+            this.uploadFileAnonymousTrayMenuItem.Click += new System.EventHandler(this.uploadFileAnonymousTrayMenuItem_Click);
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 5;
+            this.menuItem8.Text = "-";
+            // 
+            // settingsTrayMenuItem
+            // 
+            this.settingsTrayMenuItem.Index = 6;
+            this.settingsTrayMenuItem.Text = "Settings";
+            this.settingsTrayMenuItem.Click += new System.EventHandler(this.settingsTrayMenuItem_Click);
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 7;
+            this.menuItem7.Text = "-";
+            // 
+            // exitTrayMenuItem
+            // 
+            this.exitTrayMenuItem.Index = 8;
+            this.exitTrayMenuItem.Text = "Exit";
+            this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -641,8 +630,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "EasyImgur";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.trayMenu.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -660,14 +647,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip trayMenu;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private System.Windows.Forms.ToolStripMenuItem uploadClipboardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uploadFromFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.CheckBox checkBoxClearClipboard;
         private System.Windows.Forms.Button buttonApplyGeneral;
         private System.Windows.Forms.TabControl tabControl1;
@@ -705,14 +685,21 @@
         private System.Windows.Forms.CheckBox checkBoxTiedToAccount;
         private System.Windows.Forms.Button buttonFormatHelp;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ToolStripMenuItem uploadClipboardAnonymousToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uploadFromFileAnonymousToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.Button buttonForgetTokens;
         private System.Windows.Forms.CheckBox checkBoxLaunchAtBoot;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBoxShowTokenRefreshNotification;
         private System.Windows.Forms.Button buttonRemoveFromHistory;
+        private System.Windows.Forms.ContextMenu trayMenu;
+        private System.Windows.Forms.MenuItem uploadClipboardAccountTrayMenuItem;
+        private System.Windows.Forms.MenuItem uploadFileAccountTrayMenuItem;
+        private System.Windows.Forms.MenuItem uploadClipboardAnonymousTrayMenuItem;
+        private System.Windows.Forms.MenuItem uploadFileAnonymousTrayMenuItem;
+        private System.Windows.Forms.MenuItem menuItem9;
+        private System.Windows.Forms.MenuItem menuItem8;
+        private System.Windows.Forms.MenuItem settingsTrayMenuItem;
+        private System.Windows.Forms.MenuItem menuItem7;
+        private System.Windows.Forms.MenuItem exitTrayMenuItem;
     }
 }
 

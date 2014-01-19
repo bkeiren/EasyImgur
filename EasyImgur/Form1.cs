@@ -19,6 +19,7 @@ namespace EasyImgur
             
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
+            this.notifyIcon1.ContextMenu = this.trayMenu;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.VisibleChanged += new System.EventHandler(this.Form1_VisibleChanged);
@@ -65,8 +66,8 @@ namespace EasyImgur
 
         private void SetAuthorizationStatusUI( bool _IsAuthorized )
         {
-            uploadClipboardToolStripMenuItem.Enabled = _IsAuthorized;
-            uploadFromFileToolStripMenuItem.Enabled = _IsAuthorized;
+            uploadClipboardAccountTrayMenuItem.Enabled = _IsAuthorized;
+            uploadFileAccountTrayMenuItem.Enabled = _IsAuthorized;
             label13.Text = _IsAuthorized ? "Authorized" : "Not authorized";
             label13.ForeColor = _IsAuthorized ? System.Drawing.Color.Green : System.Drawing.Color.DarkBlue;
             buttonForceTokenRefresh.Enabled = _IsAuthorized;
@@ -90,22 +91,6 @@ namespace EasyImgur
             {
                 SelectedHistoryItemChanged();
             }
-        }
-
-        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CloseCommandWasSentFromExitButton = true;
-            Application.Exit();
-        }
-
-        private void uploadClipboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UploadClipboard(false);
         }
 
         private HistoryItem[] GetHistoryFromDisk()
@@ -208,13 +193,13 @@ namespace EasyImgur
                 notifyIcon1.ShowBalloonTip(2000, "Can't upload clipboard!", "There's no image or URL there", ToolTipIcon.Error);
                 return;
             }
-
-            if (Properties.Settings.Default.copyLinks)
-            {
-                Clipboard.SetText(resp.data.link);
-            }
             if (resp.success)
             {
+                if (Properties.Settings.Default.copyLinks)
+                {
+                    Clipboard.SetText(resp.data.link);
+                }
+
                 notifyIcon1.ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
@@ -282,13 +267,14 @@ namespace EasyImgur
                         Image img = System.Drawing.Image.FromStream(stream);
                         notifyIcon1.ShowBalloonTip(2000, "Hold on..." + fileCounterString, "Attempting to upload image to Imgur...", ToolTipIcon.None);
                         APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
-                        if (Properties.Settings.Default.copyLinks)
-                        {
-                            Clipboard.SetText(resp.data.link);
-                        }
                         if (resp.success)
                         {
                             success++;
+
+                            if (Properties.Settings.Default.copyLinks)
+                            {
+                                Clipboard.SetText(resp.data.link);
+                            }
 
                             notifyIcon1.ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
 
@@ -328,21 +314,10 @@ namespace EasyImgur
             }
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Open settings form.
-            this.Show();
-        }
-
         private void buttonOK_Click(object sender, EventArgs e)
         {
             SaveSettings();
             //this.Hide();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void NotifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -542,16 +517,6 @@ namespace EasyImgur
             Help.ShowPopup(this, helpString, loc);
         }
 
-        private void uploadClipboardAnonymousToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UploadClipboard(true);
-        }
-
-        private void uploadFromFileAnonymousToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UploadFile(true);
-        }
-
         private void buttonForgetTokens_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to discard the tokens?\n\nWithout tokens, the app can no longer use your Imgur account.", "Forget tokens", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -575,9 +540,36 @@ namespace EasyImgur
             listBoxHistory_SelectedIndexChanged(null, null);
         }
 
-        private void trayMenu_Opening(object sender, CancelEventArgs e)
+        private void uploadClipboardAccountTrayMenuItem_Click(object sender, EventArgs e)
         {
+            UploadClipboard(false);
+        }
 
+        private void uploadFileAccountTrayMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadFile(false);
+        }
+
+        private void uploadClipboardAnonymousTrayMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadClipboard(true);
+        }
+
+        private void uploadFileAnonymousTrayMenuItem_Click(object sender, EventArgs e)
+        {
+            UploadFile(true);
+        }
+
+        private void settingsTrayMenuItem_Click(object sender, EventArgs e)
+        {
+            // Open settings form.
+            this.Show();
+        }
+
+        private void exitTrayMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseCommandWasSentFromExitButton = true;
+            Application.Exit();
         }
     }
 }
