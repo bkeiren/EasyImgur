@@ -233,11 +233,6 @@ namespace EasyImgur
             }
         }
 
-        private void uploadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UploadFile(false);
-        }
-
         private void UploadFile( bool _Anonymous )
         {
             OpenFileDialog dialog = new OpenFileDialog();
