@@ -14,6 +14,7 @@ namespace EasyImgur
         public string description;
         public System.Drawing.Image thumbnail;
         public bool anonymous;
+        public DateTime timestamp;
 
         public string listName
         {

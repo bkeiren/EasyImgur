@@ -203,6 +203,7 @@ namespace EasyImgur
                 notifyIcon1.ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
+                item.timestamp = DateTime.Now;
                 item.id = resp.data.id;
                 item.link = resp.data.link;
                 item.deletehash = resp.data.deletehash;
@@ -273,7 +274,8 @@ namespace EasyImgur
 
                             notifyIcon1.ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
 
-                            HistoryItem item = new HistoryItem();
+                            HistoryItem item = new HistoryItem(); 
+                            item.timestamp = DateTime.Now;
                             item.id = resp.data.id;
                             item.link = resp.data.link;
                             item.deletehash = resp.data.deletehash;
@@ -428,6 +430,7 @@ namespace EasyImgur
                 textBoxID.Text = item.id;
                 textBoxLink.Text = item.link;
                 textBoxDeleteHash.Text = item.deletehash;
+                textBoxTimestamp.Text = item.timestamp.ToString();
                 pictureBox1.Image = item.thumbnail;
                 checkBoxTiedToAccount.Checked = !item.anonymous;
 
@@ -439,6 +442,7 @@ namespace EasyImgur
                 textBoxID.Text = string.Empty;
                 textBoxLink.Text = string.Empty;
                 textBoxDeleteHash.Text = string.Empty;
+                textBoxTimestamp.Text = string.Empty;
                 pictureBox1.Image = null;
                 checkBoxTiedToAccount.Checked = false;
 

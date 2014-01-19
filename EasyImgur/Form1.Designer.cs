@@ -83,6 +83,8 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.textBoxTimestamp = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -372,6 +374,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBoxTimestamp);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.buttonRemoveFromHistory);
             this.groupBox1.Controls.Add(this.checkBoxTiedToAccount);
             this.groupBox1.Controls.Add(this.buttonRemoveFromImgur);
@@ -392,7 +396,7 @@
             // buttonRemoveFromHistory
             // 
             this.buttonRemoveFromHistory.Enabled = false;
-            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(304, 104);
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(304, 132);
             this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
             this.buttonRemoveFromHistory.Size = new System.Drawing.Size(155, 30);
             this.buttonRemoveFromHistory.TabIndex = 16;
@@ -405,7 +409,7 @@
             // 
             this.checkBoxTiedToAccount.AutoSize = true;
             this.checkBoxTiedToAccount.Enabled = false;
-            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(319, 21);
+            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(331, 21);
             this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
             this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxTiedToAccount.Size = new System.Drawing.Size(128, 21);
@@ -443,9 +447,9 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(6, 104);
+            this.pictureBox1.Location = new System.Drawing.Point(101, 132);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(292, 166);
+            this.pictureBox1.Size = new System.Drawing.Size(197, 138);
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
             // 
@@ -619,6 +623,23 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
+            // textBoxTimestamp
+            // 
+            this.textBoxTimestamp.Location = new System.Drawing.Point(101, 104);
+            this.textBoxTimestamp.Name = "textBoxTimestamp";
+            this.textBoxTimestamp.ReadOnly = true;
+            this.textBoxTimestamp.Size = new System.Drawing.Size(197, 22);
+            this.textBoxTimestamp.TabIndex = 18;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(18, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(77, 17);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Timestamp";
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -700,6 +721,8 @@
         private System.Windows.Forms.MenuItem settingsTrayMenuItem;
         private System.Windows.Forms.MenuItem menuItem7;
         private System.Windows.Forms.MenuItem exitTrayMenuItem;
+        private System.Windows.Forms.TextBox textBoxTimestamp;
+        private System.Windows.Forms.Label label9;
     }
 }
 
