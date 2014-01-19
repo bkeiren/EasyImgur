@@ -605,7 +605,7 @@
             // settingsTrayMenuItem
             // 
             this.settingsTrayMenuItem.Index = 6;
-            this.settingsTrayMenuItem.Text = "Settings";
+            this.settingsTrayMenuItem.Text = "Settings...";
             this.settingsTrayMenuItem.Click += new System.EventHandler(this.settingsTrayMenuItem_Click);
             // 
             // menuItem7
