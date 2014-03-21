@@ -1,0 +1,1 @@
+powershell -noexit .\copy_dists_psscript.ps1
