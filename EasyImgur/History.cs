@@ -62,17 +62,22 @@ namespace EasyImgur
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                Log.Info("Couldn't find a history file.");
+                Log.Info("Couldn't find a history file:\n" + ex.Message);
                 return null;
             }
             catch (System.IO.IOException ex)
             {
-                Log.Error("An I/O error occurred while opening the history file.");
+                Log.Error("An I/O error occurred while opening the history file:\n" + ex.Message);
                 return null;
             }
             catch (System.UnauthorizedAccessException ex)
             {
-                Log.Error("Not authorized to open the history file.");
+                Log.Error("Not authorized to open the history file:\n" + ex.Message);
+                return null;
+            }
+            catch (System.Security.SecurityException ex)
+            {
+                Log.Error("A security exception occurred while trying to open the history file: " + ex.Message);
                 return null;
             }
 

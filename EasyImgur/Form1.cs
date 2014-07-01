@@ -368,19 +368,7 @@ namespace EasyImgur
         private void SelectedHistoryItemChanged()
         {
             HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
-            if (item != null)
-            {
-                textBoxID.Text = item.id;
-                textBoxLink.Text = item.link;
-                textBoxDeleteHash.Text = item.deletehash;
-                textBoxTimestamp.Text = item.timestamp.ToString();
-                pictureBox1.Image = item.thumbnail;
-                checkBoxTiedToAccount.Checked = !item.anonymous;
-
-                buttonRemoveFromImgur.Enabled = item.anonymous || (!item.anonymous && ImgurAPI.HasBeenAuthorized());
-                buttonRemoveFromHistory.Enabled = true;
-            }
-            else
+            if (item == null)
             {
                 textBoxID.Text = string.Empty;
                 textBoxLink.Text = string.Empty;
@@ -391,6 +379,20 @@ namespace EasyImgur
 
                 buttonRemoveFromImgur.Enabled = false;
                 buttonRemoveFromHistory.Enabled = false;
+                btnOpenImageLinkInBrowser.Enabled = false;
+            }
+            else
+            {
+                textBoxID.Text = item.id;
+                textBoxLink.Text = item.link;
+                textBoxDeleteHash.Text = item.deletehash;
+                textBoxTimestamp.Text = item.timestamp.ToString();
+                pictureBox1.Image = item.thumbnail;
+                checkBoxTiedToAccount.Checked = !item.anonymous;
+
+                buttonRemoveFromImgur.Enabled = item.anonymous || (!item.anonymous && ImgurAPI.HasBeenAuthorized());
+                buttonRemoveFromHistory.Enabled = true;
+                btnOpenImageLinkInBrowser.Enabled = true;
             }
         }
 
@@ -416,22 +418,35 @@ namespace EasyImgur
 
         private void buttonRemoveFromImgur_Click(object sender, EventArgs e)
         {
-            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
-            if (item == null)
-            {
-                return;
-            }
+            int count = listBoxHistory.SelectedItems.Count;
+            bool isMultipleImages = count > 1;
+            int currentCount = 0;
 
-            notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to remove image from Imgur...", ToolTipIcon.None);
-            if (ImgurAPI.DeleteImage(item.deletehash, item.anonymous))
+            listBoxHistory.BeginUpdate();
+            while (listBoxHistory.SelectedItems.Count > 0)
             {
-                notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed image from Imgur and history", ToolTipIcon.None);
-                History.RemoveHistoryItem(item);
+                ++currentCount;
+
+                HistoryItem item = listBoxHistory.SelectedItems[0] as HistoryItem;
+                if (item == null)
+                {
+                    return;
+                }
+
+                string balloon_image_counter_text = (isMultipleImages ? (currentCount.ToString() + "/" + count.ToString()) : string.Empty);
+                string balloon_text = "Attempting to remove image " + balloon_image_counter_text + " from Imgur...";
+                notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to remove image " + balloon_image_counter_text + " from Imgur...", ToolTipIcon.None);
+                if (ImgurAPI.DeleteImage(item.deletehash, item.anonymous))
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed image " + balloon_image_counter_text + " from Imgur and history", ToolTipIcon.None);
+                    History.RemoveHistoryItem(item);
+                }
+                else
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Failed", "Failed to remove image " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
+                }
             }
-            else
-            {
-                notifyIcon1.ShowBalloonTip(2000, "Failed", "Failed to remove image from Imgur", ToolTipIcon.Error);
-            }
+            listBoxHistory.EndUpdate();
 
             listBoxHistory.SelectedItem = null;
             listBoxHistory_SelectedIndexChanged(null, null);
@@ -469,13 +484,18 @@ namespace EasyImgur
 
         private void buttonRemoveFromHistory_Click(object sender, EventArgs e)
         {
-            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
-            if (item == null)
+            listBoxHistory.BeginUpdate();
+            while (listBoxHistory.SelectedItems.Count > 0)
             {
-                return;
-            }
+                HistoryItem item = listBoxHistory.SelectedItems[0] as HistoryItem;
+                if (item == null)
+                {
+                    return;
+                }
 
-            History.RemoveHistoryItem(item);
+                History.RemoveHistoryItem(item);
+            }
+            listBoxHistory.EndUpdate();
 
             listBoxHistory.SelectedItem = null;
             listBoxHistory_SelectedIndexChanged(null, null);
@@ -511,6 +531,30 @@ namespace EasyImgur
         {
             CloseCommandWasSentFromExitButton = true;
             Application.Exit();
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://easyimgur.bryankeiren.com/");
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://bryankeiren.com/");
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://imgur.com/account/settings/apps");
+        }
+
+        private void btnOpenImageLinkInBrowser_Click(object sender, EventArgs e)
+        {
+            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
+            if (item != null)
+            {
+                System.Diagnostics.Process.Start(item.link);
+            }
         }
     }
 }

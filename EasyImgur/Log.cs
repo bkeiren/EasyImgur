@@ -48,11 +48,22 @@ namespace EasyImgur
                         Log.Error("Failed to save log file: " + ex.Message);
                     }
                 }
-                using (System.IO.StreamWriter w = System.IO.File.AppendText(LogFile))
+                try
                 {
-                    w.WriteLine(line);
+                    using (System.IO.StreamWriter w = System.IO.File.AppendText(LogFile))
+                    {
+                        w.WriteLine(line);
+                    }
+                    Console.WriteLine(line);
                 }
-                Console.WriteLine(line);
+                catch (System.Security.SecurityException ex)
+                {
+                    Log.Error("A security exception occurred while trying to append to the history file: " + ex.Message);
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("Failed to append to the log file: " + ex.Message);
+                }
             }
             return line;
         }
