@@ -22,7 +22,7 @@ Using EasyImgur
 ![](http://i.imgur.com/i34VILO.png)
 
 - Select *Authorize this app...*. This will open the Imgur authorization page in your browser. If you are already logged in, you will see this message:
-- ![](http://i.imgur.com/zdcWcp0.png)
+![](http://i.imgur.com/zdcWcp0.png)
 
 - Select *Allow* and copy the code that is displayed on the next page.
 
@@ -38,7 +38,11 @@ NOTE: To revoke access, you can visit http://imgur.com/account/settings/apps, wh
 
 NOTE: EasyImgur will periodically refresh its authorization codes. When this happens, a balloon popup will appear to inform you that EasyImgur has successfully done so (or not, if that should be the case).
 
-**Uploaded images (and their URLs) can be found under the** ***History*** **tab. From here you can select images, see information about the selected image including a thumbnail preview of the selected image, its Imgur ID, its Imgur URL, its deletehash, and whether it was uploaded anonymously or to an account. Also, there is a convenient button here that allows you to remove an uploaded image from Imgur.**
+**Uploaded images (and their URLs) can be found under the** ***History*** **tab. From here you can select images, see information about the selected image including a thumbnail preview of the selected image, its Imgur ID, its Imgur URL, its deletehash, and whether it was uploaded anonymously or to an account.**
+**Also, there are convenient controls here that allow you to:**
+  - Remove an uploaded image from Imgur.
+  - Remove an uploaded image from your local history database.
+  - Open an image's link in your browser.
 
 Settings
 ---
