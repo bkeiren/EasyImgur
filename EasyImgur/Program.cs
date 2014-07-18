@@ -11,13 +11,24 @@ namespace EasyImgur
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Form1 form = new Form1();
-            Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
-            Application.Run();
+            Guid guid = new Guid("{75da63f2-9b76-4590-82b3-b8a108e53cf0}");
+            using(SingleInstance singleInstance = new SingleInstance(guid))
+            {
+                if(singleInstance.IsFirstInstance)
+                {
+                    singleInstance.ListenForArgumentsFromSuccessiveInstances();
+
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Form1 form = new Form1(singleInstance);
+                    Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
+                    Application.Run();
+                }
+                else
+                    singleInstance.PassArgumentsToFirstInstance(args);
+            } 
         }
     }
 }

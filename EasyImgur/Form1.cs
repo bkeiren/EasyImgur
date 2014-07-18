@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 
@@ -13,7 +17,7 @@ namespace EasyImgur
     {
         private bool CloseCommandWasSentFromExitButton = false;
 
-        public Form1()
+        public Form1(SingleInstance singleInstance)
         {
             InitializeComponent();
             
@@ -41,11 +45,42 @@ namespace EasyImgur
             ImgurAPI.AttemptRefreshTokensFromDisk();
 
             Statistics.GatherAndSend();
+
+            singleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
+        }
+
+        void singleInstance_ArgumentsReceived(object sender, ArgumentsReceivedEventArgs e)
+        {
+            bool anonymous = false;
+            foreach(string path in e.Args)
+            {
+                if(path == "/anonymous")
+                {
+                    anonymous = true;
+                    continue;
+                }
+
+                if(!anonymous && !ImgurAPI.HasBeenAuthorized())
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
+                    return;
+                }
+
+                if(Directory.Exists(path))
+                    notifyIcon1.ShowBalloonTip(2000, "Not Supported", "EasyImgur doesn't yet support uploading as a gallery.", ToolTipIcon.Warning);
+                else if(File.Exists(path))
+                    UploadFile(anonymous, new string[] { path });
+            }
         }
 
         private void HistoryItemAdded( HistoryItem _Item )
         {
-            listBoxHistory.Items.Add(_Item);
+            // required for context menu; since this will be executed on a different thread and
+            // UI access is only allowed on the creating thread, we must check for invocation.
+            if(this.listBoxHistory.InvokeRequired)
+                this.Invoke(new Action<HistoryItem>(HistoryItemAdded), new object[] { _Item });
+            else
+                listBoxHistory.Items.Add(_Item);
         }
 
         private void HistoryItemRemoved( HistoryItem _Item )
@@ -177,17 +212,22 @@ namespace EasyImgur
             }
         }
 
-        private void UploadFile( bool _Anonymous )
+        private void UploadFile( bool _Anonymous, string[] paths = null )
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            DialogResult res = dialog.ShowDialog();
-            if (res == DialogResult.OK)
+            if(paths == null)
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Multiselect = true;
+                DialogResult res = dialog.ShowDialog();
+                if(res == DialogResult.OK)
+                    paths = dialog.FileNames;
+            }
+            if (paths != null)
             {
                 int success = 0;
                 int failure = 0;
                 int i = 0;
-                foreach (string fileName in dialog.FileNames)
+                foreach (string fileName in paths)
                 {
                     ++i;
 
@@ -196,7 +236,7 @@ namespace EasyImgur
                         continue;
                     }
 
-                    string fileCounterString = (dialog.FileNames.Length > 1) ? (" (" + i.ToString() + "/" + dialog.FileNames.Length.ToString() + ") ") : (string.Empty);
+                    string fileCounterString = (paths.Length > 1) ? (" (" + i.ToString() + "/" + paths.Length.ToString() + ") ") : (string.Empty);
 
                     //using (System.IO.Stream stream = dialog.OpenFile())
                     System.IO.FileStream stream = null;
@@ -234,7 +274,7 @@ namespace EasyImgur
                             notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.status + "):", ToolTipIcon.None);
                         }
                     }
-                    catch (System.IO.FileNotFoundException ex)
+                    catch (System.IO.FileNotFoundException)
                     {
                         failure++;
                         notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error);
@@ -247,7 +287,7 @@ namespace EasyImgur
                         }
                     }
                 }
-                if (dialog.FileNames.Length > 1)
+                if(paths.Length > 1)
                 {
                     notifyIcon1.ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info);
                 }
@@ -291,7 +331,7 @@ namespace EasyImgur
             textBoxDescriptionFormat.Text = Properties.Settings.Default.descriptionFormat;
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
             checkBoxShowTokenRefreshNotification.Checked = Properties.Settings.Default.showNotificationOnTokenRefresh;
-
+            checkBoxEnableContextMenu.Checked = Properties.Settings.Default.enableContextMenu;
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -301,6 +341,7 @@ namespace EasyImgur
             {
                 // A key exists, make sure we're using the most up-to-date path!
                 registryKey.SetValue("EasyImgur", Application.ExecutablePath);
+                updateRegistry(); // this will need to be updated too, if we're using it
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
             }
         }
@@ -327,27 +368,60 @@ namespace EasyImgur
             Properties.Settings.Default.descriptionFormat = textBoxDescriptionFormat.Text;
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
             Properties.Settings.Default.showNotificationOnTokenRefresh = checkBoxShowTokenRefreshNotification.Checked;
+            Properties.Settings.Default.enableContextMenu = checkBoxEnableContextMenu.Checked;
 
-            Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (checkBoxLaunchAtBoot.Checked)
+            using(Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
-                // If the checkbox was marked, set a value which will make EasyImgur start at boot.
-                registryKey.SetValue("EasyImgur", Application.ExecutablePath);
-            }
-            else
-            {
-                try
+                if(checkBoxLaunchAtBoot.Checked)
                 {
-                    // Delete our value if one is present.
-                    registryKey.DeleteValue("EasyImgur");
+                    // If the checkbox was marked, set a value which will make EasyImgur start at boot.
+                    registryKey.SetValue("EasyImgur", Application.ExecutablePath);
                 }
-                catch (ArgumentException ex)
+                else
                 {
-                    // Don't care at all.
+                    // Delete our value if one is present; second argument supresses exception on missing value
+                    registryKey.DeleteValue("EasyImgur", false);
                 }
             }
+
+            updateRegistry();
 
             Properties.Settings.Default.Save();
+        }
+
+        private void updateRegistry()
+        {
+            string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
+            ".gif", ".tiff", ".tif", ".pdf", ".xcf", "Directory" };
+            using(RegistryKey root = Registry.CurrentUser.OpenSubKey("Software\\Classes", true))
+            using(RegistryKey fileAssoc = root.CreateSubKey("SystemFileAssociations"))
+                foreach(string fileType in fileTypes)
+                    using(RegistryKey fileTypeKey = fileAssoc.CreateSubKey(fileType))
+                    using(RegistryKey shell = fileTypeKey.CreateSubKey("shell"))
+                    {
+                        if(Properties.Settings.Default.enableContextMenu)
+                        {
+                            using(RegistryKey anonHandler = shell.CreateSubKey("imguruploadanonymous"))
+                                enableContextMenu(anonHandler, "Upload to Imgur" +
+                                    (fileType == "Folder" ? " as gallery" : "") + " (anonymous)", true);
+                            using(RegistryKey accHandler = shell.CreateSubKey("imgurupload"))
+                                enableContextMenu(accHandler, "Upload to Imgur" +
+                                    (fileType == "Folder" ? " as gallery" : ""), false);
+                        }
+                        else
+                        {
+                            try { shell.DeleteSubKeyTree("imguruploadanonymous"); } catch { }
+                            try { shell.DeleteSubKeyTree("imgurupload"); } catch { }
+                        }
+                    }
+        }
+
+        private void enableContextMenu(RegistryKey key, string commandText, bool anonymous)
+        {
+            key.SetValue("", commandText);
+            key.SetValue("Icon", Application.ExecutablePath);
+            using(RegistryKey subKey = key.CreateSubKey("command"))
+                subKey.SetValue("", "\"" + Application.ExecutablePath + "\"" + (anonymous ? " /anonymous" : "") + " \"%1\"");
         }
 
         private void buttonChangeCredentials_Click(object sender, EventArgs e)

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Drawing;
-using System.Linq;
 
 namespace EasyImgur
 {

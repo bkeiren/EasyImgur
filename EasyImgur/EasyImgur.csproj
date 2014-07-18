@@ -20,7 +20,7 @@
     <ManifestKeyFile>EasyImgur_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <TargetZone>LocalIntranet</TargetZone>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIResponses\TokenResponse.cs" />
+    <Compile Include="ArgumentsRecievedEventArgs.cs" />
     <Compile Include="AuthorizeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,7 +126,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="EasyImgur_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -135,6 +135,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SingleInstance.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="StatisticsMetrics\Metrics.cs" />
     <Compile Include="StatisticsMetrics\StatisticsMetric.cs" />
