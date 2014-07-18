@@ -95,6 +95,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.checkBoxGalleryUpload = new System.Windows.Forms.CheckBox();
             this.label17 = new System.Windows.Forms.Label();
+            this.checkBoxAlbum = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -438,6 +439,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBoxAlbum);
             this.groupBox1.Controls.Add(this.btnOpenImageLinkInBrowser);
             this.groupBox1.Controls.Add(this.textBoxTimestamp);
             this.groupBox1.Controls.Add(this.label9);
@@ -461,7 +463,7 @@
             // 
             // btnOpenImageLinkInBrowser
             // 
-            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(230, 39);
+            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(230, 62);
             this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
             this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(169, 23);
             this.btnOpenImageLinkInBrowser.TabIndex = 20;
@@ -810,6 +812,19 @@
             this.label17.TabIndex = 20;
             this.label17.Text = "Only used when multiple files are selected in the file dialog";
             // 
+            // checkBoxAlbum
+            // 
+            this.checkBoxAlbum.AutoSize = true;
+            this.checkBoxAlbum.Enabled = false;
+            this.checkBoxAlbum.Location = new System.Drawing.Point(340, 37);
+            this.checkBoxAlbum.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxAlbum.Name = "checkBoxAlbum";
+            this.checkBoxAlbum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxAlbum.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxAlbum.TabIndex = 21;
+            this.checkBoxAlbum.Text = "Album";
+            this.checkBoxAlbum.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -906,6 +921,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.CheckBox checkBoxGalleryUpload;
+        private System.Windows.Forms.CheckBox checkBoxAlbum;
     }
 }
 

@@ -37,7 +37,7 @@ namespace EasyImgur
             }
         }
 
-        static private APIResponses.ImageResponse InternalUploadImage( object _Obj, bool _URL, string _Title, string _Description, bool _Anonymous )
+        static private APIResponses.ImageResponse InternalUploadImage( object _Obj, bool _URL, string _Title, string _Description, bool _Anonymous, string album = "" )
         {
             if (_Obj == null)
             {
@@ -144,6 +144,9 @@ namespace EasyImgur
                             "type", _URL ? "URL" : "base64"
                         }
                     };
+                    if(album != "")
+                        values.Add("album", album);
+
                     response = t.UploadValues(url, "POST", values);
                     responseString = System.Text.Encoding.ASCII.GetString(response);
                 }
@@ -211,10 +214,10 @@ namespace EasyImgur
             return InternalUploadImage(_URL, true, _Title, _Description, _Anonymous);
         }
 
-        static public APIResponses.ImageResponse UploadAlbum(Image[] _Images, string _Title, bool _Anonymous)
+        static public APIResponses.AlbumResponse UploadAlbum(Image[] _Images, string _AlbumTitle, bool _Anonymous, string _Title, string _Description)
         {
             string url = m_EndPoint + "album";
-            string responseString;
+            string responseString = "";
 
             using(WebClient t = new WebClient())
             {
@@ -224,13 +227,14 @@ namespace EasyImgur
                     var values = new System.Collections.Specialized.NameValueCollection
                     {
                         {
-                            "title", _Title
+                            "title", _AlbumTitle
                         },
                         {
                             "layout", "vertical"
                         }
                     };
                     responseString = System.Text.Encoding.ASCII.GetString(t.UploadValues(url, "POST", values));
+                    //responseString = t.UploadString(url + "/ZHPG7sztcWB26YM", "DELETE", "");
                 }
                 catch(System.Net.WebException ex)
                 {
@@ -256,7 +260,175 @@ namespace EasyImgur
                 }
             }
 
-            return null;
+            APIResponses.AlbumResponse resp = null;
+            try
+            {
+                resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.AlbumResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                resp = null;
+            }
+
+            if(resp == null || responseString == "" || responseString == null)
+                resp = new APIResponses.AlbumResponse() { success = false };
+
+            if(resp.success)
+                Log.Info("Successfully created album! (" + resp.status.ToString() + ")");
+            else
+            {
+                Log.Error("Failed to create album! (" + resp.status.ToString() + ")");
+                return resp;
+            }
+
+            // sometimes this happens! it's weird.
+            if(_Anonymous && resp.data.deletehash == null)
+            {
+                Log.Error("Anonymous album creation didn't return deletehash. Can't add to album.");
+                resp.success = false;
+                resp.data.error = "Imgur API error. Try again in a minute.";
+                // can't even be responsible and delete our orphaned album
+                return resp;
+            }
+
+            // in case I need them later 
+            List<APIResponses.ImageResponse> responses = new List<APIResponses.ImageResponse>();
+            foreach(Image image in _Images)
+                responses.Add(InternalUploadImage(image, false, _Title, _Description, _Anonymous, _Anonymous ? resp.data.deletehash : resp.data.id));
+
+            // since an album creation doesn't return very much in the manner of information, make a request to 
+            // get the fully populated album
+            string deletehash = resp.data.deletehash; // save deletehash
+            responseString = "";
+            using(WebClient t = new WebClient())
+            {
+                t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
+                try
+                {
+                    responseString = t.DownloadString(url + "/" + resp.data.id);
+                }
+                catch(System.Net.WebException ex)
+                {
+                    if(ex.Response == null)
+                    {
+                        if(networkRequestFailed != null) networkRequestFailed.Invoke();
+                    }
+                    else
+                    {
+                        System.IO.Stream stream = ex.Response.GetResponseStream();
+                        int currByte = -1;
+                        StringBuilder strBuilder = new StringBuilder();
+                        while((currByte = stream.ReadByte()) != -1)
+                        {
+                            strBuilder.Append((char)currByte);
+                        }
+                        responseString = strBuilder.ToString();
+                    }
+                }
+                catch(System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
+                }
+            }
+
+            APIResponses.AlbumResponse oldResp = resp;
+            try
+            {
+                resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.AlbumResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+            }
+
+            if(resp == null || responseString == "" || responseString == null)
+                resp = new APIResponses.AlbumResponse() { success = false };
+
+            resp.data.deletehash = deletehash;
+
+            if(resp.success)
+            {
+                int i = 0;
+                foreach(var response in resp.data.images)
+                    if(response.id == resp.data.cover)
+                        break;
+                    else
+                        i++;
+                if(i < _Images.Length)
+                    resp.CoverImage = _Images[i];
+                else
+                    resp.CoverImage = null;
+            }
+
+            if(resp.success)
+                Log.Info("Successfully created album! (" + resp.status.ToString() + ")");
+            else
+            {
+                Log.Error("Created album, but failed to get album information! (" + resp.status.ToString() + ")");
+                return oldResp;
+            }
+
+            return resp;
+        }
+
+        static public bool DeleteAlbum(string _DeleteHash, bool _AnonymousAlbum)
+        {
+            string url = m_EndPoint + "album/" + _DeleteHash;
+
+            if(!_AnonymousAlbum && !HasBeenAuthorized())
+            {
+                Log.Error("Can't delete an album that belongs to an account while the app is no longer authorized!");
+                return false;
+            }
+
+            string responseString = string.Empty;
+            using(WebClient wc = new WebClient())
+            {
+                wc.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(false);
+                try
+                {
+                    responseString = wc.UploadString(url, "DELETE", string.Empty);
+                }
+                catch(System.Net.WebException ex)
+                {
+                    if(ex.Status != WebExceptionStatus.Success)
+                    {
+                        if(networkRequestFailed != null) networkRequestFailed.Invoke();
+                    }
+                    Log.Error("An exception was thrown while trying to delete an image from Imgur (" + ex.Status + ") [deletehash: " + _DeleteHash + "]");
+                }
+                catch(System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
+                }
+            }
+
+            APIResponses.BaseResponse resp = null;
+            try
+            {
+                resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.BaseResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            }
+            catch(System.Exception ex)
+            {
+                Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                resp = null;
+            }
+
+            if(resp == null || responseString == null || responseString == string.Empty)
+            {
+                resp = new APIResponses.ImageResponse();
+                resp.success = false;
+            }
+
+            if(resp.success)
+            {
+                Log.Info("Successfully deleted album! (" + resp.status.ToString() + ")");
+                return true;
+            }
+
+            Log.Error("Failed to delete album! (" + resp.status.ToString() + ") [\n\rdeletehash: " + _DeleteHash + "\n\r]");
+            return false;
         }
 
         static public bool DeleteImage( string _DeleteHash, bool _AnonymousImage )

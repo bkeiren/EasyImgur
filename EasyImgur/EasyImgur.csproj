@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIResponses\AlbumResponse.cs" />
     <Compile Include="APIResponses\TokenResponse.cs" />
     <Compile Include="ArgumentsRecievedEventArgs.cs" />
     <Compile Include="AuthorizeForm.cs">

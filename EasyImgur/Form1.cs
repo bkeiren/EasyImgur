@@ -76,7 +76,28 @@ namespace EasyImgur
                 }
 
                 if(Directory.Exists(path))
-                    notifyIcon1.ShowBalloonTip(2000, "Not Supported", "EasyImgur doesn't yet support uploading as a gallery.", ToolTipIcon.Warning);
+                {
+                    //notifyIcon1.ShowBalloonTip(2000, "Not Supported", "EasyImgur doesn't yet support uploading as a gallery.", ToolTipIcon.Warning);
+                    string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
+                        ".gif", ".tiff", ".tif", ".xcf" };
+                    List<string> files = new List<string>();
+                    foreach(string s in Directory.GetFiles(path))
+                    {
+                        bool cont = false;
+                        foreach(string filetype in fileTypes)
+                            if(s.EndsWith(filetype, true, null))
+                            {
+                                cont = true;
+                                break;
+                            }
+                        if(!cont)
+                            continue;
+
+                        files.Add(s);
+                    }
+                    
+                    UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                }
                 else if(File.Exists(path))
                     UploadFile(anonymous, new string[] { path });
             }
@@ -221,6 +242,42 @@ namespace EasyImgur
             }
         }
 
+        private void UploadAlbum(bool _Anonymous, string[] paths, string albumTitle)
+        {
+            notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
+            List<Image> images = new List<Image>();
+            foreach(string path in paths)
+                using(Stream stream = System.IO.File.Open(path, System.IO.FileMode.Open))
+                    images.Add(System.Drawing.Image.FromStream(stream));
+
+            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), albumTitle, _Anonymous, GetTitleString(), GetDescriptionString());
+            if(response.success)
+            {
+                if(Properties.Settings.Default.copyLinks)
+                {
+                    Clipboard.SetText(response.data.link);
+                }
+
+                notifyIcon1.ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.data.link, ToolTipIcon.None);
+
+                HistoryItem item = new HistoryItem();
+                item.timestamp = DateTime.Now;
+                item.id = response.data.id;
+                item.link = response.data.link;
+                item.deletehash = response.data.deletehash;
+                item.title = response.data.title;
+                item.description = response.data.description;
+                item.anonymous = _Anonymous;
+                item.album = true;
+                item.thumbnail = response.CoverImage.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
+                History.StoreHistoryItem(item);
+            }
+            else
+            {
+                notifyIcon1.ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.status + "): " + response.data.error, ToolTipIcon.None);
+            }
+        }
+
         private void UploadFile( bool _Anonymous, string[] paths = null )
         {
             if(paths == null)
@@ -233,6 +290,12 @@ namespace EasyImgur
             }
             if (paths != null)
             {
+                if(paths.Length > 1 && Properties.Settings.Default.uploadMultipleImagesAsGallery)
+                {
+                    UploadAlbum(_Anonymous, paths, "");
+                    return;
+                }
+
                 int success = 0;
                 int failure = 0;
                 int i = 0;
@@ -280,7 +343,7 @@ namespace EasyImgur
                         else
                         {
                             failure++;
-                            notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.status + "):", ToolTipIcon.None);
+                            notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.status + "): " + resp.data.error, ToolTipIcon.None);
                         }
                     }
                     catch (System.IO.FileNotFoundException)
@@ -341,6 +404,7 @@ namespace EasyImgur
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
             checkBoxShowTokenRefreshNotification.Checked = Properties.Settings.Default.showNotificationOnTokenRefresh;
             checkBoxEnableContextMenu.Checked = Properties.Settings.Default.enableContextMenu;
+            checkBoxGalleryUpload.Checked = Properties.Settings.Default.uploadMultipleImagesAsGallery;
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -378,6 +442,7 @@ namespace EasyImgur
             Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
             Properties.Settings.Default.showNotificationOnTokenRefresh = checkBoxShowTokenRefreshNotification.Checked;
             Properties.Settings.Default.enableContextMenu = checkBoxEnableContextMenu.Checked;
+            Properties.Settings.Default.uploadMultipleImagesAsGallery = checkBoxGalleryUpload.Checked;
 
             using(Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
@@ -400,22 +465,24 @@ namespace EasyImgur
 
         private void updateRegistry()
         {
+            // a note: Directory doesn't work if within SystemFileAssociations, and 
+            // the extensions don't work if not inside them. At least, this seems to be the case for me
             string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
             ".gif", ".tiff", ".tif", ".pdf", ".xcf", "Directory" };
             using(RegistryKey root = Registry.CurrentUser.OpenSubKey("Software\\Classes", true))
             using(RegistryKey fileAssoc = root.CreateSubKey("SystemFileAssociations"))
                 foreach(string fileType in fileTypes)
-                    using(RegistryKey fileTypeKey = fileAssoc.CreateSubKey(fileType))
+                    using(RegistryKey fileTypeKey = (fileType == "Directory" ? fileAssoc.CreateSubKey(fileType) : root.CreateSubKey(fileType)))
                     using(RegistryKey shell = fileTypeKey.CreateSubKey("shell"))
                     {
                         if(Properties.Settings.Default.enableContextMenu)
                         {
                             using(RegistryKey anonHandler = shell.CreateSubKey("imguruploadanonymous"))
                                 enableContextMenu(anonHandler, "Upload to Imgur" +
-                                    (fileType == "Folder" ? " as gallery" : "") + " (anonymous)", true);
+                                    (fileType == "Directory" ? " as album" : "") + " (anonymous)", true);
                             using(RegistryKey accHandler = shell.CreateSubKey("imgurupload"))
                                 enableContextMenu(accHandler, "Upload to Imgur" +
-                                    (fileType == "Folder" ? " as gallery" : ""), false);
+                                    (fileType == "Directory" ? " as album" : ""), false);
                         }
                         else
                         {
@@ -459,6 +526,7 @@ namespace EasyImgur
                 textBoxTimestamp.Text = string.Empty;
                 pictureBox1.Image = null;
                 checkBoxTiedToAccount.Checked = false;
+                checkBoxAlbum.Checked = false;
 
                 buttonRemoveFromImgur.Enabled = false;
                 buttonRemoveFromHistory.Enabled = false;
@@ -472,6 +540,7 @@ namespace EasyImgur
                 textBoxTimestamp.Text = item.timestamp.ToString();
                 pictureBox1.Image = item.thumbnail;
                 checkBoxTiedToAccount.Checked = !item.anonymous;
+                checkBoxAlbum.Checked = item.album;
 
                 buttonRemoveFromImgur.Enabled = item.anonymous || (!item.anonymous && ImgurAPI.HasBeenAuthorized());
                 buttonRemoveFromHistory.Enabled = true;
@@ -506,7 +575,8 @@ namespace EasyImgur
             int currentCount = 0;
 
             listBoxHistory.BeginUpdate();
-            while (listBoxHistory.SelectedItems.Count > 0)
+            // without the second condition, a failed removal will cause an infinite loop
+            while (listBoxHistory.SelectedItems.Count > 0 && currentCount < count) 
             {
                 ++currentCount;
 
@@ -517,16 +587,16 @@ namespace EasyImgur
                 }
 
                 string balloon_image_counter_text = (isMultipleImages ? (currentCount.ToString() + "/" + count.ToString()) : string.Empty);
-                string balloon_text = "Attempting to remove image " + balloon_image_counter_text + " from Imgur...";
-                notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to remove image " + balloon_image_counter_text + " from Imgur...", ToolTipIcon.None);
-                if (ImgurAPI.DeleteImage(item.deletehash, item.anonymous))
+                string balloon_text = "Attempting to remove " + (item.album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur...";
+                notifyIcon1.ShowBalloonTip(2000, "Hold on...", balloon_text, ToolTipIcon.None);
+                if (item.album ? ImgurAPI.DeleteAlbum(item.deletehash, item.anonymous) : ImgurAPI.DeleteImage(item.deletehash, item.anonymous))
                 {
-                    notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed image " + balloon_image_counter_text + " from Imgur and history", ToolTipIcon.None);
+                    notifyIcon1.ShowBalloonTip(2000, "Success!", "Removed " + (item.album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur and history", ToolTipIcon.None);
                     History.RemoveHistoryItem(item);
                 }
                 else
                 {
-                    notifyIcon1.ShowBalloonTip(2000, "Failed", "Failed to remove image " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
+                    notifyIcon1.ShowBalloonTip(2000, "Failed", "Failed to remove " + (item.album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
                 }
             }
             listBoxHistory.EndUpdate();
