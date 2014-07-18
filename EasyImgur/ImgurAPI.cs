@@ -211,6 +211,54 @@ namespace EasyImgur
             return InternalUploadImage(_URL, true, _Title, _Description, _Anonymous);
         }
 
+        static public APIResponses.ImageResponse UploadAlbum(Image[] _Images, string _Title, bool _Anonymous)
+        {
+            string url = m_EndPoint + "album";
+            string responseString;
+
+            using(WebClient t = new WebClient())
+            {
+                t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
+                try
+                {
+                    var values = new System.Collections.Specialized.NameValueCollection
+                    {
+                        {
+                            "title", _Title
+                        },
+                        {
+                            "layout", "vertical"
+                        }
+                    };
+                    responseString = System.Text.Encoding.ASCII.GetString(t.UploadValues(url, "POST", values));
+                }
+                catch(System.Net.WebException ex)
+                {
+                    if(ex.Response == null)
+                    {
+                        if(networkRequestFailed != null) networkRequestFailed.Invoke();
+                    }
+                    else
+                    {
+                        System.IO.Stream stream = ex.Response.GetResponseStream();
+                        int currByte = -1;
+                        StringBuilder strBuilder = new StringBuilder();
+                        while((currByte = stream.ReadByte()) != -1)
+                        {
+                            strBuilder.Append((char)currByte);
+                        }
+                        responseString = strBuilder.ToString();
+                    }
+                }
+                catch(System.Exception ex)
+                {
+                    Log.Error("Unexpected Exception: " + ex.ToString());
+                }
+            }
+
+            return null;
+        }
+
         static public bool DeleteImage( string _DeleteHash, bool _AnonymousImage )
         {
             string url = m_EndPoint + "image/" + _DeleteHash;

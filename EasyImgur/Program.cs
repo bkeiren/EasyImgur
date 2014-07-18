@@ -22,7 +22,7 @@ namespace EasyImgur
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Form1 form = new Form1(singleInstance);
+                    Form1 form = new Form1(singleInstance, args);
                     Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
                     Application.Run();
                 }

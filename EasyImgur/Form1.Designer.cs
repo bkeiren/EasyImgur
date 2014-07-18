@@ -93,6 +93,8 @@
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.label16 = new System.Windows.Forms.Label();
+            this.checkBoxGalleryUpload = new System.Windows.Forms.CheckBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -148,6 +150,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label17);
+            this.tabPage1.Controls.Add(this.checkBoxGalleryUpload);
             this.tabPage1.Controls.Add(this.label16);
             this.tabPage1.Controls.Add(this.checkBoxEnableContextMenu);
             this.tabPage1.Controls.Add(this.checkBoxShowTokenRefreshNotification);
@@ -314,7 +318,7 @@
             // checkBoxCopyLinks
             // 
             this.checkBoxCopyLinks.AutoSize = true;
-            this.checkBoxCopyLinks.Location = new System.Drawing.Point(4, 38);
+            this.checkBoxCopyLinks.Location = new System.Drawing.Point(205, 16);
             this.checkBoxCopyLinks.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxCopyLinks.Name = "checkBoxCopyLinks";
             this.checkBoxCopyLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -783,6 +787,29 @@
             this.label16.TabIndex = 18;
             this.label16.Text = "Moving the .exe requires one manual launch to restore the path";
             // 
+            // checkBoxGalleryUpload
+            // 
+            this.checkBoxGalleryUpload.AutoSize = true;
+            this.checkBoxGalleryUpload.Location = new System.Drawing.Point(19, 37);
+            this.checkBoxGalleryUpload.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxGalleryUpload.Name = "checkBoxGalleryUpload";
+            this.checkBoxGalleryUpload.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxGalleryUpload.Size = new System.Drawing.Size(181, 17);
+            this.checkBoxGalleryUpload.TabIndex = 19;
+            this.checkBoxGalleryUpload.Text = "Upload multiple images as gallery";
+            this.checkBoxGalleryUpload.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label17.Location = new System.Drawing.Point(202, 38);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(279, 13);
+            this.label17.TabIndex = 20;
+            this.label17.Text = "Only used when multiple files are selected in the file dialog";
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -877,6 +904,8 @@
         private System.Windows.Forms.Button btnOpenImageLinkInBrowser;
         private System.Windows.Forms.CheckBox checkBoxEnableContextMenu;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.CheckBox checkBoxGalleryUpload;
     }
 }
 

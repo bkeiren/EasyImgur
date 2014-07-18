@@ -142,5 +142,17 @@ namespace EasyImgur.Properties {
                 this["enableContextMenu"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool uploadMultipleImagesAsGallery {
+            get {
+                return ((bool)(this["uploadMultipleImagesAsGallery"]));
+            }
+            set {
+                this["uploadMultipleImagesAsGallery"] = value;
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace EasyImgur
     {
         private bool CloseCommandWasSentFromExitButton = false;
 
-        public Form1(SingleInstance singleInstance)
+        public Form1(SingleInstance singleInstance, string[] args)
         {
             InitializeComponent();
             
@@ -40,17 +40,26 @@ namespace EasyImgur
             History.historyItemRemoved += new History.HistoryItemRemovedEventHandler(this.HistoryItemRemoved);
             History.InitializeFromDisk();
 
-            notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
+            // if we have arguments, we're going to show a tip when we handle those arguments. 
+            if(args.Length == 0) 
+                notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
 
             Statistics.GatherAndSend();
 
             singleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
+            if(args.Length > 0)
+                singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = args });
         }
 
         void singleInstance_ArgumentsReceived(object sender, ArgumentsReceivedEventArgs e)
         {
+            // As a side effect of the way this function is implemented, something like
+            // "EasyImgur.exe file1 file2 /anonymous file3 file4" will cause file1 and file2 to be
+            // uploaded using the account and file3 and file4 to be uploaded anonymously. I left this in
+            // as a neat little feature.
+            // However, all uploads will fail if the user is not logged in.
             bool anonymous = false;
             foreach(string path in e.Args)
             {
