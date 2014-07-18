@@ -17,7 +17,7 @@ namespace EasyImgur
     {
         private bool CloseCommandWasSentFromExitButton = false;
 
-        public Form1(SingleInstance singleInstance, string[] args)
+        public Form1(SingleInstance _SingleInstance, string[] _Args)
         {
             InitializeComponent();
             
@@ -41,19 +41,19 @@ namespace EasyImgur
             History.InitializeFromDisk();
 
             // if we have arguments, we're going to show a tip when we handle those arguments. 
-            if(args.Length == 0) 
+            if(_Args.Length == 0) 
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
 
             Statistics.GatherAndSend();
 
-            singleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
-            if(args.Length > 0)
-                singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = args });
+            _SingleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
+            if(_Args.Length > 0)
+                singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Args });
         }
 
-        void singleInstance_ArgumentsReceived(object sender, ArgumentsReceivedEventArgs e)
+        void singleInstance_ArgumentsReceived( object sender, ArgumentsReceivedEventArgs e )
         {
             // As a side effect of the way this function is implemented, something like
             // "EasyImgur.exe file1 file2 /anonymous file3 file4" will cause file1 and file2 to be
@@ -242,15 +242,15 @@ namespace EasyImgur
             }
         }
 
-        private void UploadAlbum(bool _Anonymous, string[] paths, string albumTitle)
+        private void UploadAlbum( bool _Anonymous, string[] _Paths, string _AlbumTitle )
         {
             notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
             List<Image> images = new List<Image>();
-            foreach(string path in paths)
+            foreach(string path in _Paths)
                 using(Stream stream = System.IO.File.Open(path, System.IO.FileMode.Open))
                     images.Add(System.Drawing.Image.FromStream(stream));
 
-            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), albumTitle, _Anonymous, GetTitleString(), GetDescriptionString());
+            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, GetTitleString(), GetDescriptionString());
             if(response.success)
             {
                 if(Properties.Settings.Default.copyLinks)
@@ -278,28 +278,28 @@ namespace EasyImgur
             }
         }
 
-        private void UploadFile( bool _Anonymous, string[] paths = null )
+        private void UploadFile( bool _Anonymous, string[] _Paths = null )
         {
-            if(paths == null)
+            if(_Paths == null)
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Multiselect = true;
                 DialogResult res = dialog.ShowDialog();
                 if(res == DialogResult.OK)
-                    paths = dialog.FileNames;
+                    _Paths = dialog.FileNames;
             }
-            if (paths != null)
+            if (_Paths != null)
             {
-                if(paths.Length > 1 && Properties.Settings.Default.uploadMultipleImagesAsGallery)
+                if(_Paths.Length > 1 && Properties.Settings.Default.uploadMultipleImagesAsGallery)
                 {
-                    UploadAlbum(_Anonymous, paths, "");
+                    UploadAlbum(_Anonymous, _Paths, "");
                     return;
                 }
 
                 int success = 0;
                 int failure = 0;
                 int i = 0;
-                foreach (string fileName in paths)
+                foreach (string fileName in _Paths)
                 {
                     ++i;
 
@@ -308,7 +308,7 @@ namespace EasyImgur
                         continue;
                     }
 
-                    string fileCounterString = (paths.Length > 1) ? (" (" + i.ToString() + "/" + paths.Length.ToString() + ") ") : (string.Empty);
+                    string fileCounterString = (_Paths.Length > 1) ? (" (" + i.ToString() + "/" + _Paths.Length.ToString() + ") ") : (string.Empty);
 
                     //using (System.IO.Stream stream = dialog.OpenFile())
                     System.IO.FileStream stream = null;
@@ -359,7 +359,7 @@ namespace EasyImgur
                         }
                     }
                 }
-                if(paths.Length > 1)
+                if(_Paths.Length > 1)
                 {
                     notifyIcon1.ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info);
                 }
@@ -414,7 +414,7 @@ namespace EasyImgur
             {
                 // A key exists, make sure we're using the most up-to-date path!
                 registryKey.SetValue("EasyImgur", Application.ExecutablePath);
-                updateRegistry(); // this will need to be updated too, if we're using it
+                UpdateRegistry(); // this will need to be updated too, if we're using it
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
             }
         }
@@ -458,12 +458,12 @@ namespace EasyImgur
                 }
             }
 
-            updateRegistry();
+            UpdateRegistry();
 
             Properties.Settings.Default.Save();
         }
 
-        private void updateRegistry()
+        private void UpdateRegistry()
         {
             // a note: Directory doesn't work if within SystemFileAssociations, and 
             // the extensions don't work if not inside them. At least, this seems to be the case for me
@@ -478,10 +478,10 @@ namespace EasyImgur
                         if(Properties.Settings.Default.enableContextMenu)
                         {
                             using(RegistryKey anonHandler = shell.CreateSubKey("imguruploadanonymous"))
-                                enableContextMenu(anonHandler, "Upload to Imgur" +
+                                EnableContextMenu(anonHandler, "Upload to Imgur" +
                                     (fileType == "Directory" ? " as album" : "") + " (anonymous)", true);
                             using(RegistryKey accHandler = shell.CreateSubKey("imgurupload"))
-                                enableContextMenu(accHandler, "Upload to Imgur" +
+                                EnableContextMenu(accHandler, "Upload to Imgur" +
                                     (fileType == "Directory" ? " as album" : ""), false);
                         }
                         else
@@ -492,7 +492,7 @@ namespace EasyImgur
                     }
         }
 
-        private void enableContextMenu(RegistryKey key, string commandText, bool anonymous)
+        private void EnableContextMenu(RegistryKey key, string commandText, bool anonymous)
         {
             key.SetValue("", commandText);
             key.SetValue("Icon", Application.ExecutablePath);

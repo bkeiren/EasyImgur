@@ -1,4 +1,7 @@
-﻿using System;
+﻿// source: http://web.archive.org/web/20080506103924/http://www.flawlesscode.com/post/2008/02/Enforcing-single-instance-with-argument-passing.aspx
+// found at: http://stackoverflow.com/questions/917883/c-sharp-how-to-single-instance-application-that-accepts-new-parameters
+
+using System;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
@@ -19,9 +22,9 @@ namespace EasyImgur
         /// Enforces single instance for an application.
         /// </summary>
         /// <param name="identifier">An identifier unique to this application.</param>
-        public SingleInstance(Guid identifier)
+        public SingleInstance(Guid _Identifier)
         {
-            this.identifier = identifier;
+            this.identifier = _Identifier;
             mutex = new Mutex(true, identifier.ToString(), out ownsMutex);
         }
 
@@ -34,9 +37,9 @@ namespace EasyImgur
         /// <summary>
         /// Passes the given arguments to the first running instance of the application.
         /// </summary>
-        /// <param name="arguments">The arguments to pass.</param>
+        /// <param name="_Arguments">The arguments to pass.</param>
         /// <returns>Return true if the operation succeded, false otherwise.</returns>
-        public Boolean PassArgumentsToFirstInstance(String[] arguments)
+        public Boolean PassArgumentsToFirstInstance(String[] _Arguments)
         {
             if(IsFirstInstance)
                 throw new InvalidOperationException("This is the first instance.");
@@ -48,7 +51,7 @@ namespace EasyImgur
                 {
                     client.Connect(200);
 
-                    foreach(String argument in arguments)
+                    foreach(String argument in _Arguments)
                         writer.WriteLine(argument);
                 }
                 return true;
@@ -74,8 +77,8 @@ namespace EasyImgur
         /// <summary>
         /// Listens for arguments on a named pipe.
         /// </summary>
-        /// <param name="state">State object required by WaitCallback delegate.</param>
-        private void ListenForArguments(Object state)
+        /// <param name="_State">State object required by WaitCallback delegate.</param>
+        private void ListenForArguments(Object _State)
         {
             try
             {
@@ -102,10 +105,10 @@ namespace EasyImgur
         /// <summary>
         /// Calls the OnArgumentsReceived method casting the state Object to String[].
         /// </summary>
-        /// <param name="state">The arguments to pass.</param>
-        private void CallOnArgumentsReceived(Object state)
+        /// <param name="_State">The arguments to pass.</param>
+        private void CallOnArgumentsReceived(Object _State)
         {
-            OnArgumentsReceived((String[])state);
+            OnArgumentsReceived((String[])_State);
         }
         /// <summary>
         /// Event raised when arguments are received from successive instances.
@@ -114,17 +117,17 @@ namespace EasyImgur
         /// <summary>
         /// Fires the ArgumentsReceived event.
         /// </summary>
-        /// <param name="arguments">The arguments to pass with the ArgumentsReceivedEventArgs.</param>
-        private void OnArgumentsReceived(String[] arguments)
+        /// <param name="_Arguments">The arguments to pass with the ArgumentsReceivedEventArgs.</param>
+        private void OnArgumentsReceived(String[] _Arguments)
         {
             if(ArgumentsReceived != null)
-                ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = arguments });
+                ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Arguments });
         }
 
         #region IDisposable
         private Boolean disposed = false;
 
-        protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool _Disposing)
         {
             if(!disposed)
             {
