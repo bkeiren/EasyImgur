@@ -16,6 +16,8 @@ namespace EasyImgur
 
         private static BindingSource m_HistoryBinding;
 
+        private static string SaveLocation { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\"; } }
+
         public static int count
         {
             get { return m_HistoryBinding.Count; }
@@ -74,7 +76,7 @@ namespace EasyImgur
             string jsonString = string.Empty;
             try
             {
-                jsonString = System.IO.File.ReadAllText("history");
+                jsonString = System.IO.File.ReadAllText(SaveLocation + "history");
             }
             catch (System.IO.FileNotFoundException ex)
             {
@@ -146,7 +148,7 @@ namespace EasyImgur
             string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(m_HistoryBinding.List, Newtonsoft.Json.Formatting.None, new ImageConverter());
             try
             {
-                System.IO.File.WriteAllText("history", jsonString);
+                System.IO.File.WriteAllText(SaveLocation + "history", jsonString);
             }
             catch (System.Exception ex)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -18,6 +19,9 @@ namespace EasyImgur
             {
                 if(singleInstance.IsFirstInstance)
                 {
+                    if(!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"))
+                        Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur");
+
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
 
                     Application.EnableVisualStyles();

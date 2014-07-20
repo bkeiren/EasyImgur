@@ -50,8 +50,7 @@ namespace EasyImgur
         private void InitializeEventHandlers()
         {
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
-            this.Shown += new System.EventHandler(this.Form1_Shown);
-            this.VisibleChanged += new System.EventHandler(this.Form1_VisibleChanged);
+            this.Load += new System.EventHandler(this.Form1_Load);
             notifyIcon1.BalloonTipClicked += new System.EventHandler(this.NotifyIcon1_BalloonTipClicked);
             notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
             tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
@@ -389,7 +388,7 @@ namespace EasyImgur
             this.BringToFront();
         }
 
-        private void Form1_VisibleChanged(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
 
@@ -400,18 +399,13 @@ namespace EasyImgur
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string value = (string)registryKey.GetValue("EasyImgur", string.Empty); // string.Empty is returned if no key is present.
             checkBoxLaunchAtBoot.Checked = value != string.Empty;
-            if (value != string.Empty && value != QuotedApplicationPath)
+            if(value != string.Empty && value != QuotedApplicationPath)
             {
                 // A key exists, make sure we're using the most up-to-date path!
                 registryKey.SetValue("EasyImgur", QuotedApplicationPath);
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
             }
             UpdateRegistry(true); // this will need to be updated too, if we're using it
-        }
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            Form1_VisibleChanged(null, null);
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -464,7 +458,7 @@ namespace EasyImgur
             // of what I describe in the above note, and it was working. Earlier, though, when I wrote that,
             // it seemed to be true. Either way, the placement (inside or outside of SystemFileAssociations)
             // does affect where in the context menu they show up. Feel free to play with the placement and see
-            // if you can get it to work.
+            // if you can get it to work better.
             string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
             ".gif", ".tiff", ".tif", ".pdf", ".xcf", "Directory" };
             using(RegistryKey root = Registry.CurrentUser.OpenSubKey("Software\\Classes", true))
@@ -518,16 +512,6 @@ namespace EasyImgur
             HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
             if (item == null)
             {
-                // I'm certain there's a way to get rid of this block with the help of data binding,
-                // but I'm not sure how to and I'm tired of messing with it
-                textBoxID.Text = string.Empty;
-                textBoxLink.Text = string.Empty;
-                textBoxDeleteHash.Text = string.Empty;
-                textBoxTimestamp.Text = string.Empty;
-                pictureBox1.Image = null;
-                checkBoxTiedToAccount.Checked = false;
-                checkBoxAlbum.Checked = false;
-
                 buttonRemoveFromImgur.Enabled = false;
                 buttonRemoveFromHistory.Enabled = false;
                 btnOpenImageLinkInBrowser.Enabled = false;
@@ -591,9 +575,6 @@ namespace EasyImgur
                 }
             }
             listBoxHistory.EndUpdate();
-
-            if(listBoxHistory.Items.Count > 0)
-                listBoxHistory.SelectedIndex = 0;
         }
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
@@ -640,9 +621,6 @@ namespace EasyImgur
                 History.RemoveHistoryItem(item);
             }
             listBoxHistory.EndUpdate();
-
-            if(listBoxHistory.Items.Count > 0)
-                listBoxHistory.SelectedIndex = 0;
         }
 
         private void uploadClipboardAccountTrayMenuItem_Click(object sender, EventArgs e)
