@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EasyImgur
 {
-    class CredentialsHelper
+    static class CredentialsHelper
     {
         public struct Credentials
         {

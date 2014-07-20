@@ -7,7 +7,7 @@ using System.IO;
 
 namespace EasyImgur
 {
-    class AesHelper
+    static class AesHelper
     {
         public static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key,byte[] IV)
         {

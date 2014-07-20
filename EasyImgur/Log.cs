@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EasyImgur
 {
-    public class Log
+    public static class Log
     {
         private static System.Object ThreadLock = new System.Object();
         private static string LogFile = "log.log";

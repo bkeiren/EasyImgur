@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace EasyImgur
 {
-    public class ImgurAPI
+    public static class ImgurAPI
     {
         static private string m_EndPoint = "https://api.imgur.com/3/";
 
@@ -124,6 +124,8 @@ namespace EasyImgur
                 _Image.Save(memStream, format);
             }
 
+            int status = 0;
+            string error = "An unknown error occurred.";
             using (WebClient t = new WebClient())
             {
                 t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
@@ -154,10 +156,12 @@ namespace EasyImgur
                 {
                     if (ex.Response == null)
                     {
-                        if (networkRequestFailed != null) networkRequestFailed.Invoke();
+                        if (networkRequestFailed != null) networkRequestFailed();
                     }
                     else
                     {
+                        int.TryParse(ex.Message.Split('(')[1].Split(')')[0], out status); // gets status code from message string in case of emergency
+                        error = ex.Message.Split('(')[1].Split(')')[1]; // I believe this gets the rest of the error message supplied, but Imgur went back up before I could test it
                         System.IO.Stream stream = ex.Response.GetResponseStream();
                         int currByte = -1;
                         StringBuilder strBuilder = new StringBuilder();
@@ -187,8 +191,12 @@ namespace EasyImgur
 
             if (resp == null || responseString == null || responseString == string.Empty)
             {
+                // generally indicates a server failure; on problems such as 502 Proxy Error and 504 Gateway Timeout HTML is returned
+                // which can't be parsed by the JSON converter.
                 resp = new APIResponses.ImageResponse();
                 resp.success = false;
+                resp.status = status;
+                resp.data = new APIResponses.ImageResponse.Data() { error = error };
             }
 
             if (resp.success)
