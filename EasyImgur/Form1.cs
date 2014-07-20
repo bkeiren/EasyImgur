@@ -17,6 +17,11 @@ namespace EasyImgur
     {
         private bool CloseCommandWasSentFromExitButton = false;
 
+        /// <summary>
+        /// Property to easily access the path of the executable, quoted for safety.
+        /// </summary>
+        private string QuotedApplicationPath { get { return "\"" + Application.ExecutablePath + "\""; } }
+
         public Form1(SingleInstance _SingleInstance, string[] _Args)
         {
             InitializeComponent();
@@ -61,7 +66,7 @@ namespace EasyImgur
             // as a neat little feature.
             // However, all uploads will fail if the user is not logged in.
             bool anonymous = false;
-            foreach(string path in e.Args)
+            foreach(string path in e.Args.Where(s => { return s != null; })) // e.Args may contain a single null string
             {
                 if(path == "/anonymous")
                 {
@@ -74,10 +79,9 @@ namespace EasyImgur
                     notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
                     return;
                 }
-
+                
                 if(Directory.Exists(path))
                 {
-                    //notifyIcon1.ShowBalloonTip(2000, "Not Supported", "EasyImgur doesn't yet support uploading as a gallery.", ToolTipIcon.Warning);
                     string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
                         ".gif", ".tiff", ".tif", ".xcf" };
                     List<string> files = new List<string>();
@@ -310,13 +314,12 @@ namespace EasyImgur
 
                     string fileCounterString = (_Paths.Length > 1) ? (" (" + i.ToString() + "/" + _Paths.Length.ToString() + ") ") : (string.Empty);
 
-                    //using (System.IO.Stream stream = dialog.OpenFile())
-                    System.IO.FileStream stream = null;
                     try
                     {
-                        stream = System.IO.File.Open(fileName, System.IO.FileMode.Open);
-                        Image img = System.Drawing.Image.FromStream(stream);
                         notifyIcon1.ShowBalloonTip(2000, "Hold on..." + fileCounterString, "Attempting to upload image to Imgur...", ToolTipIcon.None);
+                        Image img;
+                        using(System.IO.FileStream stream = System.IO.File.Open(fileName, System.IO.FileMode.Open))
+                            img = System.Drawing.Image.FromStream(stream);
                         APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
                         if (resp.success)
                         {
@@ -350,13 +353,6 @@ namespace EasyImgur
                     {
                         failure++;
                         notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error);
-                    }
-                    finally
-                    {
-                        if (stream != null)
-                        {
-                            stream.Close();
-                        }
                     }
                 }
                 if(_Paths.Length > 1)
@@ -410,10 +406,10 @@ namespace EasyImgur
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string value = (string)registryKey.GetValue("EasyImgur", string.Empty); // string.Empty is returned if no key is present.
             checkBoxLaunchAtBoot.Checked = value != string.Empty;
-            if (value != string.Empty && value != Application.ExecutablePath)
+            if (value != string.Empty && value != QuotedApplicationPath)
             {
                 // A key exists, make sure we're using the most up-to-date path!
-                registryKey.SetValue("EasyImgur", Application.ExecutablePath);
+                registryKey.SetValue("EasyImgur", QuotedApplicationPath);
                 UpdateRegistry(); // this will need to be updated too, if we're using it
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
             }
@@ -449,7 +445,7 @@ namespace EasyImgur
                 if(checkBoxLaunchAtBoot.Checked)
                 {
                     // If the checkbox was marked, set a value which will make EasyImgur start at boot.
-                    registryKey.SetValue("EasyImgur", Application.ExecutablePath);
+                    registryKey.SetValue("EasyImgur", QuotedApplicationPath);
                 }
                 else
                 {
@@ -495,9 +491,9 @@ namespace EasyImgur
         private void EnableContextMenu(RegistryKey key, string commandText, bool anonymous)
         {
             key.SetValue("", commandText);
-            key.SetValue("Icon", Application.ExecutablePath);
+            key.SetValue("Icon", QuotedApplicationPath);
             using(RegistryKey subKey = key.CreateSubKey("command"))
-                subKey.SetValue("", "\"" + Application.ExecutablePath + "\"" + (anonymous ? " /anonymous" : "") + " \"%1\"");
+                subKey.SetValue("", QuotedApplicationPath + (anonymous ? " /anonymous" : "") + " \"%1\"");
         }
 
         private void buttonChangeCredentials_Click(object sender, EventArgs e)
