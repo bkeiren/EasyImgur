@@ -14,6 +14,7 @@ Using EasyImgur
 ![](http://i.imgur.com/3UL7hBe.png)
 
 - Open the EasyImgur menu by right-clicking on the tray icon:
+
 ![](http://i.imgur.com/vmGPAlO.png)
 
 - Upload a file or an image on your clipboard (for example a screenshot or a text URL that you copied) anonymously (*not* to an Imgur account) by using the *Upload from file...* and *Upload from clipboard* options.
