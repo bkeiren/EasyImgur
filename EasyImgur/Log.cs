@@ -5,10 +5,11 @@ using System.Text;
 
 namespace EasyImgur
 {
-    public class Log
+    public static class Log
     {
         private static System.Object ThreadLock = new System.Object();
-        private static string LogFile = "log.log";
+        private static string SaveLocation { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\"; } }
+        private static string LogFile = SaveLocation + "log.log";
         private static bool FirstInvocation = true;
 
         public static string Info( string _Message )

@@ -17,6 +17,9 @@ namespace EasyImgur
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            if(reader.Value == null)
+                return null;
+
             var m = new MemoryStream(Convert.FromBase64String((string)reader.Value));
             return (Bitmap)Bitmap.FromStream(m);
         }

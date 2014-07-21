@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EasyImgur
 {
-    class FormattingHelper
+    static class FormattingHelper
     {
         public class FormattingScheme
         {

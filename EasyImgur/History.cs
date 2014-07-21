@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace EasyImgur
 {
-    class History
+    static class History
     {
         public static event HistoryItemAddedEventHandler historyItemAdded;
         public static event HistoryItemRemovedEventHandler historyItemRemoved;
         public delegate void HistoryItemAddedEventHandler( HistoryItem _Item );
         public delegate void HistoryItemRemovedEventHandler( HistoryItem _Item );
 
-        private static List<HistoryItem> m_History = new List<HistoryItem>();
+        private static BindingSource m_HistoryBinding;
+
+        private static string SaveLocation { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\"; } }
 
         public static int count
         {
-            get { return m_History.Count; }
+            get { return m_HistoryBinding.Count; }
         }
 
         public static int anonymousCount
@@ -24,7 +28,7 @@ namespace EasyImgur
             get 
             {
                 int c = 0;
-                foreach (HistoryItem item in m_History)
+                foreach(HistoryItem item in m_HistoryBinding)
                 {
                     if (item.anonymous)
                     {
@@ -35,9 +39,22 @@ namespace EasyImgur
             }
         }
 
+        static History()
+        {
+            // add empty event handlers to avoid checking if the event is null
+            historyItemAdded += v => { };
+            historyItemRemoved += v => { };
+        }
+
         public static int accountCount
         {
             get { return count - anonymousCount; }
+        }
+
+        // required to be the first method called
+        public static void BindData(BindingSource source)
+        {
+            m_HistoryBinding = source;
         }
 
         public static void InitializeFromDisk()
@@ -45,9 +62,10 @@ namespace EasyImgur
             List<HistoryItem> history = History.GetHistoryFromDisk();
             if (history != null)
             {
-                m_History = history;
-                foreach (HistoryItem item in m_History)
+
+                foreach (HistoryItem item in history)
                 {
+                    m_HistoryBinding.Add(item);
                     historyItemAdded(item);
                 }
             }
@@ -58,7 +76,7 @@ namespace EasyImgur
             string jsonString = string.Empty;
             try
             {
-                jsonString = System.IO.File.ReadAllText("history");
+                jsonString = System.IO.File.ReadAllText(SaveLocation + "history");
             }
             catch (System.IO.FileNotFoundException ex)
             {
@@ -97,8 +115,13 @@ namespace EasyImgur
                 Log.Warning("NULL object passed to History.StoreHistoryItem. No item stored.");
                 return;
             }
+            if(m_HistoryBinding.Contains(_Item))
+            {
+                Log.Warning("Object already in history passed to History.StoreHistoryItem. No item stored.");
+                return;
+            }
 
-            m_History.Add(_Item);
+            m_HistoryBinding.Add(_Item);
             historyItemAdded(_Item);
 
             StoreHistoryOnDisk();
@@ -106,11 +129,14 @@ namespace EasyImgur
 
         public static void RemoveHistoryItem(HistoryItem _Item)
         {
-            if (m_History.RemoveAll(item => item.id == _Item.id) <= 0)
+            // This was changed because BindingSource doesn't support RemoveAll.
+            if(!m_HistoryBinding.Contains(_Item))
             {
                 Log.Warning("Failed to remove history item from list. Item is not present in list.");
                 return;
             }
+            else
+                m_HistoryBinding.Remove(_Item);
 
             StoreHistoryOnDisk();
             historyItemRemoved(_Item);
@@ -119,10 +145,10 @@ namespace EasyImgur
         private static bool StoreHistoryOnDisk()
         {
             bool success = true;
-            string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(m_History, Newtonsoft.Json.Formatting.None, new ImageConverter());
+            string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(m_HistoryBinding.List, Newtonsoft.Json.Formatting.None, new ImageConverter());
             try
             {
-                System.IO.File.WriteAllText("history", jsonString);
+                System.IO.File.WriteAllText(SaveLocation + "history", jsonString);
             }
             catch (System.Exception ex)
             {
