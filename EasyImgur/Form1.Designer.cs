@@ -62,6 +62,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxAlbum = new System.Windows.Forms.CheckBox();
+            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnOpenImageLinkInBrowser = new System.Windows.Forms.Button();
             this.textBoxTimestamp = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -78,6 +79,8 @@
             this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label18 = new System.Windows.Forms.Label();
+            this.contributorsList = new System.Windows.Forms.ListBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -96,17 +99,16 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
-            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -528,6 +530,10 @@
             this.checkBoxAlbum.Text = "Album";
             this.checkBoxAlbum.UseVisualStyleBackColor = true;
             // 
+            // historyItemBindingSource
+            // 
+            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
+            // 
             // btnOpenImageLinkInBrowser
             // 
             this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(230, 62);
@@ -694,6 +700,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.contributorsList);
             this.tabPage4.Controls.Add(this.pictureBox2);
             this.tabPage4.Controls.Add(this.linkLabel2);
             this.tabPage4.Controls.Add(this.linkLabel1);
@@ -706,10 +714,28 @@
             this.tabPage4.Text = "About";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(359, 21);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(225, 13);
+            this.label18.TabIndex = 5;
+            this.label18.Text = "A massive thanks to the following contributors:";
+            // 
+            // contributorsList
+            // 
+            this.contributorsList.FormattingEnabled = true;
+            this.contributorsList.Location = new System.Drawing.Point(362, 48);
+            this.contributorsList.Name = "contributorsList";
+            this.contributorsList.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.contributorsList.Size = new System.Drawing.Size(218, 173);
+            this.contributorsList.TabIndex = 4;
+            // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::EasyImgur.Properties.Resources.ei_logo;
-            this.pictureBox2.Location = new System.Drawing.Point(270, 17);
+            this.pictureBox2.Location = new System.Drawing.Point(150, 17);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(65, 65);
             this.pictureBox2.TabIndex = 3;
@@ -718,7 +744,7 @@
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(274, 91);
+            this.linkLabel2.Location = new System.Drawing.Point(155, 91);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(56, 13);
             this.linkLabel2.TabIndex = 1;
@@ -729,7 +755,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(240, 168);
+            this.linkLabel1.Location = new System.Drawing.Point(121, 168);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(121, 13);
             this.linkLabel1.TabIndex = 2;
@@ -740,7 +766,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(127, 121);
+            this.label14.Location = new System.Drawing.Point(8, 121);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(349, 39);
@@ -853,10 +879,6 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
-            // historyItemBindingSource
-            // 
-            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
-            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -877,12 +899,12 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -956,6 +978,8 @@
         private System.Windows.Forms.CheckBox checkBoxGalleryUpload;
         private System.Windows.Forms.CheckBox checkBoxAlbum;
         private System.Windows.Forms.BindingSource historyItemBindingSource;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ListBox contributorsList;
     }
 }
 

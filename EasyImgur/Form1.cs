@@ -406,6 +406,10 @@ namespace EasyImgur
                 notifyIcon1.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
             }
             UpdateRegistry(true); // this will need to be updated too, if we're using it
+
+            // Bind the data source for the list of contributors.
+            Contributors.bindingSource.DataSource = Contributors.contributors;
+            contributorsList.DataSource = Contributors.bindingSource;
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
