@@ -18,6 +18,13 @@ Using EasyImgur
 
 - Upload a file or an image on your clipboard (for example a screenshot or a text URL that you copied) anonymously (*not* to an Imgur account) by using the *Upload from file...* and *Upload from clipboard* options.
 
+- Upload a file or an image from your file explorer by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)**. Note that you will need to enable the context menu from the settings window for this feature to be available.
+
+![](http://i.imgur.com/IWx0XWs.png)
+
+Authorizing EasyImgur for uploading to your account
+---
+
 - To upload images to an Imgur account, you must first authorize EasyImgur to use your account. To do so, open the settings dialog by selecting *Settings* from the right-click menu. This opens an EasyImgur window. Go to the *Account* tab:
 ![](http://i.imgur.com/i34VILO.png)
 
