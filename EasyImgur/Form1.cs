@@ -26,6 +26,8 @@ namespace EasyImgur
         {
             InitializeComponent();
 
+            CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
+
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
             this.notifyIcon1.ContextMenu = this.trayMenu;
@@ -68,45 +70,53 @@ namespace EasyImgur
             // uploaded using the account and file3 and file4 to be uploaded anonymously. I left this in
             // as a neat little feature.
             // However, all uploads will fail if the user is not logged in.
-            bool anonymous = false;
-            foreach(string path in e.Args.Where(s => { return s != null; })) // e.Args may contain a single null string
+            try
             {
-                if(path == "/anonymous")
+                bool anonymous = false;
+                foreach(string path in e.Args.Where(s => { return s != null; })) // e.Args may contain a single null string
                 {
-                    anonymous = true;
-                    continue;
-                }
-
-                if(!anonymous && !ImgurAPI.HasBeenAuthorized())
-                {
-                    notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
-                    return;
-                }
-                
-                if(Directory.Exists(path))
-                {
-                    string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
-                        ".gif", ".tiff", ".tif", ".xcf" };
-                    List<string> files = new List<string>();
-                    foreach(string s in Directory.GetFiles(path))
+                    if(path == "/anonymous")
                     {
-                        bool cont = false;
-                        foreach(string filetype in fileTypes)
-                            if(s.EndsWith(filetype, true, null))
-                            {
-                                cont = true;
-                                break;
-                            }
-                        if(!cont)
-                            continue;
-
-                        files.Add(s);
+                        anonymous = true;
+                        continue;
                     }
-                    
-                    UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+
+                    if(!anonymous && !ImgurAPI.HasBeenAuthorized())
+                    {
+                        notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
+                        return;
+                    }
+
+                    if(Directory.Exists(path))
+                    {
+                        string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
+                        ".gif", ".tiff", ".tif", ".xcf" };
+                        List<string> files = new List<string>();
+                        foreach(string s in Directory.GetFiles(path))
+                        {
+                            bool cont = false;
+                            foreach(string filetype in fileTypes)
+                                if(s.EndsWith(filetype, true, null))
+                                {
+                                    cont = true;
+                                    break;
+                                }
+                            if(!cont)
+                                continue;
+
+                            files.Add(s);
+                        }
+
+                        UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                    }
+                    else if(File.Exists(path))
+                        UploadFile(anonymous, new string[] { path });
                 }
-                else if(File.Exists(path))
-                    UploadFile(anonymous, new string[] { path });
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Unhandled exception in context menu thread: " + ex.ToString());
+                notifyIcon1.ShowBalloonTip(2000, "Error", "An unknown exception occurred during upload. Check the log for further information.", ToolTipIcon.Error);
             }
         }
 
@@ -240,8 +250,20 @@ namespace EasyImgur
             notifyIcon1.ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
             List<Image> images = new List<Image>();
             foreach(string path in _Paths)
-                using(Stream stream = System.IO.File.Open(path, System.IO.FileMode.Open))
-                    images.Add(System.Drawing.Image.FromStream(stream));
+                try
+                {
+                    using(Stream stream = System.IO.File.Open(path, System.IO.FileMode.Open))
+                        images.Add(System.Drawing.Image.FromStream(stream));
+                }
+                catch(FileNotFoundException)
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Failed", "Could not find image file on disk (" + path + "):", ToolTipIcon.Error);
+                }
+                catch(IOException)
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error);
+                }
+            
 
             APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, GetTitleString(), GetDescriptionString());
             if(response.success)
@@ -353,6 +375,10 @@ namespace EasyImgur
                     {
                         failure++;
                         notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error);
+                    }
+                    catch(IOException)
+                    {
+                        notifyIcon1.ShowBalloonTip(2000, "Failed" + fileCounterString, "Image is in use by another program (" + fileName + "):", ToolTipIcon.Error);
                     }
                 }
                 if(_Paths.Length > 1)
