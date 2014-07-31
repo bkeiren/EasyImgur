@@ -28,7 +28,16 @@ namespace EasyImgur
                     Application.SetCompatibleTextRenderingDefault(false);
                     Form1 form = new Form1(singleInstance, args);
                     Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
-                    Application.Run();
+                    IntPtr handle = form.Handle; // request the handle to force it to be created; see issue #8 for more detail
+                    try
+                    {
+                        Application.Run();
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error("Fatal exception in main thread: " + ex.ToString());
+                        throw; // crash and burn; I'm not sure it's safe to show a message box so just crash
+                    }
                 }
                 else
                     singleInstance.PassArgumentsToFirstInstance(args);
