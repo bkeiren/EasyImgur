@@ -26,6 +26,8 @@ namespace EasyImgur
         {
             InitializeComponent();
 
+            CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
+
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
             this.notifyIcon1.ContextMenu = this.trayMenu;
