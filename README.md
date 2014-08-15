@@ -23,6 +23,10 @@ Using EasyImgur
 
 ![](http://i.imgur.com/IWx0XWs.png)
 
+- Upload an album from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (but not pictures in subfolders) will be uploaded and placed into an album. Note that you will need to enable the context menu from the settings window for this feature to be available.
+
+![](http://i.imgur.com/rKfBjYx.png)
+
 Authorizing EasyImgur for uploading to your account
 ---
 
