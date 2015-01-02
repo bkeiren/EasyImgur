@@ -11,38 +11,41 @@ Using EasyImgur
 
 - Run EasyImgur.exe, the EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
 
-![](http://i.imgur.com/3UL7hBe.png)
+    ![](http://i.imgur.com/3UL7hBe.png)
 
 - Open the EasyImgur menu by right-clicking on the tray icon:
 
-![](http://i.imgur.com/vmGPAlO.png)
+    ![](http://i.imgur.com/vmGPAlO.png)
 
 - Upload a file or an image on your clipboard (for example a screenshot or a text URL that you copied) anonymously (*not* to an Imgur account) by using the *Upload from file...* and *Upload from clipboard* options.
 
+===
+Alternatively, you can also upload images or folders with images through the context menu of your file explorer (if this option has been enabled from the settings menu):
+
 - Upload a file or an image from your file explorer by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)**. Note that you will need to enable the context menu from the settings window for this feature to be available.
 
-![](http://i.imgur.com/IWx0XWs.png)
+    ![](http://i.imgur.com/IWx0XWs.png)
 
 - Upload an album from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (but not pictures in subfolders) will be uploaded and placed into an album. Note that you will need to enable the context menu from the settings window for this feature to be available.
 
-![](http://i.imgur.com/rKfBjYx.png)
+    ![](http://i.imgur.com/rKfBjYx.png)
 
 Authorizing EasyImgur for uploading to your account
 ---
 
 - To upload images to an Imgur account, you must first authorize EasyImgur to use your account. To do so, open the settings dialog by selecting *Settings* from the right-click menu. This opens an EasyImgur window. Go to the *Account* tab:
-![](http://i.imgur.com/i34VILO.png)
+    ![](http://i.imgur.com/i34VILO.png)
 
 - Select *Authorize this app...*. This will open the Imgur authorization page in your browser. If you are already logged in, you will see this message:
-![](http://i.imgur.com/zdcWcp0.png)
+    ![](http://i.imgur.com/zdcWcp0.png)
 
 - Select *Allow* and copy the code that is displayed on the next page.
 
 - Go back to the EasyImgur window. A popup has been opened for you to enter the code that was just given to you:
-![](http://i.imgur.com/wdxlEPC.png)
+    ![](http://i.imgur.com/wdxlEPC.png)
 
 - Select *OK* and wait while the application talks to Imgur to receive authorization codes. Once the authorization is successful, a balloon popup will appear from the system tray to tell you this, and the EasyImgur window will display *Status: Authorized*:
-![](http://i.imgur.com/U11116k.png)
+    ![](http://i.imgur.com/U11116k.png)
 
 NOTE: To revoke access, you can visit http://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Note that the *Forget Tokens* button in EasyImgur only makes EasyImgur discard the current codes needed to access your account. If these codes have somehow been captured by malicious software or persons, they might still be able use them to access your account unless you revoke access completely!
 
