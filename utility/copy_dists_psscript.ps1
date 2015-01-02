@@ -2,7 +2,7 @@ $easyimgur_folder = (Get-Item (Split-Path $script:MyInvocation.MyCommand.Path)).
 $destination_folder = $easyimgur_folder + "\dist\"
 $source_folder = $easyimgur_folder + "\EasyImgur\bin\"
 
-$files = "Release\EasyImgur.exe","Release\Newtonsoft.Json.dll","Debug\EasyImgur.exe","Debug\Newtonsoft.Json.dll"
+$files = "Release\EasyImgur.exe","Debug\EasyImgur.exe"
 
 ForEach ($file in $files)
 {
