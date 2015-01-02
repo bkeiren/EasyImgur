@@ -70,6 +70,10 @@ namespace EasyImgur
             // uploaded using the account and file3 and file4 to be uploaded anonymously. I left this in
             // as a neat little feature.
             // However, all uploads will fail if the user is not logged in.
+            // Using "/exit" anywhere in the command list will cause EasyImgur to exit after uploading;
+            // this will happen regardless of the execution sending the exit command was the execution that
+            // launched the initial instance of EasyImgur.
+            bool exitWhenFinished = false;
             try
             {
                 bool anonymous = false;
@@ -78,6 +82,11 @@ namespace EasyImgur
                     if(path == "/anonymous")
                     {
                         anonymous = true;
+                        continue;
+                    }
+                    else if(path == "/exit")
+                    {
+                        exitWhenFinished = true;
                         continue;
                     }
 
@@ -118,6 +127,9 @@ namespace EasyImgur
                 Log.Error("Unhandled exception in context menu thread: " + ex.ToString());
                 notifyIcon1.ShowBalloonTip(2000, "Error", "An unknown exception occurred during upload. Check the log for further information.", ToolTipIcon.Error);
             }
+
+            if(exitWhenFinished)
+                Application.Exit();
         }
 
         private void ApplicationExit( object sender, EventArgs e )
