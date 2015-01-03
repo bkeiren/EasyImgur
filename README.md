@@ -85,3 +85,8 @@ EasyImgur can be run in portable mode to allow you to take your settings and acc
 `EasyImgur.exe /portable`
 
 In portable mode your history, logs, and settings are saved to the local EasyImgur.exe folder.
+
+Command Line Parameters
+---
+
+Please refer to [the wiki](https://github.com/bkeiren/EasyImgur/wiki/Command-Line-Parameters) for a list of supported command-line parameters.
