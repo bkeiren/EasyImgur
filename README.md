@@ -76,3 +76,12 @@ EasyImgur has a number of different customizable settings. These can be accessed
 - **Enable context menu**: This option determines whether the following options are added to the file context menu (right click menu) to allow even easier uploading!:
     - Upload to Imgur
     - Upload to Imgur (anonymous)
+	
+Running in portable mode
+---
+
+EasyImgur can be run in portable mode to allow you to take your settings and account authorization tokens with you on (for example) a USB drive! To run EasyImgur in portable mode simply start it with the command line switch `/portable`:
+
+`EasyImgur.exe /portable`
+
+In portable mode your history, logs, and settings are saved to the local EasyImgur.exe folder.

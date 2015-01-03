@@ -2,7 +2,7 @@ $easyimgur_folder = (Get-Item (Split-Path $script:MyInvocation.MyCommand.Path)).
 $destination_folder = $easyimgur_folder + "\dist\"
 $source_folder = $easyimgur_folder + "\EasyImgur\bin\"
 
-$files = "Release\EasyImgur.exe","Debug\EasyImgur.exe"
+$files = "Release\EasyImgur.exe","Debug\EasyImgur.exe","Release\EasyImgur Portable.bat","Debug\EasyImgur Portable.bat"
 
 ForEach ($file in $files)
 {

@@ -9,6 +9,12 @@ namespace EasyImgur
     static class Program
     {
         static Dictionary<string, System.Reflection.Assembly> m_Libs = new Dictionary<string, System.Reflection.Assembly>();
+        static bool mIsInPortableMode = false;
+
+        static public bool InPortableMode 
+        { 
+            get { return mIsInPortableMode; } 
+        }
 
         /// <summary>
         /// The main entry point for the application.
@@ -27,6 +33,16 @@ namespace EasyImgur
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
 
                     AppDomain.CurrentDomain.AssemblyResolve += FindDLL;
+
+                    foreach (string arg in args.Where(s => { return s != null; }))
+                    {
+                        if (arg == "/portable")
+                        {
+                            MakeSettingsPortable(Properties.Settings.Default);
+                            mIsInPortableMode = true;
+                            Log.Info("Started in portable mode.");
+                        }
+                    }
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
@@ -66,6 +82,16 @@ namespace EasyImgur
 
                 return assembly;
             }
+        }
+
+        // PortableSettingsProvider code obtained from http://stackoverflow.com/a/2579399 (Accessed 02-01-2014 @ 17:04).
+        private static void MakeSettingsPortable(System.Configuration.ApplicationSettingsBase settings)
+        {
+            var portableSettingsProvider = new PortableSettingsProvider(settings.GetType().Name + ".settings");
+            settings.Providers.Add(portableSettingsProvider);
+            foreach (System.Configuration.SettingsProperty prop in settings.Properties)
+                prop.Provider = portableSettingsProvider;
+            settings.Reload();
         }
     }
 }
