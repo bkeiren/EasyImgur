@@ -26,6 +26,8 @@ namespace EasyImgur
         {
             InitializeComponent();
 
+            ImplementPortableMode();
+
             CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
 
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
@@ -63,6 +65,20 @@ namespace EasyImgur
             ImgurAPI.networkRequestFailed += new ImgurAPI.NetworkEventHandler(this.APINetworkRequestFailed);
         }
 
+        void ImplementPortableMode()
+        {
+            if (Program.InPortableMode)
+            {
+                this.checkBoxLaunchAtBoot.Enabled = false;
+                this.checkBoxEnableContextMenu.Enabled = false;
+                this.Text += " - Portable Mode";
+            }
+            else
+            {
+                this.labelPortableModeNote.Visible = false;
+            }
+        }
+
         void singleInstance_ArgumentsReceived( object sender, ArgumentsReceivedEventArgs e )
         {
             // As a side effect of the way this function is implemented, something like
@@ -79,11 +95,12 @@ namespace EasyImgur
                 bool anonymous = false;
                 foreach(string path in e.Args.Where(s => { return s != null; })) // e.Args may contain a single null string
                 {
-                    if(path == "/anonymous")
+                    if (path == "/anonymous")
                     {
                         anonymous = true;
                         continue;
                     }
+<<<<<<< HEAD
                     else if(path == "/exit")
                     {
                         exitWhenFinished = true;
@@ -91,35 +108,45 @@ namespace EasyImgur
                     }
 
                     if(!anonymous && !ImgurAPI.HasBeenAuthorized())
+=======
+                    else if (path == "/portable")   // Ignore.
+>>>>>>> master
                     {
-                        notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
-                        return;
+                        continue;
                     }
-
-                    if(Directory.Exists(path))
+                    else
                     {
-                        string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
-                        ".gif", ".tiff", ".tif", ".xcf" };
-                        List<string> files = new List<string>();
-                        foreach(string s in Directory.GetFiles(path))
+                        if (!anonymous && !ImgurAPI.HasBeenAuthorized())
                         {
-                            bool cont = false;
-                            foreach(string filetype in fileTypes)
-                                if(s.EndsWith(filetype, true, null))
-                                {
-                                    cont = true;
-                                    break;
-                                }
-                            if(!cont)
-                                continue;
-
-                            files.Add(s);
+                            notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
+                            return;
                         }
 
-                        UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                        if (Directory.Exists(path))
+                        {
+                            string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
+                            ".gif", ".tiff", ".tif", ".xcf" };
+                            List<string> files = new List<string>();
+                            foreach (string s in Directory.GetFiles(path))
+                            {
+                                bool cont = false;
+                                foreach (string filetype in fileTypes)
+                                    if (s.EndsWith(filetype, true, null))
+                                    {
+                                        cont = true;
+                                        break;
+                                    }
+                                if (!cont)
+                                    continue;
+
+                                files.Add(s);
+                            }
+
+                            UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                        }
+                        else if (File.Exists(path))
+                            UploadFile(anonymous, new string[] { path });
                     }
-                    else if(File.Exists(path))
-                        UploadFile(anonymous, new string[] { path });
                 }
             }
             catch(Exception ex)

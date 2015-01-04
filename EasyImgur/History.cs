@@ -16,7 +16,17 @@ namespace EasyImgur
 
         private static BindingSource m_HistoryBinding;
 
-        private static string SaveLocation { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\"; } }
+        private static string SaveLocation 
+        { 
+            get 
+            {
+                // In non-portable mode we want to save in AppData, otherwise the local folder.
+                if (!Program.InPortableMode)
+                    return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
+                else
+                    return AppDomain.CurrentDomain.BaseDirectory;
+            } 
+        }
 
         public static int count
         {
@@ -80,17 +90,17 @@ namespace EasyImgur
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                Log.Info("Couldn't find a history file:\n" + ex.Message);
+                Log.Info("Couldn't find a history file: \n" + ex.Message);
                 return null;
             }
             catch (System.IO.IOException ex)
             {
-                Log.Error("An I/O error occurred while opening the history file:\n" + ex.Message);
+                Log.Error("An I/O error occurred while opening the history file: \n" + ex.Message);
                 return null;
             }
             catch (System.UnauthorizedAccessException ex)
             {
-                Log.Error("Not authorized to open the history file:\n" + ex.Message);
+                Log.Error("Not authorized to open the history file: \n" + ex.Message);
                 return null;
             }
             catch (System.Security.SecurityException ex)

@@ -18,7 +18,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ManifestCertificateThumbprint>FECAA255530227D4B3612662145FBDB2DB7A0942</ManifestCertificateThumbprint>
     <ManifestKeyFile>EasyImgur_TemporaryKey.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
     <TargetZone>LocalIntranet</TargetZone>
     <SignManifests>false</SignManifests>
     <FileUpgradeFlags>
@@ -61,12 +61,16 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>.\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -128,6 +132,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -137,6 +142,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SettingsProvider\PortableSettingsProvider.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="StatisticsMetrics\Metrics.cs" />
@@ -175,6 +181,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <None Include="ei_logo.png" />
     <Content Include="icon.ico" />
   </ItemGroup>

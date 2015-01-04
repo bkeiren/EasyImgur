@@ -62,7 +62,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxAlbum = new System.Windows.Forms.CheckBox();
-            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnOpenImageLinkInBrowser = new System.Windows.Forms.Button();
             this.textBoxTimestamp = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -99,16 +98,18 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.labelPortableModeNote = new System.Windows.Forms.Label();
+            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -143,6 +144,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.labelPortableModeNote);
             this.tabPage1.Controls.Add(this.label17);
             this.tabPage1.Controls.Add(this.checkBoxGalleryUpload);
             this.tabPage1.Controls.Add(this.label16);
@@ -530,10 +532,6 @@
             this.checkBoxAlbum.Text = "Album";
             this.checkBoxAlbum.UseVisualStyleBackColor = true;
             // 
-            // historyItemBindingSource
-            // 
-            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
-            // 
             // btnOpenImageLinkInBrowser
             // 
             this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(230, 62);
@@ -879,6 +877,21 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
+            // labelPortableModeNote
+            // 
+            this.labelPortableModeNote.AutoSize = true;
+            this.labelPortableModeNote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.labelPortableModeNote.Location = new System.Drawing.Point(16, 205);
+            this.labelPortableModeNote.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelPortableModeNote.Name = "labelPortableModeNote";
+            this.labelPortableModeNote.Size = new System.Drawing.Size(251, 13);
+            this.labelPortableModeNote.TabIndex = 21;
+            this.labelPortableModeNote.Text = "NOTE: Some options are disabled in portable mode.";
+            // 
+            // historyItemBindingSource
+            // 
+            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -899,12 +912,12 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -980,6 +993,7 @@
         private System.Windows.Forms.BindingSource historyItemBindingSource;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ListBox contributorsList;
+        private System.Windows.Forms.Label labelPortableModeNote;
     }
 }
 

@@ -1,1 +1,1 @@
-powershell -noexit .\copy_dists_psscript.ps1
+powershell -ExecutionPolicy ByPass -noexit .\copy_dists_psscript.ps1
