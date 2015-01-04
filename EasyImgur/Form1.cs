@@ -81,6 +81,9 @@ namespace EasyImgur
 
         void singleInstance_ArgumentsReceived( object sender, ArgumentsReceivedEventArgs e )
         {
+            const int NORMAL = 0;
+            const int NO_INFO = 1;
+            const int NO_ERR = 2;
             // As a side effect of the way this function is implemented, something like
             // "EasyImgur.exe file1 file2 /anonymous file3 file4" will cause file1 and file2 to be
             // uploaded using the account and file3 and file4 to be uploaded anonymously. I left this in
@@ -90,63 +93,66 @@ namespace EasyImgur
             // this will happen regardless of the execution sending the exit command was the execution that
             // launched the initial instance of EasyImgur.
             bool exitWhenFinished = false;
+            bool anonymous = false;
+            int silent = NORMAL;
+            // mappings of switch names to actions
+            Dictionary<string, Action> handlers = new Dictionary<string, Action>() {
+                { "anonymous", () => anonymous = true },
+                { "noinfo", () => silent = Math.Max(silent, NO_INFO) },
+                { "q", () => silent = Math.Max(silent, NO_INFO) },
+                { "noerr", () => silent = Math.Max(silent, NO_ERR) },
+                { "qq", () => silent = Math.Max(silent, NO_ERR) },
+                { "exit", () => exitWhenFinished = true },
+                { "portable", () => { } } // ignore
+            };
+            List<int> processed = new List<int>();
             try
             {
-                bool anonymous = false;
-                foreach(string path in e.Args.Where(s => { return s != null; })) // e.Args may contain a single null string
-                {
-                    if (path == "/anonymous")
-                    {
-                        anonymous = true;
-                        continue;
-                    }
-<<<<<<< HEAD
-                    else if(path == "/exit")
-                    {
-                        exitWhenFinished = true;
-                        continue;
-                    }
-
-                    if(!anonymous && !ImgurAPI.HasBeenAuthorized())
-=======
-                    else if (path == "/portable")   // Ignore.
->>>>>>> master
-                    {
-                        continue;
-                    }
+                // first scan for switches
+                bool badSwitch = false;
+                foreach(string switch_ in e.Args.Where(s => s != null && s.StartsWith("/")))
+                    if(handlers.ContainsKey(switch_))
+                        handlers[switch_]();
                     else
+                        badSwitch = true;
+                if(badSwitch && silent < NO_ERR)
+                {
+                    notifyIcon1.ShowBalloonTip(2000, "Invalid switch", "An invalid switch was passed to EasyImgur. No files were uploaded.", ToolTipIcon.Error);
+                    return;
+                }
+                // process actual arguments
+                foreach(string path in e.Args.Where(s => s != null && !s.StartsWith("/")))
+                {
+                    if(!anonymous && !ImgurAPI.HasBeenAuthorized())
                     {
-                        if (!anonymous && !ImgurAPI.HasBeenAuthorized())
-                        {
-                            notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
-                            return;
-                        }
-
-                        if (Directory.Exists(path))
-                        {
-                            string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
-                            ".gif", ".tiff", ".tif", ".xcf" };
-                            List<string> files = new List<string>();
-                            foreach (string s in Directory.GetFiles(path))
-                            {
-                                bool cont = false;
-                                foreach (string filetype in fileTypes)
-                                    if (s.EndsWith(filetype, true, null))
-                                    {
-                                        cont = true;
-                                        break;
-                                    }
-                                if (!cont)
-                                    continue;
-
-                                files.Add(s);
-                            }
-
-                            UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
-                        }
-                        else if (File.Exists(path))
-                            UploadFile(anonymous, new string[] { path });
+                        notifyIcon1.ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error);
+                        return;
                     }
+
+                    if(Directory.Exists(path))
+                    {
+                        string[] fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
+                            ".gif", ".tiff", ".tif", ".xcf" };
+                        List<string> files = new List<string>();
+                        foreach (string s in Directory.GetFiles(path))
+                        {
+                            bool cont = false;
+                            foreach (string filetype in fileTypes)
+                                if (s.EndsWith(filetype, true, null))
+                                {
+                                    cont = true;
+                                    break;
+                                }
+                            if (!cont)
+                                continue;
+
+                            files.Add(s);
+                        }
+
+                        UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                    }
+                    else if(File.Exists(path))
+                        UploadFile(anonymous, new string[] { path });
                 }
             }
             catch(Exception ex)
