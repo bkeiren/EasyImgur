@@ -16,8 +16,8 @@ namespace EasyImgur
     public partial class Form1 : Form
     {
         private bool CloseCommandWasSentFromExitButton = false;
-        private enum Verbosity { Normal = 0, NoInfo = 1, NoError = 2 }
-        private Verbosity Silence = Verbosity.Normal;
+        private enum MessageVerbosity { Normal = 0, NoInfo = 1, NoError = 2 }
+        private MessageVerbosity Verbosity = MessageVerbosity.Normal;
 
         /// <summary>
         /// Property to easily access the path of the executable, quoted for safety.
@@ -91,10 +91,10 @@ namespace EasyImgur
             // mappings of switch names to actions
             Dictionary<string, Action> handlers = new Dictionary<string, Action>() {
                 { "anonymous", () => anonymous = true },
-                { "noinfo", () => Silence = (Verbosity)Math.Max((int)Silence, (int)Verbosity.NoInfo) },
-                { "q", () => Silence = (Verbosity)Math.Max((int)Silence, (int)Verbosity.NoInfo) },
-                { "noerr", () => Silence = (Verbosity)Math.Max((int)Silence, (int)Verbosity.NoError) },
-                { "qq", () => Silence = (Verbosity)Math.Max((int)Silence, (int)Verbosity.NoError) },
+                { "noinfo", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoInfo) },
+                { "q", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoInfo) },
+                { "noerr", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoError) },
+                { "qq", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoError) },
                 { "exit", () => exitWhenFinished = true },
                 { "portable", () => { } } // ignore
             };
@@ -108,7 +108,7 @@ namespace EasyImgur
                         handlers[switch_]();
                     else
                         badSwitch = true;
-                if(badSwitch && Silence < Verbosity.NoError)
+                if(badSwitch && Verbosity < MessageVerbosity.NoError)
                 {
                     ShowBalloonTip(2000, "Invalid switch", "An invalid switch was passed to EasyImgur. No files were uploaded.", ToolTipIcon.Error, true);
                     return;
@@ -158,12 +158,12 @@ namespace EasyImgur
                 Application.Exit();
 
             // reset verbosity
-            Silence = Verbosity.Normal;
+            Verbosity = MessageVerbosity.Normal;
         }
 
         private void ShowBalloonTip( int _Timeout, string _Title, string _Text, ToolTipIcon _Icon, bool error = false )
         {
-            if(Silence < (error ? Verbosity.NoError : Verbosity.NoInfo))
+            if(Verbosity < (error ? MessageVerbosity.NoError : MessageVerbosity.NoInfo))
                 notifyIcon1.ShowBalloonTip(_Timeout, _Title, _Text, _Icon);
             else
                 Log.Info(string.Format("Tooltip with title \"{0}\" and text \"{1}\" was suppressed.", _Title, _Text));
