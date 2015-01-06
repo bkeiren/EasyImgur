@@ -81,6 +81,11 @@ namespace EasyImgur
             }
         }
 
+        bool ShouldShowMessage(MessageVerbosity _Verbosity)
+        {
+            return Verbosity < _Verbosity;
+        }
+
         void singleInstance_ArgumentsReceived( object sender, ArgumentsReceivedEventArgs e )
         {
             // Using "/exit" anywhere in the command list will cause EasyImgur to exit after uploading;
@@ -88,6 +93,7 @@ namespace EasyImgur
             // launched the initial instance of EasyImgur.
             bool exitWhenFinished = false;
             bool anonymous = false;
+
             // mappings of switch names to actions
             Dictionary<string, Action> handlers = new Dictionary<string, Action>() {
                 { "anonymous", () => anonymous = true },
@@ -98,27 +104,39 @@ namespace EasyImgur
                 { "exit", () => exitWhenFinished = true },
                 { "portable", () => { } } // ignore
             };
-            List<int> processed = new List<int>();
+            
             try
             {
-                // first scan for switches
-                bool badSwitch = false;
-                foreach(string switch_ in e.Args.Where(s => s != null && s.StartsWith("/")))
-                    if(handlers.ContainsKey(switch_))
-                        handlers[switch_]();
-                    else
-                        badSwitch = true;
-                if(badSwitch && Verbosity < MessageVerbosity.NoError)
+                // First scan for switches
+                int badSwitchCount = 0;
+                foreach (String str in e.Args.Where(s => s != null && s.StartsWith("/")))
                 {
-                    ShowBalloonTip(2000, "Invalid switch", "An invalid switch was passed to EasyImgur. No files were uploaded.", ToolTipIcon.Error, true);
+                    String param = str.Remove(0, 1); // Strip the leading '/' from the switch.
+
+                    if (handlers.ContainsKey(param))
+                    {
+                        Log.Warning("Consuming command-line switch '" + param + "'.");
+                        handlers[param]();
+                    }
+                    else
+                    {
+                        ++badSwitchCount;
+                        Log.Warning("Ignoring unrecognized command-line switch '" + param + "'.");
+                    }
+                }
+
+                if (badSwitchCount > 0 && ShouldShowMessage(MessageVerbosity.NoError))
+                {
+                    ShowBalloonTip(2000, "Invalid switch", badSwitchCount.ToString() + " invalid switch" + (badSwitchCount > 1 ? "es were" : " was") + " passed to EasyImgur (see log for details). No files were uploaded.", ToolTipIcon.Error, true);
                     return;
                 }
-                // process actual arguments
+
+                // Process actual arguments
                 foreach(string path in e.Args.Where(s => s != null && !s.StartsWith("/")))
                 {
                     if(!anonymous && !ImgurAPI.HasBeenAuthorized())
                     {
-                        ShowBalloonTip(2000, "Not logged in", "You aren't logged in. Authorize EasyImgur and try again.", ToolTipIcon.Error, true);
+                        ShowBalloonTip(2000, "Not logged in", "You aren't logged in but you're trying to upload to an account. Authorize EasyImgur and try again.", ToolTipIcon.Error, true);
                         return;
                     }
 
@@ -163,10 +181,15 @@ namespace EasyImgur
 
         private void ShowBalloonTip( int _Timeout, string _Title, string _Text, ToolTipIcon _Icon, bool error = false )
         {
-            if(Verbosity < (error ? MessageVerbosity.NoError : MessageVerbosity.NoInfo))
+            if (ShouldShowMessage(error ? MessageVerbosity.NoError : MessageVerbosity.NoInfo))
+            {
                 notifyIcon1.ShowBalloonTip(_Timeout, _Title, _Text, _Icon);
+                Log.Info(string.Format("Showed tooltip with title \"{0}\" and text \"{1}\".", _Title, _Text));
+            }
             else
+            {
                 Log.Info(string.Format("Tooltip with title \"{0}\" and text \"{1}\" was suppressed.", _Title, _Text));
+            }
         }
 
         private void ApplicationExit( object sender, EventArgs e )
