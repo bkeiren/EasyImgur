@@ -54,7 +54,7 @@ namespace EasyImgur
 
                     String url = "http://bryankeiren.com/easyimgur/stats.php";
                     byte[] response = wc.UploadValues(url, "POST", values);
-                    Log.Info(Encoding.ASCII.GetString(response));
+                    //Log.Info(Encoding.ASCII.GetString(response));
                 }
                 catch (System.Net.WebException ex)
                 {
