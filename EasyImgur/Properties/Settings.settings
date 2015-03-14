@@ -12,7 +12,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="titleFormat" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">%filename%</Value>
     </Setting>
     <Setting Name="descriptionFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
