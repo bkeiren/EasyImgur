@@ -395,7 +395,7 @@ namespace EasyImgur
                             // requires that the stream it was loaded from still be open, or else you get
                             // an immensely generic error. 
                             img = System.Drawing.Image.FromStream(stream);
-                            resp = ImgurAPI.UploadImage(img, GetTitleString(), GetDescriptionString(), _Anonymous);
+                            resp = ImgurAPI.UploadImage(img, string.IsNullOrEmpty(textBoxTitleFormat.Text) ? Path.GetFileName(fileName) : GetTitleString(), GetDescriptionString(), _Anonymous);
                         }
                         if (resp.success)
                         {
