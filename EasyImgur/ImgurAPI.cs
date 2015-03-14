@@ -49,164 +49,166 @@ namespace EasyImgur
             string responseString = string.Empty;
             byte[] response = null;
 
-            System.IO.MemoryStream memStream = new System.IO.MemoryStream();
-            if (!_URL)
+            APIResponses.ImageResponse resp = null;
+            using (System.IO.MemoryStream memStream = new System.IO.MemoryStream())
             {
-                Image _Image = _Obj as Image;
-                System.Drawing.Imaging.ImageFormat format = _Image.RawFormat;
-                switch (Properties.Settings.Default.imageFormat)
+                if (!_URL)
                 {
-                    case 1:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Jpeg;
-                            break;
-                        }
-                    case 2:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Png;
-                            break;
-                        }
-                    case 3:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Gif;
-                            break;
-                        }
-                    case 4:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Bmp;
-                            break;
-                        }
-                    case 5:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Icon;
-                            break;
-                        }
-                    case 6:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Tiff;
-                            break;
-                        }
-                    case 7:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Emf;
-                            break;
-                        }
-                    case 8:
-                        {
-                            format = System.Drawing.Imaging.ImageFormat.Wmf;
-                            break;
-                        }
-                    case 0:
-                    default:
-                        // Auto mode.
-                        {
-                            // Check whether it is a valid format.
-                            if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Gif) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Icon) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Png) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Tiff) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Emf) ||
-                                format.Equals(System.Drawing.Imaging.ImageFormat.Wmf))
+                    Image _Image = _Obj as Image;
+                    System.Drawing.Imaging.ImageFormat format = _Image.RawFormat;
+                    switch (Properties.Settings.Default.imageFormat)
+                    {
+                        case 1:
                             {
-                                // It's fine.
+                                format = System.Drawing.Imaging.ImageFormat.Jpeg;
+                                break;
                             }
-                            else
+                        case 2:
                             {
-                                // In all other cases, use PNG.
                                 format = System.Drawing.Imaging.ImageFormat.Png;
+                                break;
                             }
-                            break;
-                        }
+                        case 3:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Gif;
+                                break;
+                            }
+                        case 4:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Bmp;
+                                break;
+                            }
+                        case 5:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Icon;
+                                break;
+                            }
+                        case 6:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Tiff;
+                                break;
+                            }
+                        case 7:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Emf;
+                                break;
+                            }
+                        case 8:
+                            {
+                                format = System.Drawing.Imaging.ImageFormat.Wmf;
+                                break;
+                            }
+                        case 0:
+                        default:
+                            // Auto mode.
+                            {
+                                // Check whether it is a valid format.
+                                if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Gif) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Icon) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Png) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Tiff) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Emf) ||
+                                    format.Equals(System.Drawing.Imaging.ImageFormat.Wmf))
+                                {
+                                    // It's fine.
+                                }
+                                else
+                                {
+                                    // In all other cases, use PNG.
+                                    format = System.Drawing.Imaging.ImageFormat.Png;
+                                }
+                                break;
+                            }
+                    }
+
+                    _Image.Save(memStream, format);
                 }
 
-                _Image.Save(memStream, format);
-            }
+                int status = 0;
+                string error = "An unknown error occurred.";
+                using (WebClient t = new WebClient())
+                {
+                    t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
+                    try
+                    {
+                        var values = new System.Collections.Specialized.NameValueCollection
+                        {
+                            {
+                                "image", _URL ? _Obj as string : Convert.ToBase64String(memStream.ToArray())
+                            },
+                            {
+                                "title", _Title
+                            },
+                            {
+                                "description", _Description
+                            },
+                            {
+                                "type", _URL ? "URL" : "base64"
+                            }
+                        };
+                        if (album != "")
+                            values.Add("album", album);
 
-            int status = 0;
-            string error = "An unknown error occurred.";
-            using (WebClient t = new WebClient())
-            {
-                t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
+                        response = t.UploadValues(url, "POST", values);
+                        responseString = System.Text.Encoding.ASCII.GetString(response);
+                    }
+                    catch (System.Net.WebException ex)
+                    {
+                        if (ex.Response == null)
+                        {
+                            if (networkRequestFailed != null) networkRequestFailed();
+                        }
+                        else
+                        {
+                            int.TryParse(ex.Message.Split('(')[1].Split(')')[0], out status); // gets status code from message string in case of emergency
+                            error = ex.Message.Split('(')[1].Split(')')[1]; // I believe this gets the rest of the error message supplied, but Imgur went back up before I could test it
+                            System.IO.Stream stream = ex.Response.GetResponseStream();
+                            int currByte = -1;
+                            StringBuilder strBuilder = new StringBuilder();
+                            while ((currByte = stream.ReadByte()) != -1)
+                            {
+                                strBuilder.Append((char)currByte);
+                            }
+                            responseString = strBuilder.ToString();
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Log.Error("Unexpected Exception: " + ex.ToString());
+                    }
+                }
+
                 try
                 {
-                    var values = new System.Collections.Specialized.NameValueCollection
-                    {
-                        {
-                            "image", _URL ? _Obj as string : Convert.ToBase64String(memStream.ToArray())
-                        },
-                        {
-                            "title", _Title
-                        },
-                        {
-                            "description", _Description
-                        },
-                        {
-                            "type", _URL ? "URL" : "base64"
-                        }
-                    };
-                    if(album != "")
-                        values.Add("album", album);
-
-                    response = t.UploadValues(url, "POST", values);
-                    responseString = System.Text.Encoding.ASCII.GetString(response);
-                }
-                catch (System.Net.WebException ex)
-                {
-                    if (ex.Response == null)
-                    {
-                        if (networkRequestFailed != null) networkRequestFailed();
-                    }
-                    else
-                    {
-                        int.TryParse(ex.Message.Split('(')[1].Split(')')[0], out status); // gets status code from message string in case of emergency
-                        error = ex.Message.Split('(')[1].Split(')')[1]; // I believe this gets the rest of the error message supplied, but Imgur went back up before I could test it
-                        System.IO.Stream stream = ex.Response.GetResponseStream();
-                        int currByte = -1;
-                        StringBuilder strBuilder = new StringBuilder();
-                        while ((currByte = stream.ReadByte()) != -1)
-                        {
-                            strBuilder.Append((char)currByte);
-                        }
-                        responseString = strBuilder.ToString();
-                    }
+                    resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.ImageResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
                 }
                 catch (System.Exception ex)
                 {
-                    Log.Error("Unexpected Exception: " + ex.ToString());
+                    Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                    resp = null;
                 }
-            }
 
-            APIResponses.ImageResponse resp = null;
-            try
-            {
-                resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.ImageResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
-            }
-            catch (System.Exception ex)
-            {
-                Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
-                resp = null;
-            }
+                if (resp == null || responseString == null || responseString == string.Empty)
+                {
+                    // generally indicates a server failure; on problems such as 502 Proxy Error and 504 Gateway Timeout HTML is returned
+                    // which can't be parsed by the JSON converter.
+                    resp = new APIResponses.ImageResponse();
+                    resp.success = false;
+                    resp.status = status;
+                    resp.data = new APIResponses.ImageResponse.Data() { error = error };
+                }
 
-            if (resp == null || responseString == null || responseString == string.Empty)
-            {
-                // generally indicates a server failure; on problems such as 502 Proxy Error and 504 Gateway Timeout HTML is returned
-                // which can't be parsed by the JSON converter.
-                resp = new APIResponses.ImageResponse();
-                resp.success = false;
-                resp.status = status;
-                resp.data = new APIResponses.ImageResponse.Data() { error = error };
-            }
-
-            if (resp.success)
-            {
-                Log.Info("Successfully uploaded image! (" + resp.status.ToString() + ")[\n\rid: " + resp.data.id + "\n\rlink: " + resp.data.link + "\n\rdeletehash: " + resp.data.deletehash + "\n\r]");
-                ++m_NumUploads;
-            }
-            else
-            {
-                Log.Error("Failed to upload image (" + resp.status.ToString() + ")");
+                if (resp.success)
+                {
+                    Log.Info("Successfully uploaded image! (" + resp.status.ToString() + ")[\n\rid: " + resp.data.id + "\n\rlink: " + resp.data.link + "\n\rdeletehash: " + resp.data.deletehash + "\n\r]");
+                    ++m_NumUploads;
+                }
+                else
+                {
+                    Log.Error("Failed to upload image (" + resp.status.ToString() + ")");
+                }
             }
 
             return resp;
@@ -222,7 +224,7 @@ namespace EasyImgur
             return InternalUploadImage(_URL, true, _Title, _Description, _Anonymous);
         }
 
-        static public APIResponses.AlbumResponse UploadAlbum(Image[] _Images, string _AlbumTitle, bool _Anonymous, string _Title, string _Description)
+        static public APIResponses.AlbumResponse UploadAlbum(Image[] _Images, string _AlbumTitle, bool _Anonymous, string[] _Titles, string[] _Descriptions)
         {
             string url = m_EndPoint + "album";
             string responseString = "";
@@ -302,8 +304,19 @@ namespace EasyImgur
 
             // in case I need them later 
             List<APIResponses.ImageResponse> responses = new List<APIResponses.ImageResponse>();
-            foreach(Image image in _Images)
-                responses.Add(InternalUploadImage(image, false, _Title, _Description, _Anonymous, _Anonymous ? resp.data.deletehash : resp.data.id));
+            for (int i = 0; i < _Images.Count(); ++i)
+            {
+                Image image = _Images[i];
+                string title = string.Empty;
+                if (i < _Titles.Count())
+                    title = _Titles[i];
+
+                string description = string.Empty;
+                if (i < _Descriptions.Count())
+                    description = _Descriptions[i];
+
+                responses.Add(InternalUploadImage(image, false, title, description, _Anonymous, _Anonymous ? resp.data.deletehash : resp.data.id));
+            }
 
             // since an album creation doesn't return very much in the manner of information, make a request to 
             // get the fully populated album
