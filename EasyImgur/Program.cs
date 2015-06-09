@@ -74,13 +74,21 @@ namespace EasyImgur
             String assembly_name = "EasyImgur." + keyName + ".dll";
             using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(assembly_name))
             {
-                byte[] buffer = new BinaryReader(stream).ReadBytes((int)stream.Length);
-                System.Reflection.Assembly assembly = System.Reflection.Assembly.Load(buffer);
-                m_Libs[keyName] = assembly;
+                if (stream == null)
+                {
+                    Log.Warning("Couldn't resolve assembly: '" + assembly_name + "'");
+                    return null;
+                }
+                using (var reader = new BinaryReader(stream))
+                {
+                    byte[] buffer = reader.ReadBytes((int)stream.Length);
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.Load(buffer);
+                    m_Libs[keyName] = assembly;
 
-                Log.Info("Loaded assembly: '" + assembly_name + "'.");
+                    Log.Info("Loaded assembly: '" + assembly_name + "'.");
 
-                return assembly;
+                    return assembly;
+                }
             }
         }
 
