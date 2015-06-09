@@ -118,9 +118,7 @@ namespace EasyImgur
         {
             string Output = _Input;
             
-            FormattingContext context = _Context;
-            if (context == null)
-                context = new FormattingContext();
+            FormattingContext context = _Context ?? new FormattingContext();
 
             foreach (FormattingScheme scheme in m_FormattingSchemes)
             {

@@ -117,6 +117,7 @@
     <Compile Include="HistoryItem.cs" />
     <Compile Include="ImageConverter.cs" />
     <Compile Include="ImgurAPI.cs" />
+    <Compile Include="Interop.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
