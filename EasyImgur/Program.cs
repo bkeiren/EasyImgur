@@ -48,6 +48,10 @@ namespace EasyImgur
                     Application.SetCompatibleTextRenderingDefault(false);
                     Form1 form = new Form1(singleInstance, args);
                     Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
+
+#if DEBUG           // We want VS to get the source of the exception instead of coming to this throw when debugging
+                    Application.Run(); 
+#else
                     try
                     {
                         Application.Run();
@@ -57,6 +61,7 @@ namespace EasyImgur
                         Log.Error("Fatal exception in main thread: " + ex.ToString());
                         throw; // crash and burn; I'm not sure it's safe to show a message box so just crash
                     }
+#endif
                 }
                 else
                     singleInstance.PassArgumentsToFirstInstance(args);
