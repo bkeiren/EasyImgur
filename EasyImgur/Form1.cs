@@ -540,7 +540,7 @@ namespace EasyImgur
 
             using(Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
-                if(checkBoxLaunchAtBoot.Checked)
+                if (checkBoxLaunchAtBoot.Checked)
                 {
                     // If the checkbox was marked, set a value which will make EasyImgur start at boot.
                     registryKey.SetValue("EasyImgur", QuotedApplicationPath);
@@ -595,8 +595,8 @@ namespace EasyImgur
                         }
                         else
                         {
-                            try { shell.DeleteSubKeyTree("imguruploadanonymous"); } catch { }
-                            try { shell.DeleteSubKeyTree("imgurupload"); } catch { }
+                            shell.DeleteSubKeyTree("imguruploadanonymous", false);
+                            shell.DeleteSubKeyTree("imgurupload", false);
                         }
                     }
         }
