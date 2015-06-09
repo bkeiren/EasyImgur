@@ -626,6 +626,8 @@ namespace EasyImgur
 
         private void SelectedHistoryItemChanged()
         {
+            groupBoxHistorySelection.Text =
+                String.Format("Selection: {0} {1}", listBoxHistory.SelectedItems.Count, listBoxHistory.SelectedItems.Count == 1 ? "item" : "items");
             HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
             if (item == null)
             {
