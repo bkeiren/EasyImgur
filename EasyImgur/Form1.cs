@@ -1,14 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using System.Text.RegularExpressions;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EasyImgur
@@ -27,6 +23,7 @@ namespace EasyImgur
         public Form1(SingleInstance _SingleInstance, string[] _Args)
         {
             InitializeComponent();
+            Interop.SetCueBanner(textBoxClipboardFormat, "http://i.imgur.com/%id%.%ext%", false);
 
             ImplementPortableMode();
 
@@ -280,7 +277,10 @@ namespace EasyImgur
                 // this doesn't need an invocation guard because this function can't be called from the context menu
                 if (Properties.Settings.Default.copyLinks)
                 {
-                    Clipboard.SetText(resp.data.link);
+                    string text = Properties.Settings.Default.useCustomClipboardFormat
+                        ? FormatClipboardLink(Properties.Settings.Default.customClipboardFormat, resp.data.id, GetExtensionFromResponse(resp.data))
+                        : resp.data.link;
+                    Clipboard.SetText(text);
                 }
 
                 ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
@@ -344,11 +344,14 @@ namespace EasyImgur
             APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
             if(response.success)
             {
+                string text = Properties.Settings.Default.useCustomClipboardFormat
+                        ? FormatClipboardLink(Properties.Settings.Default.customClipboardFormat, response.data.id)
+                        : response.data.link;
                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
                 if(System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
-                    this.Invoke(new Action(delegate { Clipboard.SetText(response.data.link); }));
+                    this.Invoke(new Action(() => Clipboard.SetText(text)));
                 else
-                    Clipboard.SetText(response.data.link);
+                    Clipboard.SetText(text);
 
                 ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.data.link, ToolTipIcon.None);
 
@@ -419,11 +422,14 @@ namespace EasyImgur
 
                             if (Properties.Settings.Default.copyLinks)
                             {
+                                string text = Properties.Settings.Default.useCustomClipboardFormat
+                                    ? FormatClipboardLink(Properties.Settings.Default.customClipboardFormat, resp.data.id, GetExtensionFromResponse(resp.data))
+                                    : resp.data.link;
                                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
                                 if(System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
-                                    this.Invoke(new Action(delegate { Clipboard.SetText(resp.data.link); }));
+                                    this.Invoke(new Action(() => Clipboard.SetText(text)));
                                 else
-                                    Clipboard.SetText(resp.data.link);
+                                    Clipboard.SetText(text);
                             }
 
                             ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
@@ -464,8 +470,12 @@ namespace EasyImgur
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            // Should we remind the user here somehow?
+            //if (checkBoxClipboardFormat.Enabled && String.IsNullOrWhiteSpace(textBoxClipboardFormat.Text))
+            //{
+            //    // Custom clipboard format is enabled but no format is specified
+            //}
             SaveSettings();
-            //this.Hide();
         }
 
         private void NotifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -638,6 +648,19 @@ namespace EasyImgur
             return FormattingHelper.Format(_Input, _FormattingContext);
         }
 
+        // Move this to an utility class?
+        /// <summary>
+        /// Performs custom clipboard format replacements on a string.
+        /// </summary>
+        /// <param name="format">Custom clipboard link format</param>
+        /// <param name="id">Imgur image or album ID</param>
+        /// <param name="extension">Imgur image file extension. Do not specify if formatting album link. Defaults to "".</param>
+        /// <returns>Formatted string</returns>
+        static public string FormatClipboardLink(string format, string id, string extension = "")
+        {
+            return format.Replace("%id%", id).Replace("%ext%", extension);
+        }
+
         private string GetTitleString( FormattingHelper.FormattingContext _FormattingContext )
         {
             return FormatInfoString(textBoxTitleFormat.Text, _FormattingContext);
@@ -646,6 +669,27 @@ namespace EasyImgur
         private string GetDescriptionString(FormattingHelper.FormattingContext _FormattingContext)
         {
             return FormatInfoString(textBoxDescriptionFormat.Text, _FormattingContext);
+        }
+
+        // Move this to an utility class?
+        /// <summary>
+        /// Gets the uploaded image's file extension.
+        /// </summary>
+        /// <param name="data">Response data from which the link's extension will be parsed.</param>
+        /// <returns>String containing the file's extension without a period.</returns>
+        private string GetExtensionFromResponse(APIResponses.ImageResponse.Data data)
+        {
+            //  \.              Match a period
+            //  (               Begin capture group
+            //      [a-zA-Z]    Match any character from these ranges
+            //      {3,4}       Match 3 to 4 characters of previous criteria
+            //  )               End capture group
+            //  $               End of line anchor
+            var regex = new Regex(@"\.([a-zA-Z]{3,4})$");
+            Match match = regex.Match(data.link);
+            return match.Success
+                ? match.Groups[1].Value
+                : "";
         }
 
         private void buttonRemoveFromImgur_Click(object sender, EventArgs e)
@@ -767,7 +811,7 @@ namespace EasyImgur
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://imgur.com/account/settings/apps");
+            System.Diagnostics.Process.Start("https://imgur.com/account/settings/apps");
         }
 
         private void btnOpenImageLinkInBrowser_Click(object sender, EventArgs e)
@@ -777,6 +821,23 @@ namespace EasyImgur
             {
                 System.Diagnostics.Process.Start(item.link);
             }
+        }
+
+        private void buttonClipboardFormatHelp_Click(object sender, EventArgs e)
+        {
+            const string helpString =
+                "Use this to modify the text copied to clipboard after uploading an image. " +
+                "You can use the following modifiers to insert information:\n" +
+                "%id% - Imgur image ID of your uploaded image\n" +
+                "%ext% - [Images only] Your uploaded image's image extension.\n\n" +
+                "By default, the clipboard format is:\n" +
+                "http://i.imgur.com/%id%.%ext%\n\n" +
+                "Example:\n" +
+                "http://imgur.com/%id%\n" +
+                "https://i.imgur.com/%id%.%ext%";
+            Point loc = this.Location;
+            loc.Offset(buttonFormatHelp.Location.X, buttonFormatHelp.Location.Y);
+            Help.ShowPopup(this, helpString, loc);
         }
     }
 }
