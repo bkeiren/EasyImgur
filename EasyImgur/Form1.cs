@@ -331,6 +331,10 @@ namespace EasyImgur
                     titles.Add(GetTitleString(format_context));
                     descriptions.Add(GetDescriptionString(format_context));
                 }
+                catch (ArgumentException)
+                {
+                    ShowBalloonTip(2000, "Failed", "File (" + path + ") is not a valid image file.", ToolTipIcon.Error, true);
+                }
                 catch(FileNotFoundException)
                 {
                     ShowBalloonTip(2000, "Failed", "Could not find image file on disk (" + path + "):", ToolTipIcon.Error, true);
@@ -340,7 +344,12 @@ namespace EasyImgur
                     ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error, true);
                 }
             }
-
+            if (images.Count == 0)
+            {
+                Log.Error("Album upload failed: No valid images in selected images!");
+                ShowBalloonTip(2000, "Failed", "Album upload cancelled: No valid images to upload!", ToolTipIcon.Error, true);
+                return;
+            }
             APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
             if(response.success)
             {
@@ -444,6 +453,10 @@ namespace EasyImgur
                             failure++;
                             ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.status + "): " + resp.data.error, ToolTipIcon.None, true);
                         }
+                    }
+                    catch (ArgumentException)
+                    {
+                        ShowBalloonTip(2000, "Failed" + fileCounterString, "File (" + fileName + ") is not a valid image file.", ToolTipIcon.Error, true);
                     }
                     catch (System.IO.FileNotFoundException)
                     {
