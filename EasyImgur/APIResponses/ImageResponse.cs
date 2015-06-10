@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace EasyImgur.APIResponses
 {
@@ -9,23 +10,55 @@ namespace EasyImgur.APIResponses
     {
         public class Data : BaseResponse.BaseData
         {
-            public string id;
-            public string title;
-            public string description;
-            public string datetime;
-            public string type;
-            public bool animated;
-            public int width;
-            public int height;
-            public int size;
-            public int views;
-            public int bandwidth;
-            public bool favorite;
-            public string nsfw;
-            public string section;
-            public string deletehash;
-            public string link;
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("title")]
+            public string Title { get; set; }
+
+            [JsonProperty("description")]
+            public string Description { get; set; }
+
+            [JsonProperty("datetime")]
+            public string Datetime { get; set; }
+
+            [JsonProperty("type")]
+            public string Type { get; set; }
+
+            [JsonProperty("animated")]
+            public bool Animated { get; set; }
+
+            [JsonProperty("width")]
+            public int Width { get; set; }
+
+            [JsonProperty("height")]
+            public int Height { get; set; }
+
+            [JsonProperty("size")]
+            public int Size { get; set; }
+
+            [JsonProperty("views")]
+            public int Views { get; set; }
+
+            [JsonProperty("bandwidth")]
+            public int Bandwidth { get; set; }
+
+            [JsonProperty("favorite")]
+            public bool Favorite { get; set; }
+
+            [JsonProperty("nsfw")]
+            public string Nsfw { get; set; }
+
+            [JsonProperty("section")]
+            public string Section { get; set; }
+
+            [JsonProperty("deletehash")]
+            public string DeleteHash { get; set; }
+
+            [JsonProperty("link")]
+            public string Link { get; set; }
         }
-        public Data data;
+        [JsonProperty("data")]
+        public Data ResponseData { get; set; }
     }
 }

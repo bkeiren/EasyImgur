@@ -67,21 +67,21 @@
             this.label19 = new System.Windows.Forms.Label();
             this.checkBoxAlbum = new System.Windows.Forms.CheckBox();
             this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.groupBoxHistorySelection = new System.Windows.Forms.GroupBox();
+            this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
+            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.btnOpenImageLinkInBrowser = new System.Windows.Forms.Button();
             this.textBoxTimestamp = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBoxTiedToAccount = new System.Windows.Forms.CheckBox();
             this.textBoxDeleteHash = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxHistoryThumb = new System.Windows.Forms.PictureBox();
             this.textBoxID = new System.Windows.Forms.TextBox();
             this.textBoxLink = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
-            this.groupBoxHistorySelection = new System.Windows.Forms.GroupBox();
-            this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
-            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.versionLabel = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -111,8 +111,8 @@
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxHistorySelection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -550,7 +550,7 @@
             this.groupBox1.Controls.Add(this.checkBoxTiedToAccount);
             this.groupBox1.Controls.Add(this.textBoxDeleteHash);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.pictureBoxHistoryThumb);
             this.groupBox1.Controls.Add(this.textBoxID);
             this.groupBox1.Controls.Add(this.textBoxLink);
             this.groupBox1.Controls.Add(this.label2);
@@ -577,7 +577,7 @@
             // checkBoxAlbum
             // 
             this.checkBoxAlbum.AutoSize = true;
-            this.checkBoxAlbum.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "album", true));
+            this.checkBoxAlbum.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "Album", true));
             this.checkBoxAlbum.Enabled = false;
             this.checkBoxAlbum.Location = new System.Drawing.Point(235, 85);
             this.checkBoxAlbum.Margin = new System.Windows.Forms.Padding(2);
@@ -592,134 +592,6 @@
             // historyItemBindingSource
             // 
             this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
-            // 
-            // btnOpenImageLinkInBrowser
-            // 
-            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(234, 10);
-            this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
-            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(160, 46);
-            this.btnOpenImageLinkInBrowser.TabIndex = 6;
-            this.btnOpenImageLinkInBrowser.Text = "Open in browser";
-            this.btnOpenImageLinkInBrowser.UseVisualStyleBackColor = true;
-            this.btnOpenImageLinkInBrowser.Click += new System.EventHandler(this.btnOpenImageLinkInBrowser_Click);
-            // 
-            // textBoxTimestamp
-            // 
-            this.textBoxTimestamp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "timestamp", true));
-            this.textBoxTimestamp.Location = new System.Drawing.Point(76, 83);
-            this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxTimestamp.Name = "textBoxTimestamp";
-            this.textBoxTimestamp.ReadOnly = true;
-            this.textBoxTimestamp.Size = new System.Drawing.Size(149, 20);
-            this.textBoxTimestamp.TabIndex = 5;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 86);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(58, 13);
-            this.label9.TabIndex = 17;
-            this.label9.Text = "Timestamp";
-            // 
-            // checkBoxTiedToAccount
-            // 
-            this.checkBoxTiedToAccount.AutoSize = true;
-            this.checkBoxTiedToAccount.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "tiedToAccount", true));
-            this.checkBoxTiedToAccount.Enabled = false;
-            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(235, 61);
-            this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
-            this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(105, 17);
-            this.checkBoxTiedToAccount.TabIndex = 15;
-            this.checkBoxTiedToAccount.TabStop = false;
-            this.checkBoxTiedToAccount.Text = "On your account";
-            this.checkBoxTiedToAccount.UseVisualStyleBackColor = true;
-            // 
-            // textBoxDeleteHash
-            // 
-            this.textBoxDeleteHash.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "deletehash", true));
-            this.textBoxDeleteHash.Location = new System.Drawing.Point(76, 59);
-            this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxDeleteHash.Name = "textBoxDeleteHash";
-            this.textBoxDeleteHash.ReadOnly = true;
-            this.textBoxDeleteHash.Size = new System.Drawing.Size(149, 20);
-            this.textBoxDeleteHash.TabIndex = 4;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 62);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Delete Hash";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.historyItemBindingSource, "thumbnail", true));
-            this.pictureBox1.Location = new System.Drawing.Point(76, 148);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(148, 112);
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
-            // 
-            // textBoxID
-            // 
-            this.textBoxID.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "id", true));
-            this.textBoxID.Location = new System.Drawing.Point(76, 11);
-            this.textBoxID.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxID.Name = "textBoxID";
-            this.textBoxID.ReadOnly = true;
-            this.textBoxID.Size = new System.Drawing.Size(149, 20);
-            this.textBoxID.TabIndex = 2;
-            // 
-            // textBoxLink
-            // 
-            this.textBoxLink.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "link", true));
-            this.textBoxLink.Location = new System.Drawing.Point(76, 35);
-            this.textBoxLink.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxLink.Name = "textBoxLink";
-            this.textBoxLink.ReadOnly = true;
-            this.textBoxLink.Size = new System.Drawing.Size(149, 20);
-            this.textBoxLink.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(45, 38);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Link";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 14);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "ID";
-            // 
-            // listBoxHistory
-            // 
-            this.listBoxHistory.DataSource = this.historyItemBindingSource;
-            this.listBoxHistory.DisplayMember = "listName";
-            this.listBoxHistory.FormattingEnabled = true;
-            this.listBoxHistory.Location = new System.Drawing.Point(2, 2);
-            this.listBoxHistory.Margin = new System.Windows.Forms.Padding(2);
-            this.listBoxHistory.Name = "listBoxHistory";
-            this.listBoxHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxHistory.Size = new System.Drawing.Size(171, 264);
-            this.listBoxHistory.TabIndex = 1;
-            this.listBoxHistory.SelectedIndexChanged += new System.EventHandler(this.listBoxHistory_SelectedIndexChanged);
             // 
             // groupBoxHistorySelection
             // 
@@ -756,6 +628,134 @@
             this.buttonRemoveFromHistory.UseMnemonic = false;
             this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
             this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
+            // 
+            // btnOpenImageLinkInBrowser
+            // 
+            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(234, 10);
+            this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
+            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(160, 46);
+            this.btnOpenImageLinkInBrowser.TabIndex = 6;
+            this.btnOpenImageLinkInBrowser.Text = "Open in browser";
+            this.btnOpenImageLinkInBrowser.UseVisualStyleBackColor = true;
+            this.btnOpenImageLinkInBrowser.Click += new System.EventHandler(this.btnOpenImageLinkInBrowser_Click);
+            // 
+            // textBoxTimestamp
+            // 
+            this.textBoxTimestamp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Timestamp", true));
+            this.textBoxTimestamp.Location = new System.Drawing.Point(76, 83);
+            this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxTimestamp.Name = "textBoxTimestamp";
+            this.textBoxTimestamp.ReadOnly = true;
+            this.textBoxTimestamp.Size = new System.Drawing.Size(149, 20);
+            this.textBoxTimestamp.TabIndex = 5;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(14, 86);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(58, 13);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Timestamp";
+            // 
+            // checkBoxTiedToAccount
+            // 
+            this.checkBoxTiedToAccount.AutoSize = true;
+            this.checkBoxTiedToAccount.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "TiedToAccount", true));
+            this.checkBoxTiedToAccount.Enabled = false;
+            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(235, 61);
+            this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
+            this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(105, 17);
+            this.checkBoxTiedToAccount.TabIndex = 15;
+            this.checkBoxTiedToAccount.TabStop = false;
+            this.checkBoxTiedToAccount.Text = "On your account";
+            this.checkBoxTiedToAccount.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDeleteHash
+            // 
+            this.textBoxDeleteHash.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Deletehash", true));
+            this.textBoxDeleteHash.Location = new System.Drawing.Point(76, 59);
+            this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxDeleteHash.Name = "textBoxDeleteHash";
+            this.textBoxDeleteHash.ReadOnly = true;
+            this.textBoxDeleteHash.Size = new System.Drawing.Size(149, 20);
+            this.textBoxDeleteHash.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 62);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Delete Hash";
+            // 
+            // pictureBoxHistoryThumb
+            // 
+            this.pictureBoxHistoryThumb.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.historyItemBindingSource, "Thumbnail", true));
+            this.pictureBoxHistoryThumb.Location = new System.Drawing.Point(76, 148);
+            this.pictureBoxHistoryThumb.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBoxHistoryThumb.Name = "pictureBoxHistoryThumb";
+            this.pictureBoxHistoryThumb.Size = new System.Drawing.Size(148, 112);
+            this.pictureBoxHistoryThumb.TabIndex = 11;
+            this.pictureBoxHistoryThumb.TabStop = false;
+            // 
+            // textBoxID
+            // 
+            this.textBoxID.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Id", true));
+            this.textBoxID.Location = new System.Drawing.Point(76, 11);
+            this.textBoxID.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxID.Name = "textBoxID";
+            this.textBoxID.ReadOnly = true;
+            this.textBoxID.Size = new System.Drawing.Size(149, 20);
+            this.textBoxID.TabIndex = 2;
+            // 
+            // textBoxLink
+            // 
+            this.textBoxLink.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Link", true));
+            this.textBoxLink.Location = new System.Drawing.Point(76, 35);
+            this.textBoxLink.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLink.Name = "textBoxLink";
+            this.textBoxLink.ReadOnly = true;
+            this.textBoxLink.Size = new System.Drawing.Size(149, 20);
+            this.textBoxLink.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(45, 38);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(27, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Link";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(54, 14);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "ID";
+            // 
+            // listBoxHistory
+            // 
+            this.listBoxHistory.DataSource = this.historyItemBindingSource;
+            this.listBoxHistory.DisplayMember = "ListName";
+            this.listBoxHistory.FormattingEnabled = true;
+            this.listBoxHistory.Location = new System.Drawing.Point(2, 2);
+            this.listBoxHistory.Margin = new System.Windows.Forms.Padding(2);
+            this.listBoxHistory.Name = "listBoxHistory";
+            this.listBoxHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxHistory.Size = new System.Drawing.Size(171, 264);
+            this.listBoxHistory.TabIndex = 1;
+            this.listBoxHistory.SelectedIndexChanged += new System.EventHandler(this.listBoxHistory_SelectedIndexChanged);
             // 
             // tabPage4
             // 
@@ -970,8 +970,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBoxHistorySelection.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -996,7 +996,7 @@
         private System.Windows.Forms.TextBox textBoxID;
         private System.Windows.Forms.TextBox textBoxLink;
         private System.Windows.Forms.CheckBox checkBoxCopyLinks;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBoxHistoryThumb;
         private System.Windows.Forms.TextBox textBoxDescriptionFormat;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Drawing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,28 +9,52 @@ namespace EasyImgur
 {
     class HistoryItem
     {
-        // some fields are properties because only properties (not fields!) can be data bound
-        // this particular fact stumped me for a good two hours
-        public string id { get; set; }
-        public string link { get; set; }
-        public string deletehash { get; set; }
-        public string title;
-        public string description;
-        public System.Drawing.Image thumbnail { get; set; }
-        public bool anonymous;
-        public bool album { get; set; }
-        public DateTime timestamp { get; set; }
+        // Databound control: textBoxID
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
-        // used for data binding
+        // Databound control: textBoxLink
+        [JsonProperty("link")]
+        public string Link { get; set; }
+
+        // Databound control: textBoxDeleteHash
+        [JsonProperty("deletehash")]
+        public string Deletehash { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        // Databound control: pictureBoxHistoryThumb
+        [JsonProperty("thumbnail")]
+        public Image Thumbnail { get; set; }
+
+        [JsonProperty("anonymous")]
+        public bool Anonymous { get; set; }
+
+        // Databound control: checkBoxAlbum
+        [JsonProperty("album")]
+        public bool Album { get; set; }
+
+        // Databound control: textBoxTimestamp
+        [JsonProperty("timestamp")]
+        public DateTime Timestamp { get; set; }
+
+        // Databound control: checkBoxTiedToAccount
         [JsonIgnore]
-        public bool tiedToAccount { get { return !anonymous; } set { anonymous = !value; } }
+        public bool TiedToAccount
+        {
+            get { return !Anonymous; }
+        }
 
         [JsonIgnore]
-        public string listName
+        public string ListName
         {
             get
             {
-                return title + "//" + id;
+                return Title + "//" + Id;
             }
         }
     }

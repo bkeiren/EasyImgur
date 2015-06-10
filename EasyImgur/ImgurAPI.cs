@@ -195,19 +195,19 @@ namespace EasyImgur
                     // generally indicates a server failure; on problems such as 502 Proxy Error and 504 Gateway Timeout HTML is returned
                     // which can't be parsed by the JSON converter.
                     resp = new APIResponses.ImageResponse();
-                    resp.success = false;
-                    resp.status = status;
-                    resp.data = new APIResponses.ImageResponse.Data() { error = error };
+                    resp.Success = false;
+                    resp.Status = status;
+                    resp.ResponseData = new APIResponses.ImageResponse.Data() { Error = error };
                 }
 
-                if (resp.success)
+                if (resp.Success)
                 {
-                    Log.Info("Successfully uploaded image! (" + resp.status.ToString() + ")[\n\rid: " + resp.data.id + "\n\rlink: " + resp.data.link + "\n\rdeletehash: " + resp.data.deletehash + "\n\r]");
+                    Log.Info("Successfully uploaded image! (" + resp.Status.ToString() + ")[\n\rid: " + resp.ResponseData.Id + "\n\rlink: " + resp.ResponseData.Link + "\n\rdeletehash: " + resp.ResponseData.DeleteHash + "\n\r]");
                     ++m_NumUploads;
                 }
                 else
                 {
-                    Log.Error("Failed to upload image (" + resp.status.ToString() + ")");
+                    Log.Error("Failed to upload image (" + resp.Status.ToString() + ")");
                 }
             }
 
@@ -282,22 +282,22 @@ namespace EasyImgur
             }
 
             if(resp == null || responseString == "" || responseString == null)
-                resp = new APIResponses.AlbumResponse() { success = false };
+                resp = new APIResponses.AlbumResponse() { Success = false };
 
-            if(resp.success)
-                Log.Info("Successfully created album! (" + resp.status.ToString() + ")");
+            if(resp.Success)
+                Log.Info("Successfully created album! (" + resp.Status.ToString() + ")");
             else
             {
-                Log.Error("Failed to create album! (" + resp.status.ToString() + ")");
+                Log.Error("Failed to create album! (" + resp.Status.ToString() + ")");
                 return resp;
             }
 
             // sometimes this happens! it's weird.
-            if(_Anonymous && resp.data.deletehash == null)
+            if(_Anonymous && resp.ResponseData.DeleteHash == null)
             {
                 Log.Error("Anonymous album creation didn't return deletehash. Can't add to album.");
-                resp.success = false;
-                resp.data.error = "Imgur API error. Try again in a minute.";
+                resp.Success = false;
+                resp.ResponseData.Error = "Imgur API error. Try again in a minute.";
                 // can't even be responsible and delete our orphaned album
                 return resp;
             }
@@ -315,19 +315,19 @@ namespace EasyImgur
                 if (i < _Descriptions.Count())
                     description = _Descriptions[i];
 
-                responses.Add(InternalUploadImage(image, false, title, description, _Anonymous, _Anonymous ? resp.data.deletehash : resp.data.id));
+                responses.Add(InternalUploadImage(image, false, title, description, _Anonymous, _Anonymous ? resp.ResponseData.DeleteHash : resp.ResponseData.Id));
             }
 
             // since an album creation doesn't return very much in the manner of information, make a request to 
             // get the fully populated album
-            string deletehash = resp.data.deletehash; // save deletehash
+            string deletehash = resp.ResponseData.DeleteHash; // save deletehash
             responseString = "";
             using(WebClient t = new WebClient())
             {
                 t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(_Anonymous);
                 try
                 {
-                    responseString = t.DownloadString(url + "/" + resp.data.id);
+                    responseString = t.DownloadString(url + "/" + resp.ResponseData.Id);
                 }
                 catch(System.Net.WebException ex)
                 {
@@ -364,15 +364,15 @@ namespace EasyImgur
             }
 
             if(resp == null || responseString == "" || responseString == null)
-                resp = new APIResponses.AlbumResponse() { success = false };
+                resp = new APIResponses.AlbumResponse() { Success = false };
 
-            resp.data.deletehash = deletehash;
+            resp.ResponseData.DeleteHash = deletehash;
 
-            if(resp.success)
+            if(resp.Success)
             {
                 int i = 0;
-                foreach(var response in resp.data.images)
-                    if(response.id == resp.data.cover)
+                foreach(var response in resp.ResponseData.Images)
+                    if(response.Id == resp.ResponseData.Cover)
                         break;
                     else
                         i++;
@@ -382,11 +382,11 @@ namespace EasyImgur
                     resp.CoverImage = null;
             }
 
-            if(resp.success)
-                Log.Info("Successfully created album! (" + resp.status.ToString() + ")");
+            if(resp.Success)
+                Log.Info("Successfully created album! (" + resp.Status.ToString() + ")");
             else
             {
-                Log.Error("Created album, but failed to get album information! (" + resp.status.ToString() + ")");
+                Log.Error("Created album, but failed to get album information! (" + resp.Status.ToString() + ")");
                 return oldResp;
             }
 
@@ -439,16 +439,16 @@ namespace EasyImgur
             if(resp == null || responseString == null || responseString == string.Empty)
             {
                 resp = new APIResponses.ImageResponse();
-                resp.success = false;
+                resp.Success = false;
             }
 
-            if(resp.success)
+            if(resp.Success)
             {
-                Log.Info("Successfully deleted album! (" + resp.status.ToString() + ")");
+                Log.Info("Successfully deleted album! (" + resp.Status.ToString() + ")");
                 return true;
             }
 
-            Log.Error("Failed to delete album! (" + resp.status.ToString() + ") [\n\rdeletehash: " + _DeleteHash + "\n\r]");
+            Log.Error("Failed to delete album! (" + resp.Status.ToString() + ") [\n\rdeletehash: " + _DeleteHash + "\n\r]");
             return false;
         }
 
@@ -498,16 +498,16 @@ namespace EasyImgur
             if (resp == null || responseString == null || responseString == string.Empty)
             {
                 resp = new APIResponses.ImageResponse();
-                resp.success = false;
+                resp.Success = false;
             }
 
-            if (resp.success)
+            if (resp.Success)
             {
-                Log.Info("Successfully deleted image! (" + resp.status.ToString() + ")");
+                Log.Info("Successfully deleted image! (" + resp.Status.ToString() + ")");
                 return true;
             }
 
-            Log.Error("Failed to delete image! (" + resp.status.ToString() + ") [\n\rdeletehash: " + _DeleteHash + "\n\r]");
+            Log.Error("Failed to delete image! (" + resp.Status.ToString() + ") [\n\rdeletehash: " + _DeleteHash + "\n\r]");
             return false;
         }
 
@@ -576,9 +576,9 @@ namespace EasyImgur
             }
 
             APIResponses.TokenResponse resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
-            if (resp != null && resp.access_token != null && resp.refresh_token != null)
+            if (resp != null && resp.AccessToken != null && resp.RefreshToken!= null)
             {
-                StoreNewTokens(resp.expires_in, resp.access_token, resp.refresh_token);
+                StoreNewTokens(resp.ExpiresIn, resp.AccessToken, resp.RefreshToken);
 
                 Log.Info("Received tokens from PIN");
 
@@ -682,9 +682,9 @@ namespace EasyImgur
             {
                 Log.Error("Unexpected Exception: " + ex.ToString());
             }
-            if (resp != null && resp.access_token != null && resp.refresh_token != null)
+            if (resp != null && resp.AccessToken != null && resp.RefreshToken!= null)
             {
-                StoreNewTokens(resp.expires_in, resp.access_token, resp.refresh_token);
+                StoreNewTokens(resp.ExpiresIn, resp.AccessToken, resp.RefreshToken);
 
                 Log.Info("Refreshed tokens");
 

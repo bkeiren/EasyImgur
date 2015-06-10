@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace EasyImgur.APIResponses
 {
@@ -10,23 +11,53 @@ namespace EasyImgur.APIResponses
     {
         public class Data : BaseResponse.BaseData
         {
-            public string id;
-            public string title;
-            public string description;
-            public int datetime;
-            public string cover;
-            public int cover_width;
-            public int cover_height;
-            public string account_url;
-            public string privacy;
-            public string layout;
-            public int views;
-            public string link;
-            public string deletehash;
-            public int images_count;
-            public ImageResponse.Data[] images;
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("title")]
+            public string Title { get; set; }
+
+            [JsonProperty("description")]
+            public string Description { get; set; }
+
+            [JsonProperty("datetime")]
+            public int Datetime { get; set; }
+
+            [JsonProperty("cover")]
+            public string Cover { get; set; }
+
+            [JsonProperty("cover_width")]
+            public int CoverWidth { get; set; }
+
+            [JsonProperty("cover_height")]
+            public int CoverHeight { get; set; }
+
+            [JsonProperty("account_url")]
+            public string AccountUrl { get; set; }
+
+            [JsonProperty("privacy")]
+            public string Privacy { get; set; }
+
+            [JsonProperty("layout")]
+            public string Layout { get; set; }
+
+            [JsonProperty("views")]
+            public int Views { get; set; }
+
+            [JsonProperty("link")]
+            public string Link { get; set; }
+
+            [JsonProperty("deletehash")]
+            public string DeleteHash { get; set; }
+
+            [JsonProperty("images_count")]
+            public int ImageCount { get; set; }
+
+            [JsonProperty("images")]
+            public ImageResponse.Data[] Images { get; set; }
         }
-        public Data data;
-        public Image CoverImage; 
+        [JsonProperty("data")]
+        public Data ResponseData { get; set; }
+        public Image CoverImage { get; set; } 
     }
 }
