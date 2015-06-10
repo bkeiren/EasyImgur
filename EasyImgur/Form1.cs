@@ -733,17 +733,27 @@ namespace EasyImgur
 
         private void buttonFormatHelp_Click(object sender, EventArgs e)
         {
-            FormattingHelper.FormattingScheme[] formattingSchemes = FormattingHelper.GetSchemes();
-            string helpString = "You can use strings consisting of either static characters or the following dynamic symbols, or a combination of both:\n\n";
-            foreach (FormattingHelper.FormattingScheme scheme in formattingSchemes)
+            var sb = new StringBuilder(
+                "You can use strings consisting of either static characters or " +
+                "the following dynamic symbols, or a combination of both:\n\n");
+            foreach (FormattingHelper.FormattingScheme scheme in FormattingHelper.GetSchemes())
             {
-                helpString += scheme.symbol + "  :  " + scheme.description + "\n";
+                sb.Append(scheme.symbol);
+                sb.Append("  :  ");
+                sb.Append(scheme.description);
+                sb.Append('\n');
             }
-            string exampleFormattedString = "Image_%date%_%time%";
-            helpString += "\n\nEx.: '" + exampleFormattedString + "' would become: '" + FormattingHelper.Format(exampleFormattedString, null);
+
+            const string exampleFormattedString = "Image_%date%_%time%";
+
+            sb.Append("\n\nEx.: '");
+            sb.Append(exampleFormattedString);
+            sb.Append("' would become: '");
+            sb.Append(FormattingHelper.Format(exampleFormattedString, null));
+
             Point loc = this.Location;
             loc.Offset(buttonFormatHelp.Location.X, buttonFormatHelp.Location.Y);
-            Help.ShowPopup(this, helpString, loc);
+            Help.ShowPopup(this, sb.ToString(), loc);
         }
 
         private void buttonForgetTokens_Click(object sender, EventArgs e)
