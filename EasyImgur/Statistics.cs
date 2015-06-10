@@ -7,9 +7,10 @@ using System.Net;
 
 namespace EasyImgur
 {
-    class Statistics
+    static class Statistics
     {
-        private static Dictionary<String, StatisticsMetric> m_StatisticsMetrics = new Dictionary<String, StatisticsMetric>()
+        private const string m_StatisticsServerUrl = "http://bryankeiren.com/easyimgur/stats.php";
+        private static readonly Dictionary<String, StatisticsMetric> m_StatisticsMetrics = new Dictionary<String, StatisticsMetric>()
         {
              {"authorized",  new MetricAuthorized()}                // Whether the user has authorized EasyImgur.
             ,{"histsize",    new MetricHistorySize()}               // The size of the history list.
@@ -29,10 +30,8 @@ namespace EasyImgur
 
             try
             {
-                Statistics stats = new Statistics();
-
-                String metricsString = String.Empty;
-                using (WebClient wc = new WebClient())
+                var sb = new StringBuilder();
+                using (var wc = new WebClient())
                 {
                     try
                     {
@@ -44,7 +43,13 @@ namespace EasyImgur
                             if (value != null)
                             {
                                 values.Add(metric.Key, value.ToString());
-                                metricsString += "\r\n\t" + c.ToString() + "\t{" + metric.Key + ": " + value.ToString() + "}";
+                                sb.Append("\r\n\t");
+                                sb.Append(c);
+                                sb.Append("\t{");
+                                sb.Append(metric.Key);
+                                sb.Append(": ");
+                                sb.Append(value);
+                                sb.Append('}');
                                 ++c;
                             }
                             else
@@ -53,26 +58,25 @@ namespace EasyImgur
                             }
                         }
 
-                        Log.Info("Uploading the following metrics to the server: " + metricsString);
+                        Log.Info("Uploading the following metrics to the server: " + sb);
 
 #if !DEBUG
-                        String url = "http://bryankeiren.com/easyimgur/stats.php";
-                        byte[] response = wc.UploadValues(url, "POST", values);
+                        wc.UploadValues(m_StatisticsServerUrl, "POST", values);
                         //Log.Info("Response from stats server: \r\n" + Encoding.ASCII.GetString(response));
 #else
                         Log.Info("Upload to server was not performed due to the application being a debug build.");
 #endif
                     }
-                    catch (System.Net.WebException ex)
+                    catch (WebException ex)
                     {
-                        HttpWebResponse response = (System.Net.HttpWebResponse)ex.Response;
-                        Log.Error("Something went wrong while trying to upload statistics data.\r\n\tStatus code: " + response.StatusCode.ToString() + "\r\n\tException: " + ex.ToString());
+                        var response = (HttpWebResponse)ex.Response;
+                        Log.Error("Something went wrong while trying to upload statistics data.\r\n\tStatus code: " + response.StatusCode + "\r\n\tException: " + ex);
                         success = false;
                     }
 
                     if (success)
                     {
-                        Log.Info("Successfully uploaded data of " + m_StatisticsMetrics.Count.ToString() + " metrics to the server.");
+                        Log.Info("Successfully uploaded data of " + m_StatisticsMetrics.Count + " metrics to the server.");
                     }
                 }
             }

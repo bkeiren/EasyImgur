@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Management;
+using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace EasyImgur.StatisticsMetrics
 {
-    class MetricHistorySize    : StatisticsMetric
+    class MetricHistorySize : StatisticsMetric
     {
         protected override Object Gather()
         {
@@ -13,7 +17,7 @@ namespace EasyImgur.StatisticsMetrics
         }
     }
 
-    class MetricHistoryAnonymousUploads    : StatisticsMetric
+    class MetricHistoryAnonymousUploads : StatisticsMetric
     {
         protected override Object Gather()
         {
@@ -33,7 +37,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return System.Environment.OSVersion;
+            return Environment.OSVersion;
         }
     }
 
@@ -41,7 +45,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return System.Environment.Version;            
+            return Environment.Version;            
         }
     }
 
@@ -49,7 +53,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return System.Globalization.CultureInfo.CurrentUICulture.EnglishName;
+            return CultureInfo.CurrentUICulture.EnglishName;
         }
     }
 
@@ -57,7 +61,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return System.Globalization.CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName;
+            return CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName;
         }
     }
 
@@ -65,7 +69,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return EasyImgur.Program.InPortableMode;
+            return Program.InPortableMode;
         }
     }
 
@@ -84,15 +88,14 @@ namespace EasyImgur.StatisticsMetrics
         }
 
         // Code obtained from http://www.codeproject.com/Articles/34309/Convert-String-to-64bit-Integer (Accessed 13-03-2015 @ 23:25).
-        private Int64 GetInt64HashCode(string strText)
+        private static Int64 GetInt64HashCode(string strText)
         {
             Int64 hashCode = 0;
             if (!string.IsNullOrEmpty(strText))
             {
                 //Unicode Encode Covering all characterset
                 byte[] byteContents = Encoding.Unicode.GetBytes(strText);
-                System.Security.Cryptography.SHA256 hash =
-                new System.Security.Cryptography.SHA256CryptoServiceProvider();
+                SHA256 hash = new SHA256CryptoServiceProvider();
                 byte[] hashText = hash.ComputeHash(byteContents);
                 //32Byte hashText separate
                 //hashCodeStart = 0~7  8Byte
@@ -104,22 +107,22 @@ namespace EasyImgur.StatisticsMetrics
                 Int64 hashCodeEnd = BitConverter.ToInt64(hashText, 24);
                 hashCode = hashCodeStart ^ hashCodeMedium ^ hashCodeEnd;
             }
-            return (hashCode);
+            return hashCode;
         }
 
         private string GetUserNameString()
         {
-            return System.Environment.UserName;
+            return Environment.UserName;
         }
 
         private string GetNICString()
         {
             // Use the physical address (MAC) of the first network interface that has a non-null MAC address.
-            System.Net.NetworkInformation.NetworkInterface[] nics = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
-            foreach (System.Net.NetworkInformation.NetworkInterface nic in nics)
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface nic in nics)
             {
-                System.Net.NetworkInformation.PhysicalAddress mac = nic.GetPhysicalAddress();
-                if (mac != System.Net.NetworkInformation.PhysicalAddress.None)
+                PhysicalAddress mac = nic.GetPhysicalAddress();
+                if (!mac.Equals(PhysicalAddress.None))
                     return mac.ToString();
             }
 
@@ -141,23 +144,23 @@ namespace EasyImgur.StatisticsMetrics
             return GetPropertiesOfWMIObjects("Win32_PhysicalMedia", "SerialNumber");
         }
 
-        private string GetPropertiesOfWMIObjects(string _QueryTarget, string _PropertyName)
+        private string GetPropertiesOfWMIObjects(string queryTarget, string propertyName)
         {
             try
             {
-                System.Management.ManagementObjectSearcher searcher = new System.Management.ManagementObjectSearcher("SELECT * FROM " + _QueryTarget);
+                var searcher = new ManagementObjectSearcher("SELECT * FROM " + queryTarget);
 
-                string propertystring = string.Empty;
-                foreach (System.Management.ManagementObject wmi_object in searcher.Get())
+                var sb = new StringBuilder();
+                foreach (ManagementObject wmiObject in searcher.Get())
                 {
-                    Object property = wmi_object[_PropertyName];
+                    Object property = wmiObject[propertyName];
                     if (property != null)
-                        propertystring += property.ToString();
+                        sb.Append(property);
                 }
 
-                return propertystring;
+                return sb.ToString();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 // Do nothing except log.
                 Log.Error("An exception occurred while trying to obtain some WMI object properties: " + ex.Message);
