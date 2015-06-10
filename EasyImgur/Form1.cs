@@ -284,7 +284,9 @@ namespace EasyImgur
                 // this doesn't need an invocation guard because this function can't be called from the context menu
                 if (Properties.Settings.Default.copyLinks)
                 {
-                    Clipboard.SetText(resp.data.link);
+                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                        ? resp.data.link.Replace("http://", "https://")
+                        : resp.data.link);
                 }
 
                 ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
@@ -357,13 +359,22 @@ namespace EasyImgur
                 return;
             }
             APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
-            if(response.success)
+            if (response.success)
             {
                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
-                if(System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
-                    this.Invoke(new Action(delegate { Clipboard.SetText(response.data.link); }));
+                if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
+                {
+                    this.Invoke(new Action(() =>
+                        Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                            ? response.data.link.Replace("http://", "https://")
+                            : response.data.link)));
+                }
                 else
-                    Clipboard.SetText(response.data.link);
+                {
+                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                        ? response.data.link.Replace("http://", "https://")
+                        : response.data.link);
+                }
 
                 ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.data.link, ToolTipIcon.None);
 
@@ -377,7 +388,7 @@ namespace EasyImgur
                 item.anonymous = _Anonymous;
                 item.album = true;
                 item.thumbnail = response.CoverImage.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
-                Invoke(new Action(() => { History.StoreHistoryItem(item); }));
+                Invoke(new Action(() => History.StoreHistoryItem(item)));
             }
             else
                 ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.status + "): " + response.data.error, ToolTipIcon.None, true);
@@ -437,10 +448,20 @@ namespace EasyImgur
                             if (Properties.Settings.Default.copyLinks)
                             {
                                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
-                                if(System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
-                                    this.Invoke(new Action(delegate { Clipboard.SetText(resp.data.link); }));
+                                if (System.Threading.Thread.CurrentThread.GetApartmentState() !=
+                                    System.Threading.ApartmentState.STA)
+                                {
+                                    this.Invoke(new Action(() =>
+                                        Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                                            ? resp.data.link.Replace("http://", "https://")
+                                            : resp.data.link)));
+                                }
                                 else
-                                    Clipboard.SetText(resp.data.link);
+                                {
+                                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                                        ? resp.data.link.Replace("http://", "https://")
+                                        : resp.data.link);
+                                }
                             }
 
                             ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.data.link, ToolTipIcon.None);
@@ -454,7 +475,7 @@ namespace EasyImgur
                             item.description = resp.data.description;
                             item.anonymous = _Anonymous;
                             item.thumbnail = img.GetThumbnailImage(pictureBox1.Width, pictureBox1.Height, null, System.IntPtr.Zero);
-                            Invoke(new Action(() => { History.StoreHistoryItem(item); }));
+                            Invoke(new Action(() => History.StoreHistoryItem(item)));
                         }
                         else
                         {
@@ -804,6 +825,11 @@ namespace EasyImgur
             {
                 System.Diagnostics.Process.Start(item.link);
             }
+        }
+
+        private void checkBoxCopyLinks_CheckedChanged(object sender, EventArgs e)
+        {
+            this.clipboardSettingsContainer.Enabled = this.checkBoxCopyLinks.Checked;
         }
     }
 }

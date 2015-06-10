@@ -64,10 +64,11 @@ Settings
 
 EasyImgur has a number of different customizable settings. These can be accessed from the *General* tab in the EasyImgur settings window:
 
-![](http://i.imgur.com/dt7bu7s.png)
+![Settings tab screenshot](http://i.imgur.com/ssvIAZl.png)
 
-- **Clear clipboard on upload**: This option determines whether the clipboard will be cleared after uploading from it.
-- **Automatically copy links to clipboard**: Determines whether links to images that have succesfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
+- **Clear clipboard immediately on upload**: This option determines whether the clipboard will be cleared after uploading from it.
+- **Copy links to clipboard**: Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
+- **Copy HTTPS links**: Determines whether copied links will use [HTTPS](http://en.wikipedia.org/wiki/HTTPS) instead of HTTP.
 - **Upload multiple images as gallery**: Determines whether multiple images upload using the file dialog window are uploaded as separate images or contained in an album.
 - **Preferred image format**: This option gives a hint to Imgur as to what image format is preferred. Note that it only hints at this by providing the source image in a certain format. Imgur can (and sometimes will) change the format to something else if it chooses to do so.
 - **Use this title format** and **Use this description format**: These define two strings that are used as the title and description for every uploaded image. The strings can contain special symbols which are converted to set values before uploading. For a complete set of symbols, click the *Format?* button. An example string containing special symbols and its final form is: *Image_%n%_%date%_%time%*, might turn out to be *Image_0_19-08-2013_13:37:00* because *%n%* is converted to an integer denoting how many images have currently been uploaded, *%date* is converted to the current date in DD-MM-YYYY format, and *%time%* is converted to the current time in HH-MM-SS format.
