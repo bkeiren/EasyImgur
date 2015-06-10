@@ -34,6 +34,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.checkBoxCopyHttpsLinks = new System.Windows.Forms.CheckBox();
             this.labelPortableModeNote = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.checkBoxGalleryUpload = new System.Windows.Forms.CheckBox();
@@ -145,6 +146,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBoxCopyHttpsLinks);
             this.tabPage1.Controls.Add(this.labelPortableModeNote);
             this.tabPage1.Controls.Add(this.label17);
             this.tabPage1.Controls.Add(this.checkBoxGalleryUpload);
@@ -172,6 +174,20 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCopyHttpsLinks
+            // 
+            this.checkBoxCopyHttpsLinks.AutoSize = true;
+            this.checkBoxCopyHttpsLinks.Checked = global::EasyImgur.Properties.Settings.Default.copyHttpsLinks;
+            this.checkBoxCopyHttpsLinks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "copyHttpsLinks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBoxCopyHttpsLinks.Location = new System.Drawing.Point(404, 16);
+            this.checkBoxCopyHttpsLinks.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxCopyHttpsLinks.Name = "checkBoxCopyHttpsLinks";
+            this.checkBoxCopyHttpsLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxCopyHttpsLinks.Size = new System.Drawing.Size(113, 17);
+            this.checkBoxCopyHttpsLinks.TabIndex = 22;
+            this.checkBoxCopyHttpsLinks.Text = "Copy HTTPS links";
+            this.checkBoxCopyHttpsLinks.UseVisualStyleBackColor = true;
             // 
             // labelPortableModeNote
             // 
@@ -1008,6 +1024,7 @@
         private System.Windows.Forms.ListBox contributorsList;
         private System.Windows.Forms.Label labelPortableModeNote;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
     }
 }
 
