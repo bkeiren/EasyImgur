@@ -827,11 +827,6 @@ namespace EasyImgur
             }
         }
 
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void checkBoxCopyLinks_CheckedChanged(object sender, EventArgs e)
         {
             this.clipboardSettingsContainer.Enabled = this.checkBoxCopyLinks.Checked;
