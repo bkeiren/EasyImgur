@@ -34,6 +34,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.labelPortableModeNote = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.checkBoxGalleryUpload = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -61,7 +62,9 @@
             this.buttonAuthorize = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.checkBoxAlbum = new System.Windows.Forms.CheckBox();
+            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.btnOpenImageLinkInBrowser = new System.Windows.Forms.Button();
             this.textBoxTimestamp = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -73,7 +76,7 @@
             this.textBoxLink = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxHistorySelection = new System.Windows.Forms.GroupBox();
             this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
             this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
@@ -98,18 +101,16 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
-            this.labelPortableModeNote = new System.Windows.Forms.Label();
-            this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox2.SuspendLayout();
+            this.groupBoxHistorySelection.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -120,7 +121,7 @@
             // 
             // buttonApplyGeneral
             // 
-            this.buttonApplyGeneral.Location = new System.Drawing.Point(490, 189);
+            this.buttonApplyGeneral.Location = new System.Drawing.Point(501, 194);
             this.buttonApplyGeneral.Margin = new System.Windows.Forms.Padding(2);
             this.buttonApplyGeneral.Name = "buttonApplyGeneral";
             this.buttonApplyGeneral.Size = new System.Drawing.Size(81, 29);
@@ -172,11 +173,22 @@
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // labelPortableModeNote
+            // 
+            this.labelPortableModeNote.AutoSize = true;
+            this.labelPortableModeNote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.labelPortableModeNote.Location = new System.Drawing.Point(16, 205);
+            this.labelPortableModeNote.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelPortableModeNote.Name = "labelPortableModeNote";
+            this.labelPortableModeNote.Size = new System.Drawing.Size(251, 13);
+            this.labelPortableModeNote.TabIndex = 21;
+            this.labelPortableModeNote.Text = "NOTE: Some options are disabled in portable mode.";
+            // 
             // label17
             // 
             this.label17.AutoSize = true;
             this.label17.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label17.Location = new System.Drawing.Point(202, 38);
+            this.label17.Location = new System.Drawing.Point(205, 38);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(279, 13);
@@ -202,7 +214,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label16.Location = new System.Drawing.Point(202, 173);
+            this.label16.Location = new System.Drawing.Point(205, 174);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(305, 13);
@@ -214,7 +226,7 @@
             this.checkBoxEnableContextMenu.AutoSize = true;
             this.checkBoxEnableContextMenu.Checked = global::EasyImgur.Properties.Settings.Default.enableContextMenu;
             this.checkBoxEnableContextMenu.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "enableContextMenu", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(76, 172);
+            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(74, 173);
             this.checkBoxEnableContextMenu.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEnableContextMenu.Name = "checkBoxEnableContextMenu";
             this.checkBoxEnableContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -228,7 +240,7 @@
             this.checkBoxShowTokenRefreshNotification.AutoSize = true;
             this.checkBoxShowTokenRefreshNotification.Checked = global::EasyImgur.Properties.Settings.Default.showNotificationOnTokenRefresh;
             this.checkBoxShowTokenRefreshNotification.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "showNotificationOnTokenRefresh", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(15, 151);
+            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(13, 152);
             this.checkBoxShowTokenRefreshNotification.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
             this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -241,7 +253,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label4.Location = new System.Drawing.Point(202, 130);
+            this.label4.Location = new System.Drawing.Point(205, 132);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(305, 13);
@@ -251,7 +263,7 @@
             // checkBoxLaunchAtBoot
             // 
             this.checkBoxLaunchAtBoot.AutoSize = true;
-            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(6, 129);
+            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(4, 131);
             this.checkBoxLaunchAtBoot.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxLaunchAtBoot.Name = "checkBoxLaunchAtBoot";
             this.checkBoxLaunchAtBoot.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -262,12 +274,12 @@
             // 
             // buttonFormatHelp
             // 
-            this.buttonFormatHelp.Location = new System.Drawing.Point(525, 84);
+            this.buttonFormatHelp.Location = new System.Drawing.Point(526, 82);
             this.buttonFormatHelp.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFormatHelp.Name = "buttonFormatHelp";
-            this.buttonFormatHelp.Size = new System.Drawing.Size(56, 41);
+            this.buttonFormatHelp.Size = new System.Drawing.Size(56, 46);
             this.buttonFormatHelp.TabIndex = 7;
-            this.buttonFormatHelp.Text = "Format?";
+            this.buttonFormatHelp.Text = "Format help";
             this.buttonFormatHelp.UseVisualStyleBackColor = true;
             this.buttonFormatHelp.Click += new System.EventHandler(this.buttonFormatHelp_Click);
             // 
@@ -275,7 +287,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label8.Location = new System.Drawing.Point(326, 63);
+            this.label8.Location = new System.Drawing.Point(329, 61);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -286,7 +298,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(57, 63);
+            this.label7.Location = new System.Drawing.Point(62, 61);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -296,9 +308,10 @@
             // 
             // comboBoxImageFormat
             // 
+            this.comboBoxImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxImageFormat.FormattingEnabled = true;
             this.comboBoxImageFormat.Items.AddRange(new object[] {
-            "Auto",
+            "Automatic",
             "JPEG",
             "PNG",
             "GIF",
@@ -307,7 +320,7 @@
             "TIFF",
             "EMF",
             "WMF"});
-            this.comboBoxImageFormat.Location = new System.Drawing.Point(184, 60);
+            this.comboBoxImageFormat.Location = new System.Drawing.Point(186, 58);
             this.comboBoxImageFormat.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxImageFormat.Name = "comboBoxImageFormat";
             this.comboBoxImageFormat.Size = new System.Drawing.Size(139, 21);
@@ -316,7 +329,7 @@
             // textBoxDescriptionFormat
             // 
             this.textBoxDescriptionFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::EasyImgur.Properties.Settings.Default, "descriptionFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(184, 106);
+            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(186, 107);
             this.textBoxDescriptionFormat.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxDescriptionFormat.Name = "textBoxDescriptionFormat";
             this.textBoxDescriptionFormat.Size = new System.Drawing.Size(336, 20);
@@ -326,7 +339,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(47, 109);
+            this.label6.Location = new System.Drawing.Point(51, 110);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -337,7 +350,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(82, 86);
+            this.label5.Location = new System.Drawing.Point(86, 86);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -348,7 +361,7 @@
             // textBoxTitleFormat
             // 
             this.textBoxTitleFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::EasyImgur.Properties.Settings.Default, "titleFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBoxTitleFormat.Location = new System.Drawing.Point(184, 84);
+            this.textBoxTitleFormat.Location = new System.Drawing.Point(186, 83);
             this.textBoxTitleFormat.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTitleFormat.Name = "textBoxTitleFormat";
             this.textBoxTitleFormat.Size = new System.Drawing.Size(336, 20);
@@ -360,7 +373,7 @@
             this.checkBoxCopyLinks.AutoSize = true;
             this.checkBoxCopyLinks.Checked = global::EasyImgur.Properties.Settings.Default.copyLinks;
             this.checkBoxCopyLinks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "copyLinks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxCopyLinks.Location = new System.Drawing.Point(205, 16);
+            this.checkBoxCopyLinks.Location = new System.Drawing.Point(204, 16);
             this.checkBoxCopyLinks.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxCopyLinks.Name = "checkBoxCopyLinks";
             this.checkBoxCopyLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -495,6 +508,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label19);
             this.groupBox1.Controls.Add(this.checkBoxAlbum);
             this.groupBox1.Controls.Add(this.btnOpenImageLinkInBrowser);
             this.groupBox1.Controls.Add(this.textBoxTimestamp);
@@ -507,7 +521,7 @@
             this.groupBox1.Controls.Add(this.textBoxLink);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.groupBox2);
+            this.groupBox1.Controls.Add(this.groupBoxHistorySelection);
             this.groupBox1.Location = new System.Drawing.Point(177, 2);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
@@ -517,26 +531,40 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(27, 110);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(45, 13);
+            this.label19.TabIndex = 22;
+            this.label19.Text = "Preview";
+            // 
             // checkBoxAlbum
             // 
             this.checkBoxAlbum.AutoSize = true;
             this.checkBoxAlbum.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "album", true));
             this.checkBoxAlbum.Enabled = false;
-            this.checkBoxAlbum.Location = new System.Drawing.Point(340, 37);
+            this.checkBoxAlbum.Location = new System.Drawing.Point(235, 85);
             this.checkBoxAlbum.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxAlbum.Name = "checkBoxAlbum";
-            this.checkBoxAlbum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxAlbum.Size = new System.Drawing.Size(55, 17);
+            this.checkBoxAlbum.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.checkBoxAlbum.Size = new System.Drawing.Size(80, 17);
             this.checkBoxAlbum.TabIndex = 21;
             this.checkBoxAlbum.TabStop = false;
-            this.checkBoxAlbum.Text = "Album";
+            this.checkBoxAlbum.Text = "Is an album";
             this.checkBoxAlbum.UseVisualStyleBackColor = true;
+            // 
+            // historyItemBindingSource
+            // 
+            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
             // 
             // btnOpenImageLinkInBrowser
             // 
-            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(230, 62);
+            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(234, 10);
             this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
-            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(169, 23);
+            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(160, 46);
             this.btnOpenImageLinkInBrowser.TabIndex = 6;
             this.btnOpenImageLinkInBrowser.Text = "Open in browser";
             this.btnOpenImageLinkInBrowser.UseVisualStyleBackColor = true;
@@ -545,7 +573,7 @@
             // textBoxTimestamp
             // 
             this.textBoxTimestamp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "timestamp", true));
-            this.textBoxTimestamp.Location = new System.Drawing.Point(76, 84);
+            this.textBoxTimestamp.Location = new System.Drawing.Point(76, 83);
             this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTimestamp.Name = "textBoxTimestamp";
             this.textBoxTimestamp.ReadOnly = true;
@@ -555,7 +583,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 85);
+            this.label9.Location = new System.Drawing.Point(14, 86);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(58, 13);
@@ -567,20 +595,20 @@
             this.checkBoxTiedToAccount.AutoSize = true;
             this.checkBoxTiedToAccount.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "tiedToAccount", true));
             this.checkBoxTiedToAccount.Enabled = false;
-            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(294, 17);
+            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(235, 61);
             this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
-            this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(101, 17);
+            this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(105, 17);
             this.checkBoxTiedToAccount.TabIndex = 15;
             this.checkBoxTiedToAccount.TabStop = false;
-            this.checkBoxTiedToAccount.Text = "Tied to account";
+            this.checkBoxTiedToAccount.Text = "On your account";
             this.checkBoxTiedToAccount.UseVisualStyleBackColor = true;
             // 
             // textBoxDeleteHash
             // 
             this.textBoxDeleteHash.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "deletehash", true));
-            this.textBoxDeleteHash.Location = new System.Drawing.Point(76, 62);
+            this.textBoxDeleteHash.Location = new System.Drawing.Point(76, 59);
             this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxDeleteHash.Name = "textBoxDeleteHash";
             this.textBoxDeleteHash.ReadOnly = true;
@@ -590,7 +618,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 64);
+            this.label3.Location = new System.Drawing.Point(6, 62);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
@@ -610,7 +638,7 @@
             // textBoxID
             // 
             this.textBoxID.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "id", true));
-            this.textBoxID.Location = new System.Drawing.Point(76, 18);
+            this.textBoxID.Location = new System.Drawing.Point(76, 11);
             this.textBoxID.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxID.Name = "textBoxID";
             this.textBoxID.ReadOnly = true;
@@ -620,7 +648,7 @@
             // textBoxLink
             // 
             this.textBoxLink.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "link", true));
-            this.textBoxLink.Location = new System.Drawing.Point(76, 39);
+            this.textBoxLink.Location = new System.Drawing.Point(76, 35);
             this.textBoxLink.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLink.Name = "textBoxLink";
             this.textBoxLink.ReadOnly = true;
@@ -630,7 +658,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(46, 41);
+            this.label2.Location = new System.Drawing.Point(45, 38);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 13);
@@ -640,45 +668,45 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(56, 20);
+            this.label1.Location = new System.Drawing.Point(54, 14);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(18, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "ID";
             // 
-            // groupBox2
+            // groupBoxHistorySelection
             // 
-            this.groupBox2.Controls.Add(this.buttonRemoveFromImgur);
-            this.groupBox2.Controls.Add(this.buttonRemoveFromHistory);
-            this.groupBox2.Location = new System.Drawing.Point(229, 107);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(170, 112);
-            this.groupBox2.TabIndex = 19;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Selection";
+            this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromImgur);
+            this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromHistory);
+            this.groupBoxHistorySelection.Location = new System.Drawing.Point(229, 145);
+            this.groupBoxHistorySelection.Name = "groupBoxHistorySelection";
+            this.groupBoxHistorySelection.Size = new System.Drawing.Size(170, 74);
+            this.groupBoxHistorySelection.TabIndex = 19;
+            this.groupBoxHistorySelection.TabStop = false;
+            this.groupBoxHistorySelection.Text = "Selection: 0 items";
             // 
             // buttonRemoveFromImgur
             // 
             this.buttonRemoveFromImgur.Enabled = false;
-            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(5, 79);
+            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(5, 46);
             this.buttonRemoveFromImgur.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRemoveFromImgur.Name = "buttonRemoveFromImgur";
             this.buttonRemoveFromImgur.Size = new System.Drawing.Size(160, 24);
             this.buttonRemoveFromImgur.TabIndex = 8;
-            this.buttonRemoveFromImgur.Text = "Remove selected from Imgur";
+            this.buttonRemoveFromImgur.Text = "Delete from Imgur";
             this.buttonRemoveFromImgur.UseVisualStyleBackColor = true;
             this.buttonRemoveFromImgur.Click += new System.EventHandler(this.buttonRemoveFromImgur_Click);
             // 
             // buttonRemoveFromHistory
             // 
             this.buttonRemoveFromHistory.Enabled = false;
-            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(6, 18);
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(5, 18);
             this.buttonRemoveFromHistory.Margin = new System.Windows.Forms.Padding(2);
             this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
             this.buttonRemoveFromHistory.Size = new System.Drawing.Size(160, 24);
             this.buttonRemoveFromHistory.TabIndex = 7;
-            this.buttonRemoveFromHistory.Text = "Remove selected from history";
+            this.buttonRemoveFromHistory.Text = "Clear from history";
             this.buttonRemoveFromHistory.UseMnemonic = false;
             this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
             this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
@@ -877,21 +905,6 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
-            // labelPortableModeNote
-            // 
-            this.labelPortableModeNote.AutoSize = true;
-            this.labelPortableModeNote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.labelPortableModeNote.Location = new System.Drawing.Point(16, 205);
-            this.labelPortableModeNote.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelPortableModeNote.Name = "labelPortableModeNote";
-            this.labelPortableModeNote.Size = new System.Drawing.Size(251, 13);
-            this.labelPortableModeNote.TabIndex = 21;
-            this.labelPortableModeNote.Text = "NOTE: Some options are disabled in portable mode.";
-            // 
-            // historyItemBindingSource
-            // 
-            this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
-            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -912,12 +925,12 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox2.ResumeLayout(false);
+            this.groupBoxHistorySelection.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -983,7 +996,7 @@
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel3;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxHistorySelection;
         private System.Windows.Forms.Button btnOpenImageLinkInBrowser;
         private System.Windows.Forms.CheckBox checkBoxEnableContextMenu;
         private System.Windows.Forms.Label label16;
@@ -994,6 +1007,7 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ListBox contributorsList;
         private System.Windows.Forms.Label labelPortableModeNote;
+        private System.Windows.Forms.Label label19;
     }
 }
 
