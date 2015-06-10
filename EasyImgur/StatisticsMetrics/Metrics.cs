@@ -148,14 +148,17 @@ namespace EasyImgur.StatisticsMetrics
         {
             try
             {
-                var searcher = new ManagementObjectSearcher("SELECT * FROM " + queryTarget);
-
                 var sb = new StringBuilder();
-                foreach (ManagementObject wmiObject in searcher.Get())
+
+                using (var searcher = new ManagementObjectSearcher("SELECT * FROM " + queryTarget))
+                using (ManagementObjectCollection wmiCollection = searcher.Get())
                 {
-                    Object property = wmiObject[propertyName];
-                    if (property != null)
-                        sb.Append(property);
+                    foreach (ManagementBaseObject wmiObject in wmiCollection)
+                    {
+                        Object property = wmiObject[propertyName];
+                        if (property != null)
+                            sb.Append(property);
+                    }
                 }
 
                 return sb.ToString();
@@ -163,7 +166,7 @@ namespace EasyImgur.StatisticsMetrics
             catch (Exception ex)
             {
                 // Do nothing except log.
-                Log.Error("An exception occurred while trying to obtain some WMI object properties: " + ex.Message);
+                Log.Error("An exception occurred while trying to obtain some WMI object properties: " + ex);
             }
 
             return string.Empty;
