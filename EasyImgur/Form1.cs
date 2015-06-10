@@ -34,6 +34,8 @@ namespace EasyImgur
 
             this.notifyIcon1.ContextMenu = this.trayMenu;
 
+            this.versionLabel.Text = "Version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
 
             InitializeEventHandlers();
@@ -195,6 +197,8 @@ namespace EasyImgur
 
         private void ApplicationExit( object sender, EventArgs e )
         {
+            Statistics.GatherAndSend();
+
             ImgurAPI.OnMainThreadExit();
             if (notifyIcon1 != null)
                 notifyIcon1.Visible = false;
@@ -307,6 +311,8 @@ namespace EasyImgur
                 else
                     Clipboard.SetText(clipboardURL, TextDataFormat.UnicodeText);
             }
+
+            Statistics.GatherAndSend();
         }
 
         private void UploadAlbum( bool _Anonymous, string[] _Paths, string _AlbumTitle )
@@ -375,6 +381,8 @@ namespace EasyImgur
             }
             else
                 ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.status + "): " + response.data.error, ToolTipIcon.None, true);
+
+            Statistics.GatherAndSend();
         }
 
         private void UploadFile( bool _Anonymous, string[] _Paths = null )
@@ -473,6 +481,8 @@ namespace EasyImgur
                     ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info, failure > 0);
                 }
             }
+
+            Statistics.GatherAndSend();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -690,6 +700,8 @@ namespace EasyImgur
                     ShowBalloonTip(2000, "Failed", "Failed to remove " + (item.album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
             }
             listBoxHistory.EndUpdate();
+
+            Statistics.GatherAndSend();
         }
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)

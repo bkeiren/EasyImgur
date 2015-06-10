@@ -86,7 +86,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label14 = new System.Windows.Forms.Label();
+            this.appDescriptionLabel = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -101,6 +101,7 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.versionLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -726,12 +727,13 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.versionLabel);
             this.tabPage4.Controls.Add(this.label18);
             this.tabPage4.Controls.Add(this.contributorsList);
             this.tabPage4.Controls.Add(this.pictureBox2);
             this.tabPage4.Controls.Add(this.linkLabel2);
             this.tabPage4.Controls.Add(this.linkLabel1);
-            this.tabPage4.Controls.Add(this.label14);
+            this.tabPage4.Controls.Add(this.appDescriptionLabel);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage4.Name = "tabPage4";
@@ -789,17 +791,17 @@
             this.linkLabel1.Text = "http://bryankeiren.com/";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // label14
+            // appDescriptionLabel
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(8, 121);
-            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(349, 39);
-            this.label14.TabIndex = 0;
-            this.label14.Text = "EasyImgur is a small and simple tool to easily upload images to imgur.com\r\n\r\nThis" +
+            this.appDescriptionLabel.AutoSize = true;
+            this.appDescriptionLabel.Location = new System.Drawing.Point(8, 121);
+            this.appDescriptionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.appDescriptionLabel.Name = "appDescriptionLabel";
+            this.appDescriptionLabel.Size = new System.Drawing.Size(349, 39);
+            this.appDescriptionLabel.TabIndex = 0;
+            this.appDescriptionLabel.Text = "EasyImgur is a small and simple tool to easily upload images to imgur.com\r\n\r\nThis" +
     " application was created by Bryan Keiren\r\n";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.appDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label11
             // 
@@ -905,6 +907,14 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
+            // versionLabel
+            // 
+            this.versionLabel.AutoSize = true;
+            this.versionLabel.Location = new System.Drawing.Point(217, 91);
+            this.versionLabel.Name = "versionLabel";
+            this.versionLabel.Size = new System.Drawing.Size(0, 13);
+            this.versionLabel.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -971,7 +981,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label appDescriptionLabel;
         private System.Windows.Forms.CheckBox checkBoxTiedToAccount;
         private System.Windows.Forms.Button buttonFormatHelp;
         private System.Windows.Forms.Label label15;
@@ -1008,6 +1018,7 @@
         private System.Windows.Forms.ListBox contributorsList;
         private System.Windows.Forms.Label labelPortableModeNote;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label versionLabel;
     }
 }
 

@@ -166,4 +166,12 @@ namespace EasyImgur.StatisticsMetrics
             return string.Empty;
         }
     }
+
+    class MetricVersion : StatisticsMetric
+    {
+        protected override Object Gather()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+    }
 }
