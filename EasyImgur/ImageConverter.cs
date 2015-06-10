@@ -65,7 +65,7 @@ namespace EasyImgur
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            using (var img = value as Bitmap)
+            using (var img = new Bitmap(value as Bitmap)) // new Bitmap fixes occasional generic GDI+ external exceptions on Windows 8.1
             using (var m = new MemoryStream())
             {
                 img.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
