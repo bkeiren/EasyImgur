@@ -170,9 +170,6 @@
         2bCF1JOtRkKV44aRy8jsVT6EEAl+NCL8TFFBLvR+zXlU8H9c64sHKwWZwAAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="historyItemBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>368, 17</value>
-  </metadata>
   <data name="label15.Text" xml:space="preserve">
     <value>Authorizing this app enables you to add uploaded images to your 
 account, rather than uploading them anonymously.
@@ -180,6 +177,9 @@ account, rather than uploading them anonymously.
 To discard all current authorization tokens, press Forget Tokens.
 To revoke authorization of any tokens this application has, visit http://imgur.com/account/settings/apps</value>
   </data>
+  <metadata name="historyItemBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>368, 17</value>
+  </metadata>
   <metadata name="trayMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>264, 17</value>
   </metadata>

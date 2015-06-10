@@ -308,9 +308,10 @@
             // 
             // comboBoxImageFormat
             // 
+            this.comboBoxImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxImageFormat.FormattingEnabled = true;
             this.comboBoxImageFormat.Items.AddRange(new object[] {
-            "Auto",
+            "Automatic",
             "JPEG",
             "PNG",
             "GIF",
