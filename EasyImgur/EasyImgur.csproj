@@ -94,7 +94,7 @@
   <ItemGroup>
     <Compile Include="APIResponses\AlbumResponse.cs" />
     <Compile Include="APIResponses\TokenResponse.cs" />
-    <Compile Include="ArgumentsRecievedEventArgs.cs" />
+    <Compile Include="ArgumentsReceivedEventArgs.cs" />
     <Compile Include="AuthorizeForm.cs">
       <SubType>Form</SubType>
     </Compile>
