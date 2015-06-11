@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace EasyImgur.APIResponses
 {
@@ -9,12 +10,22 @@ namespace EasyImgur.APIResponses
     {
         public class BaseData
         {
-            public string error;
-            public string method;
-            public string parameters;
-            public string request;
+            [JsonProperty("error")]
+            public string Error { get; set; }
+
+            [JsonProperty("method")]
+            public string Method { get; set; }
+
+            [JsonProperty("parameters")]
+            public string Parameters { get; set; }
+
+            [JsonProperty("request")]
+            public string Request { get; set; }
         }
-        public bool success;
-        public int status;
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+
+        [JsonProperty("status")]
+        public int Status { get; set; }
     }
 }

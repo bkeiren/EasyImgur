@@ -13,7 +13,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return History.count;
+            return History.Count;
         }
     }
 
@@ -21,7 +21,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override Object Gather()
         {
-            return History.anonymousCount;
+            return History.AnonymousCount;
         }
     }
 
