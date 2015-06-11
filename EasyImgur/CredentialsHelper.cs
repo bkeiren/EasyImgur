@@ -20,8 +20,8 @@ namespace EasyImgur
                 byte[] key = myAes.Key;
                 byte[] iv = myAes.IV;
 
-                byte[] encryptedName = AesHelper.EncryptStringToBytes_Aes(_Name, key, iv);
-                byte[] encryptedP = AesHelper.EncryptStringToBytes_Aes(_P, key, iv);
+                byte[] encryptedName = AesHelper.Encrypt(_Name, key, iv);
+                byte[] encryptedP = AesHelper.Encrypt(_P, key, iv);
 
                 // Format: 
                 // [4 bytes: key size in bytes]
@@ -73,8 +73,8 @@ namespace EasyImgur
             Array.Copy(data, 16 + keySize + ivSize + nameLength, p, 0, pLength);
 
             Credentials credentials = new Credentials();
-            credentials.name = AesHelper.DecryptStringFromBytes_Aes(name, key, iv);
-            credentials.p = AesHelper.DecryptStringFromBytes_Aes(p, key, iv);
+            credentials.name = AesHelper.Decrypt(name, key, iv);
+            credentials.p = AesHelper.Decrypt(p, key, iv);
             return credentials;
         }
     }
