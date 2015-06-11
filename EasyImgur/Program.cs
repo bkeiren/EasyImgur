@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace EasyImgur
 {
     static class Program
     {
-        static Dictionary<string, System.Reflection.Assembly> m_Libs = new Dictionary<string, System.Reflection.Assembly>();
-        static bool mIsInPortableMode = false;
+        static readonly Dictionary<string, Assembly> ResolvedAssemblyCache = new Dictionary<string, Assembly>();
+        static bool _isInPortableMode = false;
 
         static public bool InPortableMode 
         { 
-            get { return mIsInPortableMode; } 
+            get { return _isInPortableMode; } 
         }
 
         /// <summary>
@@ -22,8 +24,8 @@ namespace EasyImgur
         [STAThread]
         static void Main(string[] args)
         {
-            Guid guid = new Guid("{75da63f2-9b76-4590-82b3-b8a108e53cf0}");
-            using(SingleInstance singleInstance = new SingleInstance(guid))
+            var guid = new Guid("{75da63f2-9b76-4590-82b3-b8a108e53cf0}");
+            using (var singleInstance = new SingleInstance(guid))
             {
                 if (singleInstance.IsFirstInstance)
                 {
@@ -32,29 +34,29 @@ namespace EasyImgur
 
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
 
-                    AppDomain.CurrentDomain.AssemblyResolve += FindDLL;
+                    AppDomain.CurrentDomain.AssemblyResolve += FindDll;
 
-                    foreach (string arg in args.Where(s => { return s != null; }))
+                    foreach (string arg in args.Where(s => s != null))
                     {
                         if (arg == "/portable")
                         {
                             MakeSettingsPortable(Properties.Settings.Default);
-                            mIsInPortableMode = true;
+                            _isInPortableMode = true;
                             Log.Info("Started in portable mode.");
                         }
                     }
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Form1 form = new Form1(singleInstance, args);
+                    var form = new Form1(singleInstance, args);
                     Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
 
 #if DEBUG           // We want VS to get the source of the exception instead of coming to this throw when debugging
-                    Application.Run(); 
+                    Application.Run(form); 
 #else
                     try
                     {
-                        Application.Run();
+                        Application.Run(form);
                     }
                     catch(Exception ex)
                     {
@@ -69,28 +71,29 @@ namespace EasyImgur
         }
 
         // FindDLL technique and routine obtained from http://stackoverflow.com/a/15077288 (Accessed 02-01-2014 @ 15:37).
-        private static System.Reflection.Assembly FindDLL(object sender, ResolveEventArgs args)
+        private static Assembly FindDll(object sender, ResolveEventArgs args)
         {
-            string keyName = new System.Reflection.AssemblyName(args.Name).Name;
+            string keyName = new AssemblyName(args.Name).Name;
 
             // If DLL is loaded then don't load it again just return
-            if (m_Libs.ContainsKey(keyName)) return m_Libs[keyName];
+            Assembly value;
+            if (ResolvedAssemblyCache.TryGetValue(keyName, out value)) return value;
 
-            String assembly_name = "EasyImgur." + keyName + ".dll";
-            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(assembly_name))
+            string assemblyName = "EasyImgur." + keyName + ".dll";
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyName))
             {
                 if (stream == null)
                 {
-                    Log.Warning("Couldn't resolve assembly: '" + assembly_name + "'");
+                    Log.Warning("Couldn't resolve assembly: '" + assemblyName + "'");
                     return null;
                 }
                 using (var reader = new BinaryReader(stream))
                 {
                     byte[] buffer = reader.ReadBytes((int)stream.Length);
-                    System.Reflection.Assembly assembly = System.Reflection.Assembly.Load(buffer);
-                    m_Libs[keyName] = assembly;
+                    Assembly assembly = Assembly.Load(buffer);
+                    ResolvedAssemblyCache[keyName] = assembly;
 
-                    Log.Info("Loaded assembly: '" + assembly_name + "'.");
+                    Log.Info("Loaded assembly: '" + assemblyName + "'.");
 
                     return assembly;
                 }
@@ -98,11 +101,11 @@ namespace EasyImgur
         }
 
         // PortableSettingsProvider code obtained from http://stackoverflow.com/a/2579399 (Accessed 02-01-2014 @ 17:04).
-        private static void MakeSettingsPortable(System.Configuration.ApplicationSettingsBase settings)
+        private static void MakeSettingsPortable(ApplicationSettingsBase settings)
         {
             var portableSettingsProvider = new PortableSettingsProvider(settings.GetType().Name + ".settings");
             settings.Providers.Add(portableSettingsProvider);
-            foreach (System.Configuration.SettingsProperty prop in settings.Properties)
+            foreach (SettingsProperty prop in settings.Properties)
                 prop.Provider = portableSettingsProvider;
             settings.Reload();
         }
