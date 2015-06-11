@@ -106,6 +106,7 @@
     <Compile Include="APIResponses\BaseResponse.cs" />
     <Compile Include="Contributors.cs" />
     <Compile Include="CredentialsHelper.cs" />
+    <Compile Include="FileHelpers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

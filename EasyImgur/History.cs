@@ -76,7 +76,7 @@ namespace EasyImgur
             string jsonString;
             try
             {
-                jsonString = File.ReadAllText(SaveLocation + "history");
+                jsonString = FileHelper.GZipReadFile(SaveLocation + "history");
             }
             catch (FileNotFoundException ex)
             {
@@ -146,7 +146,7 @@ namespace EasyImgur
             string jsonString = JsonConvert.SerializeObject(_historyBinding.List, Formatting.None, new ImageConverter());
             try
             {
-                File.WriteAllText(SaveLocation + "history", jsonString);
+                FileHelper.GZipWriteFile(SaveLocation + "history", jsonString);
             }
             catch (Exception ex)
             {
