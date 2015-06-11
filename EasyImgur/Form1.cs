@@ -552,8 +552,8 @@ namespace EasyImgur
             UpdateRegistry(true); // this will need to be updated too, if we're using it
 
             // Bind the data source for the list of contributors.
-            Contributors.bindingSource.DataSource = Contributors.contributors;
-            contributorsList.DataSource = Contributors.bindingSource;
+            Contributors.BindingSource.DataSource = Contributors.ContributorList;
+            contributorsList.DataSource = Contributors.BindingSource;
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)

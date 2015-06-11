@@ -10,28 +10,47 @@ namespace EasyImgur
     {
         public class Contributor
         {
-            public String name { get; set; }
-            public String alias { get; set; }
-            public String url { get; set; }
+            public string Name { get; set; }
+            public string Alias { get; set; }
+            public string Url { get; set; }
 
             public override string ToString()
             {
-                String str = name;
-                if (!String.IsNullOrEmpty(alias))
-                    str += " (" + alias + ")";
+                string str = Name;
+                if (!string.IsNullOrEmpty(Alias))
+                    str += " (" + Alias + ")";
                 return str;
             }
         }
+        public static List<Contributor> ContributorList { get; private set; }
+        static public BindingSource BindingSource { get; private set; }
 
-        static public List<Contributor> contributors = new List<Contributor> {
-            new Contributor { name = "Alex van Liew",           alias = "snoozbuster",              url = "https://github.com/snoozbuster"      },
-            new Contributor { name = "Joona Heikkilä",          alias = "cubrr",                    url = "https://github.com/cubrr"            },
+        static Contributors()
+        {
+            BindingSource = new BindingSource();
+            ContributorList = new List<Contributor>
+            {
+                new Contributor
+                {
+                    Name = "Alex van Liew",
+                    Alias = "snoozbuster",
+                    Url = "https://github.com/snoozbuster"
+                },
+                new Contributor
+                {
+                    Name = "Joona Heikkilä",
+                    Alias = "cubrr",
+                    Url = "https://github.com/cubrr"
+                },
+                // Add new contributor here
 
-
-            // Leave this for last at all times.
-            new Contributor { name = "and every user of EasyImgur",  alias = "",                    url = ""                                    }
-        };
-
-        static public BindingSource bindingSource = new BindingSource();
+                new Contributor // Leave this for last at all times.
+                {
+                    Name = "...and every user of EasyImgur",
+                    Alias = "",
+                    Url = ""
+                }
+            };
+        }
     }
 }
