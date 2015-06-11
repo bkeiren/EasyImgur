@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace EasyImgur
 {
-    public class ImageConverter : Newtonsoft.Json.JsonConverter
+    public class ImageConverter : JsonConverter
     {
         private static readonly Bitmap FallbackImage;
 
@@ -68,7 +68,7 @@ namespace EasyImgur
             using (var img = new Bitmap(value as Bitmap)) // new Bitmap fixes occasional generic GDI+ external exceptions on Windows 8.1
             using (var m = new MemoryStream())
             {
-                img.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
+                img.Save(m, ImageFormat.Jpeg);
                 writer.WriteValue(Convert.ToBase64String(m.ToArray()));
             }
         }
