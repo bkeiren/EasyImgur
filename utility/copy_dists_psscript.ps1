@@ -2,6 +2,15 @@ $easyimgur_folder = (Get-Item (Split-Path $script:MyInvocation.MyCommand.Path)).
 $destination_folder = $easyimgur_folder + "\dist\"
 $source_folder = $easyimgur_folder + "\EasyImgur\bin\"
 
+$incremented_version = "n"
+while ($incremented_version -ne "yes")
+{
+	Write-Host "------------------------------------------------------"
+	$incremented_version = Read-Host "DID YOU INCREMENT THE VERSION NUMBER IN ASSEMBLYINFO.CS?"
+	Write-Host "------------------------------------------------------"
+}
+
+
 $files = "Release\EasyImgur.exe","Debug\EasyImgur.exe","Release\EasyImgur Portable.bat","Debug\EasyImgur Portable.bat"
 
 ForEach ($file in $files)
@@ -11,6 +20,7 @@ ForEach ($file in $files)
 	
 	$destination_timestamp 	= Get-Date -Date "1970-01-01 00:00:00Z"
 	$source_timestamp 		= Get-Date -Date "1970-01-01 00:00:00Z"
+
 	if (Test-Path $full_destination_path)
 	{
 		$destination_timestamp 	= [datetime](Get-ItemProperty -Path $full_destination_path -Name LastWriteTime).lastwritetime
