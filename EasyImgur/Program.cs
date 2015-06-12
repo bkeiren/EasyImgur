@@ -52,11 +52,11 @@ namespace EasyImgur
                     Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
 
 #if DEBUG           // We want VS to get the source of the exception instead of coming to this throw when debugging
-                    Application.Run(form); 
+                    Application.Run(); // Don't put the new form instance here m'kay
 #else
                     try
                     {
-                        Application.Run(form);
+                        Application.Run();
                     }
                     catch(Exception ex)
                     {
