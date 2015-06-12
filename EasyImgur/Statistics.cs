@@ -21,7 +21,7 @@ namespace EasyImgur
             {"langfull",    new MetricLanguageFull()},              // The current UI language's full English name.
             {"langiso",     new MetricLanguageISO()},               // The current UI language's 3-letter ISO code.
             {"portable",    new MetricPortableMode()},              // Whether the application is running in portable mode.
-            {"id",          new MetricMachineID()},                 // The (hopefully) unique machine ID.
+            {"id",          new MetricMachineId()},                 // The (hopefully) unique machine ID.
             {"version",     new MetricVersion()},                   // The version of the application.
         };
 
@@ -41,7 +41,7 @@ namespace EasyImgur
 
                         foreach (KeyValuePair<String, StatisticsMetric> metric in StatisticsMetrics)
                         {
-                            object value = metric.Value.value;
+                            object value = metric.Value.Value;
                             if (value != null)
                             {
                                 values.Add(metric.Key, value.ToString());
