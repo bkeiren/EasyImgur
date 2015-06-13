@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using EasyImgur.StatisticsMetrics;
@@ -9,19 +10,19 @@ namespace EasyImgur
 {
     static class Statistics
     {
-        private const string m_StatisticsServerUrl = "http://bryankeiren.com/easyimgur/stats.php";
-        private static readonly Dictionary<String, StatisticsMetric> m_StatisticsMetrics = new Dictionary<String, StatisticsMetric>()
+        private const string StatisticsServerUrl = "http://bryankeiren.com/easyimgur/stats.php";
+        private static readonly Dictionary<String, StatisticsMetric> StatisticsMetrics = new Dictionary<String, StatisticsMetric>()
         {
-             {"authorized",  new MetricAuthorized()}                // Whether the user has authorized EasyImgur.
-            ,{"histsize",    new MetricHistorySize()}               // The size of the history list.
-            ,{"histanon",    new MetricHistoryAnonymousUploads()}   // The number of anonymous uploads in the history list.
-            ,{"os",          new MetricOperatingSystem()}           // The operating system version.
-            ,{"clrversion",  new MetricCLRVersion()}                // The Common Language Runtime version.
-            ,{"langfull",    new MetricLanguageFull()}              // The current UI language's full English name.
-            ,{"langiso",     new MetricLanguageISO()}               // The current UI language's 3-letter ISO code.
-            ,{"portable",    new MetricPortableMode()}              // Whether the application is running in portable mode.
-            ,{"id",          new MetricMachineID()}                 // The (hopefully) unique machine ID.
-            ,{"version",     new MetricVersion()}                   // The version of the application.
+            {"authorized",  new MetricAuthorized()},                // Whether the user has authorized EasyImgur.
+            {"histsize",    new MetricHistorySize()},               // The size of the history list.
+            {"histanon",    new MetricHistoryAnonymousUploads()},   // The number of anonymous uploads in the history list.
+            {"os",          new MetricOperatingSystem()},           // The operating system version.
+            {"clrversion",  new MetricCLRVersion()},                // The Common Language Runtime version.
+            {"langfull",    new MetricLanguageFull()},              // The current UI language's full English name.
+            {"langiso",     new MetricLanguageISO()},               // The current UI language's 3-letter ISO code.
+            {"portable",    new MetricPortableMode()},              // Whether the application is running in portable mode.
+            {"id",          new MetricMachineId()},                 // The (hopefully) unique machine ID.
+            {"version",     new MetricVersion()},                   // The version of the application.
         };
 
         public static bool GatherAndSend()
@@ -30,27 +31,28 @@ namespace EasyImgur
 
             try
             {
-                var sb = new StringBuilder();
                 using (var wc = new WebClient())
                 {
                     try
                     {
-                        var values = new System.Collections.Specialized.NameValueCollection();
-                        int c = 1;
-                        foreach (KeyValuePair<String, StatisticsMetric> metric in m_StatisticsMetrics)
+                        int count = 1;
+                        var sb = new StringBuilder();
+                        var values = new NameValueCollection();
+
+                        foreach (KeyValuePair<String, StatisticsMetric> metric in StatisticsMetrics)
                         {
-                            Object value = metric.Value.value;
+                            object value = metric.Value.Value;
                             if (value != null)
                             {
                                 values.Add(metric.Key, value.ToString());
                                 sb.Append("\r\n\t");
-                                sb.Append(c);
+                                sb.Append(count);
                                 sb.Append("\t{");
                                 sb.Append(metric.Key);
                                 sb.Append(": ");
                                 sb.Append(value);
                                 sb.Append('}');
-                                ++c;
+                                ++count;
                             }
                             else
                             {
@@ -61,7 +63,7 @@ namespace EasyImgur
                         Log.Info("Uploading the following metrics to the server: " + sb);
 
 #if !DEBUG
-                        wc.UploadValues(m_StatisticsServerUrl, "POST", values);
+                        wc.UploadValues(StatisticsServerUrl, "POST", values);
                         //Log.Info("Response from stats server: \r\n" + Encoding.ASCII.GetString(response));
 #else
                         Log.Info("Upload to server was not performed due to the application being a debug build.");
@@ -76,7 +78,7 @@ namespace EasyImgur
 
                     if (success)
                     {
-                        Log.Info("Successfully uploaded data of " + m_StatisticsMetrics.Count + " metrics to the server.");
+                        Log.Info("Successfully uploaded data of " + StatisticsMetrics.Count + " metrics to the server.");
                     }
                 }
             }

@@ -19,11 +19,10 @@ namespace EasyImgur
         private void buttonOK_Click(object sender, EventArgs e)
         {
             // Store credentials.
-            //CredentialsHelper.StoreCredentials(textBoxPIN.Text, maskedTextBoxAccountPassword.Text);
+            // CredentialsHelper.StoreCredentials(textBoxPIN.Text, maskedTextBoxAccountPassword.Text);
             
             // Do stuff with the PIN number (requesting access tokens and such).
             ImgurAPI.RequestTokens(textBoxPIN.Text);
-
             this.Close();
         }
 

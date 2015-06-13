@@ -14,51 +14,58 @@ namespace EasyImgur
     /// </summary>
     public class SingleInstance : IDisposable
     {
-        private Mutex mutex = null;
-        private Boolean ownsMutex = false;
-        private Guid identifier = Guid.Empty;
+        private readonly Boolean _ownsMutex;
+        private Mutex _mutex;
+        private Guid _identifier = Guid.Empty;
+
+        /// <summary>
+        /// Event raised when arguments are received from successive instances.
+        /// </summary>
+        public event EventHandler<ArgumentsReceivedEventArgs> ArgumentsReceived;
+
+        /// <summary>
+        /// Indicates whether this is the first instance of this application.
+        /// </summary>
+        public bool IsFirstInstance
+        {
+            get { return _ownsMutex; }
+        }
 
         /// <summary>
         /// Enforces single instance for an application.
         /// </summary>
         /// <param name="identifier">An identifier unique to this application.</param>
-        public SingleInstance(Guid _Identifier)
+        public SingleInstance(Guid identifier)
         {
-            this.identifier = _Identifier;
-            mutex = new Mutex(true, identifier.ToString(), out ownsMutex);
+            _identifier = identifier;
+            _mutex = new Mutex(true, _identifier.ToString(), out _ownsMutex);
         }
-
-        /// <summary>
-        /// Indicates whether this is the first instance of this application.
-        /// </summary>
-        public Boolean IsFirstInstance
-        { get { return ownsMutex; } }
 
         /// <summary>
         /// Passes the given arguments to the first running instance of the application.
         /// </summary>
-        /// <param name="_Arguments">The arguments to pass.</param>
+        /// <param name="arguments">The arguments to pass.</param>
         /// <returns>Return true if the operation succeded, false otherwise.</returns>
-        public Boolean PassArgumentsToFirstInstance(String[] _Arguments)
+        public bool PassArgumentsToFirstInstance(string[] arguments)
         {
             if(IsFirstInstance)
                 throw new InvalidOperationException("This is the first instance.");
 
             try
             {
-                using(NamedPipeClientStream client = new NamedPipeClientStream(identifier.ToString()))
-                using(StreamWriter writer = new StreamWriter(client))
+                using(var client = new NamedPipeClientStream(_identifier.ToString()))
+                using(var writer = new StreamWriter(client))
                 {
                     client.Connect(200);
 
-                    foreach(String argument in _Arguments)
+                    foreach(string argument in arguments)
                         writer.WriteLine(argument);
                 }
                 return true;
             }
-            catch(TimeoutException)
+            catch (TimeoutException)
             { } //Couldn't connect to server
-            catch(IOException)
+            catch (IOException)
             { } //Pipe was broken
 
             return false;
@@ -71,30 +78,30 @@ namespace EasyImgur
         {
             if(!IsFirstInstance)
                 throw new InvalidOperationException("This is not the first instance.");
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ListenForArguments));
+            ThreadPool.QueueUserWorkItem(ListenForArguments);
         }
 
         /// <summary>
-        /// Listens for arguments on a named pipe.
+        /// Listens for arguments on a named pipe. Function is recursive on all paths.
         /// </summary>
-        /// <param name="_State">State object required by WaitCallback delegate.</param>
-        private void ListenForArguments(Object _State)
+        /// <param name="state">State object required by WaitCallback delegate.</param>
+        private void ListenForArguments(object state)
         {
             try
             {
-                using(NamedPipeServerStream server = new NamedPipeServerStream(identifier.ToString()))
-                using(StreamReader reader = new StreamReader(server))
+                using(var server = new NamedPipeServerStream(_identifier.ToString()))
+                using(var reader = new StreamReader(server))
                 {
                     server.WaitForConnection();
 
-                    List<String> arguments = new List<String>();
+                    var arguments = new List<String>();
                     while(server.IsConnected)
                         arguments.Add(reader.ReadLine());
 
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(CallOnArgumentsReceived), arguments.ToArray());
+                    ThreadPool.QueueUserWorkItem(CallOnArgumentsReceived, arguments.ToArray());
                 }
             }
-            catch(IOException)
+            catch (IOException)
             { } //Pipe was broken
             finally
             {
@@ -105,39 +112,35 @@ namespace EasyImgur
         /// <summary>
         /// Calls the OnArgumentsReceived method casting the state Object to String[].
         /// </summary>
-        /// <param name="_State">The arguments to pass.</param>
-        private void CallOnArgumentsReceived(Object _State)
+        /// <param name="state">The arguments to pass.</param>
+        private void CallOnArgumentsReceived(object state)
         {
-            OnArgumentsReceived((String[])_State);
+            OnArgumentsReceived((string[])state);
         }
-        /// <summary>
-        /// Event raised when arguments are received from successive instances.
-        /// </summary>
-        public event EventHandler<ArgumentsReceivedEventArgs> ArgumentsReceived;
+        
         /// <summary>
         /// Fires the ArgumentsReceived event.
         /// </summary>
-        /// <param name="_Arguments">The arguments to pass with the ArgumentsReceivedEventArgs.</param>
-        private void OnArgumentsReceived(String[] _Arguments)
+        /// <param name="arguments">The arguments to pass with the ArgumentsReceivedEventArgs.</param>
+        private void OnArgumentsReceived(string[] arguments)
         {
             if(ArgumentsReceived != null)
-                ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Arguments });
+                ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = arguments });
         }
 
         #region IDisposable
-        private Boolean disposed = false;
+        private bool _disposed;
 
-        protected virtual void Dispose(bool _Disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if(!disposed)
+            if (_disposed)
+                return;
+            if (_mutex != null && _ownsMutex)
             {
-                if(mutex != null && ownsMutex)
-                {
-                    mutex.ReleaseMutex();
-                    mutex = null;
-                }
-                disposed = true;
+                _mutex.ReleaseMutex();
+                _mutex = null;
             }
+            _disposed = true;
         }
 
         ~SingleInstance()

@@ -334,8 +334,8 @@ namespace EasyImgur
                     string description = string.Empty;
 
                     FormattingHelper.FormattingContext format_context = new FormattingHelper.FormattingContext();
-                    format_context.m_Filepath = path;
-                    format_context.m_AlbumIndex = ++i;
+                    format_context.FilePath = path;
+                    format_context.AlbumIndex = ++i;
                     titles.Add(GetTitleString(format_context));
                     descriptions.Add(GetDescriptionString(format_context));
                 }
@@ -438,7 +438,7 @@ namespace EasyImgur
                             // an immensely generic error. 
                             img = System.Drawing.Image.FromStream(stream);
                             FormattingHelper.FormattingContext format_context = new FormattingHelper.FormattingContext();
-                            format_context.m_Filepath = fileName;
+                            format_context.FilePath = fileName;
                             resp = ImgurAPI.UploadImage(img, GetTitleString(format_context), GetDescriptionString(format_context), _Anonymous);
                         }
                         if (resp.Success)
@@ -552,8 +552,8 @@ namespace EasyImgur
             UpdateRegistry(true); // this will need to be updated too, if we're using it
 
             // Bind the data source for the list of contributors.
-            Contributors.bindingSource.DataSource = Contributors.contributors;
-            contributorsList.DataSource = Contributors.bindingSource;
+            Contributors.BindingSource.DataSource = Contributors.ContributorList;
+            contributorsList.DataSource = Contributors.BindingSource;
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -738,9 +738,9 @@ namespace EasyImgur
                 "the following dynamic symbols, or a combination of both:\n\n");
             foreach (FormattingHelper.FormattingScheme scheme in FormattingHelper.GetSchemes())
             {
-                sb.Append(scheme.symbol);
+                sb.Append(scheme.Symbol);
                 sb.Append("  :  ");
-                sb.Append(scheme.description);
+                sb.Append(scheme.Description);
                 sb.Append('\n');
             }
 

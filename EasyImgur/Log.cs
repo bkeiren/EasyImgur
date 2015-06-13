@@ -1,84 +1,97 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 
 namespace EasyImgur
 {
     public static class Log
     {
-        private static System.Object ThreadLock = new System.Object();
-
+        private static readonly Object LogfileLock = new Object();
+        private static bool _firstInvocation = true;
         private static string SaveLocation
         {
             get
             {
-                // In non-portable mode we want to save in AppData, otherwise the local folder.
-                if (!Program.InPortableMode)
-                    return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
-                else
-                    return AppDomain.CurrentDomain.BaseDirectory;
+                // In portable mode we want to save in the local folder, otherwise AppData.
+                return Program.InPortableMode
+                    ? AppDomain.CurrentDomain.BaseDirectory
+                    : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
             }
         }
+        private static string LogFile { get { return Path.Combine(SaveLocation, "log.log"); } }
 
-        private static string LogFile { get { return SaveLocation + "log.log"; } }
-        private static bool FirstInvocation = true;
-
-        public static string Info( string _Message, bool _OnlyConsole = false )
+        /// <summary>
+        /// Logs an informative message.
+        /// </summary>
+        /// <param name="message">Log message</param>
+        /// <param name="consoleOnly">If <see langword="true"/>, instead of writing the message to both console and file, it will be written only to the console.</param>
+        /// <returns>Logged line containing the log channel and timestamp.</returns>
+        public static string Info(string message, bool consoleOnly = false)
         {
-            return LogMessage("INFO", _Message, _OnlyConsole);
+            return LogMessage("INFO", message, consoleOnly);
         }
 
-        public static string Warning( string _Message, bool _OnlyConsole = false )
+        /// <summary>
+        /// Logs a warning message.
+        /// </summary>
+        /// <param name="message">Log message</param>
+        /// <param name="consoleOnly">If <see langword="true"/>, instead of writing the message to both console and file, it will be written only to the console.</param>
+        /// <returns>Logged line containing the log channel and timestamp.</returns>
+        public static string Warning(string message, bool consoleOnly = false)
         {
-            return LogMessage("WARNING", _Message, _OnlyConsole);
+            return LogMessage("WARNING", message, consoleOnly);
         }
 
-        public static string Error( string _Message, bool _OnlyConsole = false )
+        /// <summary>
+        /// Logs an error message.
+        /// </summary>
+        /// <param name="message">Log message</param>
+        /// <param name="consoleOnly">If <see langword="true"/>, instead of writing the message to both console and file, it will be written only to the console.</param>
+        /// <returns>Logged line containing the log channel and timestamp.</returns>
+        public static string Error(string message, bool consoleOnly = false)
         {
-            return LogMessage("ERROR", _Message, _OnlyConsole);
+            return LogMessage("ERROR", message, consoleOnly);
         }
 
-        private static string LogMessage( string _Prefix, string _Message, bool _OnlyConsole )
+        /// <summary>
+        /// Logs a message to the console and log file.
+        /// </summary>
+        /// <param name="prefix">String to prepend to the message.</param>
+        /// <param name="message">Log message.</param>
+        /// <param name="consoleOnly">If <see langword="true"/>, instead of writing the message to both console and file, it will be written only to the console.</param>
+        /// <returns>Logged line containing the log channel and timestamp.</returns>
+        private static string LogMessage(string prefix, string message, bool consoleOnly)
         {
-            string TimeStamp = System.DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", System.Globalization.CultureInfo.InvariantCulture);
-            string line = TimeStamp + " [" + _Prefix + "] " + _Message;
-            lock (ThreadLock)
+            string timeStamp = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", CultureInfo.InvariantCulture);
+            string line = timeStamp + " [" + prefix + "] " + message;
+
+            Console.WriteLine(line);
+            if (consoleOnly)
+                return line;
+
+            lock (LogfileLock)
             {
-                if (FirstInvocation && !_OnlyConsole)
-                {
-                    FirstInvocation = false;
-                    try
-                    {
-                        System.IO.File.WriteAllText(LogFile, string.Empty);
-                    }
-                    catch (System.IO.FileNotFoundException ex)
-                    {
-                        Log.Error("Failed to save log file '" + LogFile + "': " + ex.Message, true);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Log.Error("Failed to save log file: " + ex.Message, true);
-                    }
-                }
+                if (_firstInvocation)
+                    _firstInvocation = false;
+                
                 try
                 {
-                    if (!_OnlyConsole)
-                    {
-                        using (System.IO.StreamWriter w = System.IO.File.AppendText(LogFile))
-                        {
-                            w.WriteLine(line);
-                        }
-                    }
-                    Console.WriteLine(line);
+                    if (_firstInvocation)
+                        File.WriteAllText(LogFile, line + Environment.NewLine);
+                    else
+                        File.AppendAllText(LogFile, line + Environment.NewLine);
                 }
-                catch (System.Security.SecurityException ex)
+                catch (SecurityException ex)
                 {
-                    Log.Error("A security exception occurred while trying to append to the history file: " + ex.Message, true);
+                    Error("A security exception occurred while trying to append to the history file: " + ex, true);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    Log.Error("Failed to append to the log file: " + ex.Message, true);
+                    Error("Failed to append to the log file: " + ex, true);
                 }
             }
             return line;

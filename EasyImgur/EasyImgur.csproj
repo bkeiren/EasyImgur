@@ -94,7 +94,7 @@
   <ItemGroup>
     <Compile Include="APIResponses\AlbumResponse.cs" />
     <Compile Include="APIResponses\TokenResponse.cs" />
-    <Compile Include="ArgumentsRecievedEventArgs.cs" />
+    <Compile Include="ArgumentsReceivedEventArgs.cs" />
     <Compile Include="AuthorizeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,7 +148,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SettingsProvider\PortableSettingsProvider.cs" />
+    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="StatisticsMetrics\Metrics.cs" />
