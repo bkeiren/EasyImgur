@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace EasyImgur
 {
@@ -17,17 +17,7 @@ namespace EasyImgur
 
         private static BindingSource _historyBinding;
 
-        private static string SaveLocation 
-        { 
-            get 
-            {
-                // In non-portable mode we want to save in AppData, otherwise the local folder.
-                if (!Program.InPortableMode)
-                    return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
-                else
-                    return AppDomain.CurrentDomain.BaseDirectory;
-            } 
-        }
+        private static string SaveLocation => Program.RootFolder;
 
         public static int Count
         {
@@ -76,7 +66,7 @@ namespace EasyImgur
             string jsonString;
             try
             {
-                jsonString = FileHelper.GZipReadFile(SaveLocation + "history");
+                jsonString = FileHelper.GZipReadFile(Path.Combine(SaveLocation, "history"));
             }
             catch (FileNotFoundException ex)
             {
@@ -114,7 +104,7 @@ namespace EasyImgur
                 Log.Warning("NULL object passed to History.StoreHistoryItem. No item stored.");
                 return;
             }
-            if(_historyBinding.Contains(item))
+            if (_historyBinding.Contains(item))
             {
                 Log.Warning("Object already in history passed to History.StoreHistoryItem. No item stored.");
                 return;
@@ -129,7 +119,7 @@ namespace EasyImgur
         public static void RemoveHistoryItem(HistoryItem item)
         {
             // This was changed because BindingSource doesn't support RemoveAll.
-            if(!_historyBinding.Contains(item))
+            if (!_historyBinding.Contains(item))
             {
                 Log.Warning("Failed to remove history item from list. Item is not present in list.");
                 return;
@@ -146,7 +136,7 @@ namespace EasyImgur
             string jsonString = JsonConvert.SerializeObject(_historyBinding.List, Formatting.None, new ImageConverter());
             try
             {
-                FileHelper.GZipWriteFile(SaveLocation + "history", jsonString);
+                FileHelper.GZipWriteFile(Path.Combine(SaveLocation, "history"), jsonString);
             }
             catch (Exception ex)
             {

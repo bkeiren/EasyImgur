@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Security;
-using System.Text;
 
 namespace EasyImgur
 {
@@ -12,16 +9,7 @@ namespace EasyImgur
     {
         private static readonly Object LogfileLock = new Object();
         private static bool _firstInvocation = true;
-        private static string SaveLocation
-        {
-            get
-            {
-                // In portable mode we want to save in the local folder, otherwise AppData.
-                return Program.InPortableMode
-                    ? AppDomain.CurrentDomain.BaseDirectory
-                    : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
-            }
-        }
+        private static string SaveLocation => Program.RootFolder;
         private static string LogFile { get { return Path.Combine(SaveLocation, "log.log"); } }
 
         /// <summary>
@@ -77,7 +65,7 @@ namespace EasyImgur
             {
                 if (_firstInvocation)
                     _firstInvocation = false;
-                
+
                 try
                 {
                     if (_firstInvocation)

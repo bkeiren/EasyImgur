@@ -18,6 +18,10 @@ namespace EasyImgur
             get { return _isInPortableMode; }
         }
 
+        public static string RootFolder => !InPortableMode
+            ? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"
+            : AppDomain.CurrentDomain.BaseDirectory;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -29,9 +33,6 @@ namespace EasyImgur
             {
                 if (singleInstance.IsFirstInstance)
                 {
-                    if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"))
-                        Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur");
-
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
 
                     AppDomain.CurrentDomain.AssemblyResolve += FindDll;
@@ -51,6 +52,12 @@ namespace EasyImgur
                     {
                         MakeSettingsPortable(Properties.Settings.Default);
                         Log.Info("Started in portable mode.");
+                    }
+                    else
+                    {
+                        var folder = RootFolder;
+                        if (!Directory.Exists(folder))
+                            Directory.CreateDirectory(folder);
                     }
 
                     Application.EnableVisualStyles();
