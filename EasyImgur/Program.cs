@@ -13,9 +13,9 @@ namespace EasyImgur
         static readonly Dictionary<string, Assembly> ResolvedAssemblyCache = new Dictionary<string, Assembly>();
         static bool _isInPortableMode = false;
 
-        static public bool InPortableMode 
-        { 
-            get { return _isInPortableMode; } 
+        static public bool InPortableMode
+        {
+            get { return _isInPortableMode; }
         }
 
         /// <summary>
@@ -29,21 +29,28 @@ namespace EasyImgur
             {
                 if (singleInstance.IsFirstInstance)
                 {
-                    if(!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"))
+                    if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"))
                         Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur");
 
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
 
                     AppDomain.CurrentDomain.AssemblyResolve += FindDll;
 
+                    const string portableFlag = "portable";
                     foreach (string arg in args.Where(s => s != null))
                     {
                         if (arg == "/portable")
                         {
-                            MakeSettingsPortable(Properties.Settings.Default);
+                            using (File.Open(portableFlag, FileMode.OpenOrCreate)) { }
                             _isInPortableMode = true;
-                            Log.Info("Started in portable mode.");
                         }
+                    }
+
+                    _isInPortableMode |= File.Exists(portableFlag);
+                    if (_isInPortableMode)
+                    {
+                        MakeSettingsPortable(Properties.Settings.Default);
+                        Log.Info("Started in portable mode.");
                     }
 
                     Application.EnableVisualStyles();
@@ -67,7 +74,7 @@ namespace EasyImgur
                 }
                 else
                     singleInstance.PassArgumentsToFirstInstance(args);
-            } 
+            }
         }
 
         // FindDLL technique and routine obtained from http://stackoverflow.com/a/15077288 (Accessed 02-01-2014 @ 15:37).
