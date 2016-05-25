@@ -9,7 +9,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using EasyImgur.Properties;
-using Microsoft.Win32;
 
 namespace EasyImgur
 {
@@ -18,11 +17,6 @@ namespace EasyImgur
         private bool closeCommandWasSentFromExitButton = false;
         private enum MessageVerbosity { Normal = 0, NoInfo = 1, NoError = 2 }
         private MessageVerbosity verbosity = MessageVerbosity.Normal;
-
-        /// <summary>
-        /// Property to easily access the path of the executable, quoted for safety.
-        /// </summary>
-        private string QuotedApplicationPath => "\"" + Application.ExecutablePath + "\"";
 
         public Form1(SingleInstance singleInstance, string[] args)
         {
@@ -74,7 +68,6 @@ namespace EasyImgur
             if (Program.InPortableMode)
             {
                 this.checkBoxLaunchAtBoot.Enabled = false;
-                this.checkBoxEnableContextMenu.Enabled = false;
                 this.Text += " - Portable Mode";
             }
             else
@@ -534,25 +527,8 @@ namespace EasyImgur
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Settings.Default.Reload();
-
-            // Assign control values. Most values are set using application binding on the control.
             this.comboBoxImageFormat.SelectedIndex = Settings.Default.imageFormat;
-
-            // Check the registry for a key describing whether EasyImgur should be started on boot.
-            if (!Program.InPortableMode)
-            {
-                var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                var value = (string)registryKey.GetValue("EasyImgur", string.Empty); // string.Empty is returned if no key is present.
-                this.checkBoxLaunchAtBoot.Checked = value != string.Empty;
-                if (value != string.Empty && value != this.QuotedApplicationPath)
-                {
-                    // A key exists, make sure we're using the most up-to-date path!
-                    registryKey.SetValue("EasyImgur", this.QuotedApplicationPath);
-                    this.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
-                }
-                this.UpdateRegistry(true); // this will need to be updated too, if we're using it
-            }
+            this.checkBoxLaunchAtBoot.Checked = RegistryHelper.EnableLaunchAtBoot;
 
             // Bind the data source for the list of contributors.
             Contributors.BindingSource.DataSource = Contributors.ContributorList;
@@ -573,85 +549,20 @@ namespace EasyImgur
         {
             // Store control values. Most values are stored using application binding on the control.
             Settings.Default.imageFormat = this.comboBoxImageFormat.SelectedIndex;
+            RegistryHelper.EnableLaunchAtBoot = this.checkBoxLaunchAtBoot.Checked;
+            Settings.Default.enableContextMenu = this.checkBoxEnableContextMenu.Checked;
+            RegistryHelper.ConfigurationShell(Settings.Default.enableContextMenu);
 
-            if (!Program.InPortableMode)
-            {
-                using (var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-                {
-                    if (this.checkBoxLaunchAtBoot.Checked)
-                    {
-                        // If the checkbox was marked, set a value which will make EasyImgur start at boot.
-                        registryKey.SetValue("EasyImgur", this.QuotedApplicationPath);
-                    }
-                    else
-                    {
-                        // Delete our value if one is present; second argument supresses exception on missing value
-                        registryKey.DeleteValue("EasyImgur", false);
-                    }
-                }
-
-                this.UpdateRegistry(false);
-            }
-
+            // proxy
             var proxyAddress = this.ProxyAddress.Text;
             Settings.Default.ProxyAddress = !string.IsNullOrWhiteSpace(proxyAddress) &&
                 Regex.Match(proxyAddress, "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}:\\d{1,5}$").Success
                 ? proxyAddress
                 : null;
             ImgurAPI.WebClientFactory.ReloadSetting();
+
+            // save.
             Settings.Default.Save();
-        }
-
-        private void UpdateRegistry(bool loadingSettings)
-        {
-            if (loadingSettings) // update enableContextMenu if necessary
-            {
-                // look for one of our handlers; Directory is the easiest and most reliable
-                // Since HKCR is a merging of HKCU\Software\Classes and HKLM\Software\Classes, look there
-                using (var dir = Registry.ClassesRoot.OpenSubKey("Directory"))
-                using (var shell = dir.OpenSubKey("shell"))
-                    Settings.Default.enableContextMenu = shell != null && shell.OpenSubKey("imguruploadanonymous") != null;
-            }
-
-            // a note: Directory doesn't work if within SystemFileAssociations, and 
-            // the extensions don't work if not inside them. At least, this seems to be the case for me
-
-            // another note: I discovered that I had the logic flipped, and the code actually did the opposite
-            // of what I describe in the above note, and it was working. Earlier, though, when I wrote that,
-            // it seemed to be true. Either way, the placement (inside or outside of SystemFileAssociations)
-            // does affect where in the context menu they show up. Feel free to play with the placement and see
-            // if you can get it to work better.
-            var fileTypes = new[] { ".jpg", ".jpeg", ".png", ".apng", ".bmp",
-            ".gif", ".tiff", ".tif", ".pdf", ".xcf", "Directory" };
-            using (var root = Registry.CurrentUser.OpenSubKey("Software\\Classes", true))
-            using (var fileAssoc = root.CreateSubKey("SystemFileAssociations"))
-                foreach (var fileType in fileTypes)
-                    using (var fileTypeKey = (fileType != "Directory" ? fileAssoc.CreateSubKey(fileType) : root.CreateSubKey(fileType)))
-                    using (var shell = fileTypeKey.CreateSubKey("shell"))
-                    {
-                        if (Settings.Default.enableContextMenu)
-                        {
-                            using (var anonHandler = shell.CreateSubKey("imguruploadanonymous"))
-                                this.EnableContextMenu(anonHandler, "Upload to Imgur" +
-                                    (fileType == "Directory" ? " as album" : "") + " (anonymous)", true);
-                            using (var accHandler = shell.CreateSubKey("imgurupload"))
-                                this.EnableContextMenu(accHandler, "Upload to Imgur" +
-                                    (fileType == "Directory" ? " as album" : ""), false);
-                        }
-                        else
-                        {
-                            shell.DeleteSubKeyTree("imguruploadanonymous", false);
-                            shell.DeleteSubKeyTree("imgurupload", false);
-                        }
-                    }
-        }
-
-        private void EnableContextMenu(RegistryKey key, string commandText, bool anonymous)
-        {
-            key.SetValue("", commandText);
-            key.SetValue("Icon", this.QuotedApplicationPath);
-            using (var subKey = key.CreateSubKey("command"))
-                subKey.SetValue("", this.QuotedApplicationPath + (anonymous ? " /anonymous" : "") + " \"%1\"");
         }
 
         private void buttonChangeCredentials_Click(object sender, EventArgs e)

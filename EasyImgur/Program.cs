@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using EasyImgur.Properties;
 
 namespace EasyImgur
 {
@@ -13,14 +14,16 @@ namespace EasyImgur
         static readonly Dictionary<string, Assembly> ResolvedAssemblyCache = new Dictionary<string, Assembly>();
         static bool isInPortableMode = false;
 
-        static public bool InPortableMode
-        {
-            get { return isInPortableMode; }
-        }
+        public static bool InPortableMode => isInPortableMode;
 
         public static string RootFolder => !InPortableMode
             ? Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur"
             : AppDomain.CurrentDomain.BaseDirectory;
+
+        /// <summary>
+        /// Property to easily access the path of the executable, quoted for safety.
+        /// </summary>
+        public static string QuotedApplicationPath => "\"" + Application.ExecutablePath + "\"";
 
         /// <summary>
         /// The main entry point for the application.
@@ -34,23 +37,32 @@ namespace EasyImgur
                 if (singleInstance.IsFirstInstance)
                 {
                     singleInstance.ListenForArgumentsFromSuccessiveInstances();
+                    Entry(singleInstance, args);
+                }
+                else
+                    singleInstance.PassArgumentsToFirstInstance(args);
+            }
+        }
 
+        private static void Entry(SingleInstance singleInstance, string[] args)
+        {
+#if DEBUG
+            try
+            {
+#endif
+                using (var app = new EasyImgurApplication())
+                {
                     AppDomain.CurrentDomain.AssemblyResolve += FindDll;
-
                     const string portableFlag = "portable";
-                    foreach (var arg in args.Where(s => s != null))
+                    if (args.Any(arg => arg == "/" + portableFlag) || File.Exists(portableFlag))
                     {
-                        if (arg == "/portable")
-                        {
-                            using (File.Open(portableFlag, FileMode.OpenOrCreate)) { }
-                            isInPortableMode = true;
-                        }
+                        if (!File.Exists(portableFlag)) using (File.Open(portableFlag, FileMode.OpenOrCreate)) { }
+                        isInPortableMode = true;
                     }
 
-                    isInPortableMode |= File.Exists(portableFlag);
                     if (isInPortableMode)
                     {
-                        MakeSettingsPortable(Properties.Settings.Default);
+                        MakeSettingsPortable(Settings.Default);
                         Log.Info("Started in portable mode.");
                     }
                     else
@@ -63,25 +75,19 @@ namespace EasyImgur
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     var form = new Form1(singleInstance, args);
-                    Properties.Settings.Default.Reload();   // To make sure we can access the current settings.
+                    Settings.Default.Reload();
 
-#if DEBUG           // We want VS to get the source of the exception instead of coming to this throw when debugging
-                    Application.Run(); // Don't put the new form instance here m'kay
-#else
-                    try
-                    {
-                        Application.Run();
-                    }
-                    catch(Exception ex)
-                    {
-                        Log.Error("Fatal exception in main thread: " + ex.ToString());
-                        throw; // crash and burn; I'm not sure it's safe to show a message box so just crash
-                    }
-#endif
+                    app.Initialize();
+                    Application.Run();
                 }
-                else
-                    singleInstance.PassArgumentsToFirstInstance(args);
+#if DEBUG
             }
+            catch (Exception ex)
+            {
+                Log.Error("Fatal exception in main thread: " + ex.ToString());
+                throw; // crash and burn; I'm not sure it's safe to show a message box so just crash
+            }
+#endif
         }
 
         // FindDLL technique and routine obtained from http://stackoverflow.com/a/15077288 (Accessed 02-01-2014 @ 15:37).
