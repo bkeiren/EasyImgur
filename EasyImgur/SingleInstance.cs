@@ -2,10 +2,10 @@
 // found at: http://stackoverflow.com/questions/917883/c-sharp-how-to-single-instance-application-that-accepts-new-parameters
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
-using System.Collections.Generic;
 
 namespace EasyImgur
 {
@@ -14,9 +14,9 @@ namespace EasyImgur
     /// </summary>
     public class SingleInstance : IDisposable
     {
-        private readonly Boolean _ownsMutex;
-        private Mutex _mutex;
-        private Guid _identifier = Guid.Empty;
+        private readonly Boolean ownsMutex;
+        private Mutex mutex;
+        private Guid identifier = Guid.Empty;
 
         /// <summary>
         /// Event raised when arguments are received from successive instances.
@@ -28,7 +28,7 @@ namespace EasyImgur
         /// </summary>
         public bool IsFirstInstance
         {
-            get { return _ownsMutex; }
+            get { return this.ownsMutex; }
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace EasyImgur
         /// <param name="identifier">An identifier unique to this application.</param>
         public SingleInstance(Guid identifier)
         {
-            _identifier = identifier;
-            _mutex = new Mutex(true, _identifier.ToString(), out _ownsMutex);
+            this.identifier = identifier;
+            this.mutex = new Mutex(true, this.identifier.ToString(), out this.ownsMutex);
         }
 
         /// <summary>
@@ -48,17 +48,17 @@ namespace EasyImgur
         /// <returns>Return true if the operation succeded, false otherwise.</returns>
         public bool PassArgumentsToFirstInstance(string[] arguments)
         {
-            if(IsFirstInstance)
+            if (this.IsFirstInstance)
                 throw new InvalidOperationException("This is the first instance.");
 
             try
             {
-                using(var client = new NamedPipeClientStream(_identifier.ToString()))
-                using(var writer = new StreamWriter(client))
+                using (var client = new NamedPipeClientStream(this.identifier.ToString()))
+                using (var writer = new StreamWriter(client))
                 {
                     client.Connect(200);
 
-                    foreach(string argument in arguments)
+                    foreach (string argument in arguments)
                         writer.WriteLine(argument);
                 }
                 return true;
@@ -76,9 +76,9 @@ namespace EasyImgur
         /// </summary>
         public void ListenForArgumentsFromSuccessiveInstances()
         {
-            if(!IsFirstInstance)
+            if (!this.IsFirstInstance)
                 throw new InvalidOperationException("This is not the first instance.");
-            ThreadPool.QueueUserWorkItem(ListenForArguments);
+            ThreadPool.QueueUserWorkItem(this.ListenForArguments);
         }
 
         /// <summary>
@@ -89,23 +89,23 @@ namespace EasyImgur
         {
             try
             {
-                using(var server = new NamedPipeServerStream(_identifier.ToString()))
-                using(var reader = new StreamReader(server))
+                using (var server = new NamedPipeServerStream(this.identifier.ToString()))
+                using (var reader = new StreamReader(server))
                 {
                     server.WaitForConnection();
 
                     var arguments = new List<String>();
-                    while(server.IsConnected)
+                    while (server.IsConnected)
                         arguments.Add(reader.ReadLine());
 
-                    ThreadPool.QueueUserWorkItem(CallOnArgumentsReceived, arguments.ToArray());
+                    ThreadPool.QueueUserWorkItem(this.CallOnArgumentsReceived, arguments.ToArray());
                 }
             }
             catch (IOException)
             { } //Pipe was broken
             finally
             {
-                ListenForArguments(null);
+                this.ListenForArguments(null);
             }
         }
 
@@ -115,42 +115,42 @@ namespace EasyImgur
         /// <param name="state">The arguments to pass.</param>
         private void CallOnArgumentsReceived(object state)
         {
-            OnArgumentsReceived((string[])state);
+            this.OnArgumentsReceived((string[])state);
         }
-        
+
         /// <summary>
         /// Fires the ArgumentsReceived event.
         /// </summary>
         /// <param name="arguments">The arguments to pass with the ArgumentsReceivedEventArgs.</param>
         private void OnArgumentsReceived(string[] arguments)
         {
-            if(ArgumentsReceived != null)
-                ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = arguments });
+            if (this.ArgumentsReceived != null)
+                this.ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = arguments });
         }
 
         #region IDisposable
-        private bool _disposed;
+        private bool disposed;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
+            if (this.disposed)
                 return;
-            if (_mutex != null && _ownsMutex)
+            if (this.mutex != null && this.ownsMutex)
             {
-                _mutex.ReleaseMutex();
-                _mutex = null;
+                this.mutex.ReleaseMutex();
+                this.mutex = null;
             }
-            _disposed = true;
+            this.disposed = true;
         }
 
         ~SingleInstance()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
         #endregion

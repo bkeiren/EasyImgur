@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 using Newtonsoft.Json;
 
 namespace EasyImgur.APIResponses
 {
     public class AlbumResponse : BaseResponse
     {
-        public class Data : BaseResponse.BaseData
+        public class Data : BaseData
         {
             [JsonProperty("id")]
             public string Id { get; set; }
@@ -58,6 +54,6 @@ namespace EasyImgur.APIResponses
         }
         [JsonProperty("data")]
         public Data ResponseData { get; set; }
-        public Image CoverImage { get; set; } 
+        public Image CoverImage { get; set; }
     }
 }

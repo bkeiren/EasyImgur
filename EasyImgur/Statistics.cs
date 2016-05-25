@@ -17,9 +17,9 @@ namespace EasyImgur
             {"histsize",    new MetricHistorySize()},               // The size of the history list.
             {"histanon",    new MetricHistoryAnonymousUploads()},   // The number of anonymous uploads in the history list.
             {"os",          new MetricOperatingSystem()},           // The operating system version.
-            {"clrversion",  new MetricCLRVersion()},                // The Common Language Runtime version.
+            {"clrversion",  new MetricClrVersion()},                // The Common Language Runtime version.
             {"langfull",    new MetricLanguageFull()},              // The current UI language's full English name.
-            {"langiso",     new MetricLanguageISO()},               // The current UI language's 3-letter ISO code.
+            {"langiso",     new MetricLanguageIso()},               // The current UI language's 3-letter ISO code.
             {"portable",    new MetricPortableMode()},              // Whether the application is running in portable mode.
             {"id",          new MetricMachineId()},                 // The (hopefully) unique machine ID.
             {"version",     new MetricVersion()},                   // The version of the application.

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace EasyImgur
 {
@@ -29,7 +27,7 @@ namespace EasyImgur
 
             public FormattingContext()
             {
-                FilePath = "";
+                this.FilePath = "";
             }
         }
 
@@ -40,7 +38,7 @@ namespace EasyImgur
             new FormattingScheme(
                 "%n%",
                 "The position of the current upload. Ex.: First uploaded image is 1, fifth 5, tenth is 10, etc.",
-                context => (ImgurAPI.numSuccessfulUploads + 1).ToString()),
+                context => (ImgurAPI.NumSuccessfulUploads + 1).ToString()),
             new FormattingScheme(
                 "%date%",
                 "Current date in DD-MM-YYYY format.",
@@ -86,7 +84,7 @@ namespace EasyImgur
                 "The position of the image in the album (0-n, where n = the number of images. Only applies if an album is being uploaded)",
                 context => context.AlbumIndex.ToString())
         };
-        
+
         static public string Format(string input, FormattingContext ctx)
         {
             FormattingContext context = ctx ?? new FormattingContext();

@@ -15,20 +15,20 @@ namespace EasyImgur
         public static event HistoryItemAddedEventHandler HistoryItemAdded;
         public static event HistoryItemRemovedEventHandler HistoryItemRemoved;
 
-        private static BindingSource _historyBinding;
+        private static BindingSource historyBinding;
 
         private static string SaveLocation => Program.RootFolder;
 
         public static int Count
         {
-            get { return _historyBinding.Count; }
+            get { return historyBinding.Count; }
         }
 
         public static int AnonymousCount
         {
             get
             {
-                return _historyBinding.Cast<HistoryItem>().Count(item => item.Anonymous);
+                return historyBinding.Cast<HistoryItem>().Count(item => item.Anonymous);
             }
         }
 
@@ -47,7 +47,7 @@ namespace EasyImgur
         // required to be the first method called
         public static void BindData(BindingSource source)
         {
-            _historyBinding = source;
+            historyBinding = source;
         }
 
         public static void InitializeFromDisk()
@@ -56,7 +56,7 @@ namespace EasyImgur
             if (history == null) return;
             foreach (HistoryItem item in history)
             {
-                _historyBinding.Add(item);
+                historyBinding.Add(item);
                 HistoryItemAdded(item);
             }
         }
@@ -104,13 +104,13 @@ namespace EasyImgur
                 Log.Warning("NULL object passed to History.StoreHistoryItem. No item stored.");
                 return;
             }
-            if (_historyBinding.Contains(item))
+            if (historyBinding.Contains(item))
             {
                 Log.Warning("Object already in history passed to History.StoreHistoryItem. No item stored.");
                 return;
             }
 
-            _historyBinding.Add(item);
+            historyBinding.Add(item);
             HistoryItemAdded(item);
 
             StoreHistoryOnDisk();
@@ -119,12 +119,12 @@ namespace EasyImgur
         public static void RemoveHistoryItem(HistoryItem item)
         {
             // This was changed because BindingSource doesn't support RemoveAll.
-            if (!_historyBinding.Contains(item))
+            if (!historyBinding.Contains(item))
             {
                 Log.Warning("Failed to remove history item from list. Item is not present in list.");
                 return;
             }
-            _historyBinding.Remove(item);
+            historyBinding.Remove(item);
 
             StoreHistoryOnDisk();
             HistoryItemRemoved(item);
@@ -133,7 +133,7 @@ namespace EasyImgur
         private static bool StoreHistoryOnDisk()
         {
             bool success = true;
-            string jsonString = JsonConvert.SerializeObject(_historyBinding.List, Formatting.None, new ImageConverter());
+            string jsonString = JsonConvert.SerializeObject(historyBinding.List, Formatting.None, new ImageConverter());
             try
             {
                 FileHelper.GZipWriteFile(Path.Combine(SaveLocation, "history"), jsonString);

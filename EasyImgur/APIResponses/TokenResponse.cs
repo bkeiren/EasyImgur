@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace EasyImgur.APIResponses
 {
@@ -36,8 +32,8 @@ namespace EasyImgur.APIResponses
 
         public TokenResponse()
         {
-            Bearer = Scope = TokenType = AccountUsername = AccessToken = RefreshToken = string.Empty;
-            ExpiresIn = 0;
+            this.Bearer = this.Scope = this.TokenType = this.AccountUsername = this.AccessToken = this.RefreshToken = string.Empty;
+            this.ExpiresIn = 0;
         }
     }
 }

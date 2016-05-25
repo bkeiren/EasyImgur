@@ -8,7 +8,7 @@ namespace EasyImgur
     public static class Log
     {
         private static readonly Object LogfileLock = new Object();
-        private static bool _firstInvocation = true;
+        private static bool firstInvocation = true;
         private static string SaveLocation => Program.RootFolder;
         private static string LogFile { get { return Path.Combine(SaveLocation, "log.log"); } }
 
@@ -63,12 +63,12 @@ namespace EasyImgur
 
             lock (LogfileLock)
             {
-                if (_firstInvocation)
-                    _firstInvocation = false;
+                if (firstInvocation)
+                    firstInvocation = false;
 
                 try
                 {
-                    if (_firstInvocation)
+                    if (firstInvocation)
                         File.WriteAllText(LogFile, line + Environment.NewLine);
                     else
                         File.AppendAllText(LogFile, line + Environment.NewLine);

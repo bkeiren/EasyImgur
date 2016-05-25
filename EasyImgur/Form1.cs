@@ -15,58 +15,58 @@ namespace EasyImgur
 {
     public partial class Form1 : Form
     {
-        private bool CloseCommandWasSentFromExitButton = false;
+        private bool closeCommandWasSentFromExitButton = false;
         private enum MessageVerbosity { Normal = 0, NoInfo = 1, NoError = 2 }
-        private MessageVerbosity Verbosity = MessageVerbosity.Normal;
+        private MessageVerbosity verbosity = MessageVerbosity.Normal;
 
         /// <summary>
         /// Property to easily access the path of the executable, quoted for safety.
         /// </summary>
-        private string QuotedApplicationPath { get { return "\"" + Application.ExecutablePath + "\""; } }
+        private string QuotedApplicationPath => "\"" + Application.ExecutablePath + "\"";
 
-        public Form1(SingleInstance _SingleInstance, string[] _Args)
+        public Form1(SingleInstance singleInstance, string[] args)
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            ImplementPortableMode();
+            this.ImplementPortableMode();
 
-            CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
+            this.CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
 
             this.notifyIcon1.ContextMenu = this.trayMenu;
 
             this.versionLabel.Text = "Version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            Application.ApplicationExit += new System.EventHandler(this.ApplicationExit);
+            Application.ApplicationExit += this.ApplicationExit;
 
-            InitializeEventHandlers();
-            History.BindData(historyItemBindingSource); // to use the designer with data binding, we have to pass History our BindingSource, instead of just getting one from History
+            this.InitializeEventHandlers();
+            History.BindData(this.historyItemBindingSource); // to use the designer with data binding, we have to pass History our BindingSource, instead of just getting one from History
             History.InitializeFromDisk();
 
             // if we have arguments, we're going to show a tip when we handle those arguments. 
-            if (_Args.Length == 0)
-                ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
+            if (args.Length == 0)
+                this.ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
 
             Statistics.GatherAndSend();
 
-            _SingleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
-            if (_Args.Length > 0) // handle initial arguments
-                singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Args });
+            singleInstance.ArgumentsReceived += this.singleInstance_ArgumentsReceived;
+            if (args.Length > 0) // handle initial arguments
+                this.singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = args });
         }
 
         private void InitializeEventHandlers()
         {
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
-            this.Load += new System.EventHandler(this.Form1_Load);
-            notifyIcon1.BalloonTipClicked += new System.EventHandler(this.NotifyIcon1_BalloonTipClicked);
-            notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
-            tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.FormClosing += this.Form1_Closing;
+            this.Load += this.Form1_Load;
+            this.notifyIcon1.BalloonTipClicked += this.NotifyIcon1_BalloonTipClicked;
+            this.notifyIcon1.MouseDoubleClick += this.NotifyIcon1_MouseDoubleClick;
+            this.tabControl1.SelectedIndexChanged += this.tabControl1_SelectedIndexChanged;
 
-            ImgurAPI.obtainedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.ObtainedAPIAuthorization);
-            ImgurAPI.refreshedAuthorization += new ImgurAPI.AuthorizationEventHandler(this.RefreshedAPIAuthorization);
-            ImgurAPI.lostAuthorization += new ImgurAPI.AuthorizationEventHandler(this.LostAPIAuthorization);
-            ImgurAPI.networkRequestFailed += new ImgurAPI.NetworkEventHandler(this.APINetworkRequestFailed);
+            ImgurAPI.ObtainedAuthorization += this.ObtainedAPIAuthorization;
+            ImgurAPI.RefreshedAuthorization += this.RefreshedAPIAuthorization;
+            ImgurAPI.LostAuthorization += this.LostAPIAuthorization;
+            ImgurAPI.NetworkRequestFailed += this.APINetworkRequestFailed;
         }
 
         void ImplementPortableMode()
@@ -83,9 +83,9 @@ namespace EasyImgur
             }
         }
 
-        bool ShouldShowMessage(MessageVerbosity _Verbosity)
+        bool ShouldShowMessage(MessageVerbosity verbosity)
         {
-            return Verbosity < _Verbosity;
+            return this.verbosity < verbosity;
         }
 
         void singleInstance_ArgumentsReceived(object sender, ArgumentsReceivedEventArgs e)
@@ -99,10 +99,10 @@ namespace EasyImgur
             // mappings of switch names to actions
             Dictionary<string, Action> handlers = new Dictionary<string, Action>() {
                 { "anonymous", () => anonymous = true },
-                { "noinfo", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoInfo) },
-                { "q", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoInfo) },
-                { "noerr", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoError) },
-                { "qq", () => Verbosity = (MessageVerbosity)Math.Max((int)Verbosity, (int)MessageVerbosity.NoError) },
+                { "noinfo", () => this.verbosity = (MessageVerbosity)Math.Max((int) this.verbosity, (int)MessageVerbosity.NoInfo) },
+                { "q", () => this.verbosity = (MessageVerbosity)Math.Max((int) this.verbosity, (int)MessageVerbosity.NoInfo) },
+                { "noerr", () => this.verbosity = (MessageVerbosity)Math.Max((int) this.verbosity, (int)MessageVerbosity.NoError) },
+                { "qq", () => this.verbosity = (MessageVerbosity)Math.Max((int) this.verbosity, (int)MessageVerbosity.NoError) },
                 { "exit", () => exitWhenFinished = true },
                 { "portable", () => { } } // ignore
             };
@@ -127,9 +127,9 @@ namespace EasyImgur
                     }
                 }
 
-                if (badSwitchCount > 0 && ShouldShowMessage(MessageVerbosity.NoError))
+                if (badSwitchCount > 0 && this.ShouldShowMessage(MessageVerbosity.NoError))
                 {
-                    ShowBalloonTip(2000, "Invalid switch", badSwitchCount.ToString() + " invalid switch" + (badSwitchCount > 1 ? "es were" : " was") + " passed to EasyImgur (see log for details). No files were uploaded.", ToolTipIcon.Error, true);
+                    this.ShowBalloonTip(2000, "Invalid switch", badSwitchCount.ToString() + " invalid switch" + (badSwitchCount > 1 ? "es were" : " was") + " passed to EasyImgur (see log for details). No files were uploaded.", ToolTipIcon.Error, true);
                     return;
                 }
 
@@ -138,7 +138,7 @@ namespace EasyImgur
                 {
                     if (!anonymous && !ImgurAPI.HasBeenAuthorized())
                     {
-                        ShowBalloonTip(2000, "Not logged in", "You aren't logged in but you're trying to upload to an account. Authorize EasyImgur and try again.", ToolTipIcon.Error, true);
+                        this.ShowBalloonTip(2000, "Not logged in", "You aren't logged in but you're trying to upload to an account. Authorize EasyImgur and try again.", ToolTipIcon.Error, true);
                         return;
                     }
 
@@ -162,36 +162,36 @@ namespace EasyImgur
                             files.Add(s);
                         }
 
-                        UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
+                        this.UploadAlbum(anonymous, files.ToArray(), path.Split('\\').Last());
                     }
                     else if (File.Exists(path))
-                        UploadFile(anonymous, new string[] { path });
+                        this.UploadFile(anonymous, new string[] { path });
                 }
             }
             catch (Exception ex)
             {
                 Log.Error("Unhandled exception in context menu thread: " + ex.ToString());
-                ShowBalloonTip(2000, "Error", "An unknown exception occurred during upload. Check the log for further information.", ToolTipIcon.Error, true);
+                this.ShowBalloonTip(2000, "Error", "An unknown exception occurred during upload. Check the log for further information.", ToolTipIcon.Error, true);
             }
 
             if (exitWhenFinished)
                 Application.Exit();
 
             // reset verbosity
-            Verbosity = MessageVerbosity.Normal;
+            this.verbosity = MessageVerbosity.Normal;
         }
 
-        private void ShowBalloonTip(int _Timeout, string _Title, string _Text, ToolTipIcon _Icon, bool error = false)
+        private void ShowBalloonTip(int timeout, string title, string text, ToolTipIcon icon, bool error = false)
         {
-            if (ShouldShowMessage(error ? MessageVerbosity.NoError : MessageVerbosity.NoInfo))
+            if (this.ShouldShowMessage(error ? MessageVerbosity.NoError : MessageVerbosity.NoInfo))
             {
-                if (notifyIcon1 != null)
-                    notifyIcon1.ShowBalloonTip(_Timeout, _Title, _Text, _Icon);
-                Log.Info(string.Format("Showed tooltip with title \"{0}\" and text \"{1}\".", _Title, _Text));
+                if (this.notifyIcon1 != null)
+                    this.notifyIcon1.ShowBalloonTip(timeout, title, text, icon);
+                Log.Info(string.Format("Showed tooltip with title \"{0}\" and text \"{1}\".", title, text));
             }
             else
             {
-                Log.Info(string.Format("Tooltip with title \"{0}\" and text \"{1}\" was suppressed.", _Title, _Text));
+                Log.Info(string.Format("Tooltip with title \"{0}\" and text \"{1}\" was suppressed.", title, text));
             }
         }
 
@@ -200,49 +200,49 @@ namespace EasyImgur
             Statistics.GatherAndSend();
 
             ImgurAPI.OnMainThreadExit();
-            if (notifyIcon1 != null)
-                notifyIcon1.Visible = false;
+            if (this.notifyIcon1 != null)
+                this.notifyIcon1.Visible = false;
         }
 
         private void ObtainedAPIAuthorization()
         {
-            SetAuthorizationStatusUI(true);
-            ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
+            this.SetAuthorizationStatusUI(true);
+            this.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has received authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
         private void RefreshedAPIAuthorization()
         {
-            SetAuthorizationStatusUI(true);
-            if (Properties.Settings.Default.showNotificationOnTokenRefresh)
-                ShowBalloonTip(2000, "EasyImgur", "EasyImgur has successfully refreshed authorization tokens!", ToolTipIcon.Info);
+            this.SetAuthorizationStatusUI(true);
+            if (Settings.Default.showNotificationOnTokenRefresh)
+                this.ShowBalloonTip(2000, "EasyImgur", "EasyImgur has successfully refreshed authorization tokens!", ToolTipIcon.Info);
         }
 
-        private void SetAuthorizationStatusUI(bool _IsAuthorized)
+        private void SetAuthorizationStatusUI(bool isAuthorized)
         {
-            uploadClipboardAccountTrayMenuItem.Enabled = _IsAuthorized;
-            uploadFileAccountTrayMenuItem.Enabled = _IsAuthorized;
-            label13.Text = _IsAuthorized ? "Authorized" : "Not authorized";
-            label13.ForeColor = _IsAuthorized ? System.Drawing.Color.Green : System.Drawing.Color.DarkBlue;
-            buttonForceTokenRefresh.Enabled = _IsAuthorized;
-            buttonForgetTokens.Enabled = _IsAuthorized;
+            this.uploadClipboardAccountTrayMenuItem.Enabled = isAuthorized;
+            this.uploadFileAccountTrayMenuItem.Enabled = isAuthorized;
+            this.label13.Text = isAuthorized ? "Authorized" : "Not authorized";
+            this.label13.ForeColor = isAuthorized ? Color.Green : Color.DarkBlue;
+            this.buttonForceTokenRefresh.Enabled = isAuthorized;
+            this.buttonForgetTokens.Enabled = isAuthorized;
         }
 
         private void LostAPIAuthorization()
         {
-            SetAuthorizationStatusUI(false);
-            ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
+            this.SetAuthorizationStatusUI(false);
+            this.ShowBalloonTip(2000, "EasyImgur", "EasyImgur no longer has authorization to use your Imgur account!", ToolTipIcon.Info);
         }
 
         private void APINetworkRequestFailed()
         {
-            ShowBalloonTip(2000, "EasyImgur", "Network request failed. Check your internet connection.", ToolTipIcon.Error, true);
+            this.ShowBalloonTip(2000, "EasyImgur", "Network request failed. Check your internet connection.", ToolTipIcon.Error, true);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedIndex == 2)
+            if (this.tabControl1.SelectedIndex == 2)
             {
-                SelectedHistoryItemChanged();
+                this.SelectedHistoryItemChanged();
             }
         }
 
@@ -250,46 +250,46 @@ namespace EasyImgur
         {
             APIResponses.ImageResponse resp = null;
             Image clipboardImage = null;
-            string clipboardURL = string.Empty;
+            string clipboardUrl = string.Empty;
             //bool anonymous = !Properties.Settings.Default.useAccount || !ImgurAPI.HasBeenAuthorized();
             bool anonymous = _Anonymous;
             if (Clipboard.ContainsImage())
             {
                 clipboardImage = Clipboard.GetImage();
-                ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                resp = ImgurAPI.UploadImage(clipboardImage, GetTitleString(null), GetDescriptionString(null), _Anonymous);
+                this.ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
+                resp = ImgurAPI.UploadImage(clipboardImage, this.GetTitleString(null), this.GetDescriptionString(null), _Anonymous);
             }
             else if (Clipboard.ContainsText())
             {
-                clipboardURL = Clipboard.GetText(TextDataFormat.UnicodeText);
+                clipboardUrl = Clipboard.GetText(TextDataFormat.UnicodeText);
                 Uri uriResult;
-                if (Uri.TryCreate(clipboardURL, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                if (Uri.TryCreate(clipboardUrl, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
                 {
-                    ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
-                    resp = ImgurAPI.UploadImage(clipboardURL, GetTitleString(null), GetDescriptionString(null), _Anonymous);
+                    this.ShowBalloonTip(4000, "Hold on...", "Attempting to upload image to Imgur...", ToolTipIcon.None);
+                    resp = ImgurAPI.UploadImage(clipboardUrl, this.GetTitleString(null), this.GetDescriptionString(null), _Anonymous);
                 }
                 else
                 {
-                    ShowBalloonTip(2000, "Can't upload clipboard!", "There's text on the clipboard but it's not a valid URL", ToolTipIcon.Error, true);
+                    this.ShowBalloonTip(2000, "Can't upload clipboard!", "There's text on the clipboard but it's not a valid URL", ToolTipIcon.Error, true);
                     return;
                 }
             }
             else
             {
-                ShowBalloonTip(2000, "Can't upload clipboard!", "There's no image or URL there", ToolTipIcon.Error, true);
+                this.ShowBalloonTip(2000, "Can't upload clipboard!", "There's no image or URL there", ToolTipIcon.Error, true);
                 return;
             }
             if (resp.Success)
             {
                 // this doesn't need an invocation guard because this function can't be called from the context menu
-                if (Properties.Settings.Default.copyLinks)
+                if (Settings.Default.copyLinks)
                 {
-                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                    Clipboard.SetText(Settings.Default.copyHttpsLinks
                         ? resp.ResponseData.Link.Replace("http://", "https://")
                         : resp.ResponseData.Link);
                 }
 
-                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.ResponseData.Link, ToolTipIcon.None);
+                this.ShowBalloonTip(2000, "Success!", Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.ResponseData.Link, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
                 item.Timestamp = DateTime.Now;
@@ -300,31 +300,31 @@ namespace EasyImgur
                 item.Description = resp.ResponseData.Description;
                 item.Anonymous = anonymous;
                 if (clipboardImage != null)
-                    item.Thumbnail = clipboardImage.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+                    item.Thumbnail = clipboardImage.GetThumbnailImage(this.pictureBoxHistoryThumb.Width, this.pictureBoxHistoryThumb.Height, null, IntPtr.Zero);
                 History.StoreHistoryItem(item);
             }
             else
-                ShowBalloonTip(2000, "Failed", "Could not upload image (" + resp.Status + "):", ToolTipIcon.None, true);
+                this.ShowBalloonTip(2000, "Failed", "Could not upload image (" + resp.Status + "):", ToolTipIcon.None, true);
 
-            if (!Properties.Settings.Default.clearClipboardOnUpload)
+            if (!Settings.Default.clearClipboardOnUpload)
             {
                 if (clipboardImage != null)
                     Clipboard.SetImage(clipboardImage);
                 else
-                    Clipboard.SetText(clipboardURL, TextDataFormat.UnicodeText);
+                    Clipboard.SetText(clipboardUrl, TextDataFormat.UnicodeText);
             }
 
             Statistics.GatherAndSend();
         }
 
-        private void UploadAlbum(bool _Anonymous, string[] _Paths, string _AlbumTitle)
+        private void UploadAlbum(bool anonymous, string[] paths, string albumTitle)
         {
-            ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
+            this.ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
             List<Image> images = new List<Image>();
             List<string> titles = new List<string>();
             List<string> descriptions = new List<string>();
             int i = 0;
-            foreach (string path in _Paths)
+            foreach (string path in paths)
             {
                 try
                 {
@@ -333,50 +333,50 @@ namespace EasyImgur
                     string title = string.Empty;
                     string description = string.Empty;
 
-                    FormattingHelper.FormattingContext format_context = new FormattingHelper.FormattingContext();
-                    format_context.FilePath = path;
-                    format_context.AlbumIndex = ++i;
-                    titles.Add(GetTitleString(format_context));
-                    descriptions.Add(GetDescriptionString(format_context));
+                    FormattingHelper.FormattingContext formatContext = new FormattingHelper.FormattingContext();
+                    formatContext.FilePath = path;
+                    formatContext.AlbumIndex = ++i;
+                    titles.Add(this.GetTitleString(formatContext));
+                    descriptions.Add(this.GetDescriptionString(formatContext));
                 }
                 catch (ArgumentException)
                 {
-                    ShowBalloonTip(2000, "Failed", "File (" + path + ") is not a valid image file.", ToolTipIcon.Error, true);
+                    this.ShowBalloonTip(2000, "Failed", "File (" + path + ") is not a valid image file.", ToolTipIcon.Error, true);
                 }
                 catch (FileNotFoundException)
                 {
-                    ShowBalloonTip(2000, "Failed", "Could not find image file on disk (" + path + "):", ToolTipIcon.Error, true);
+                    this.ShowBalloonTip(2000, "Failed", "Could not find image file on disk (" + path + "):", ToolTipIcon.Error, true);
                 }
                 catch (IOException)
                 {
-                    ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error, true);
+                    this.ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error, true);
                 }
             }
             if (images.Count == 0)
             {
                 Log.Error("Album upload failed: No valid images in selected images!");
-                ShowBalloonTip(2000, "Failed", "Album upload cancelled: No valid images to upload!", ToolTipIcon.Error, true);
+                this.ShowBalloonTip(2000, "Failed", "Album upload cancelled: No valid images to upload!", ToolTipIcon.Error, true);
                 return;
             }
-            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
+            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), albumTitle, anonymous, titles.ToArray(), descriptions.ToArray());
             if (response.Success)
             {
                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
                 if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     this.Invoke(new Action(() =>
-                        Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                        Clipboard.SetText(Settings.Default.copyHttpsLinks
                             ? response.ResponseData.Link.Replace("http://", "https://")
                             : response.ResponseData.Link)));
                 }
                 else
                 {
-                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                    Clipboard.SetText(Settings.Default.copyHttpsLinks
                         ? response.ResponseData.Link.Replace("http://", "https://")
                         : response.ResponseData.Link);
                 }
 
-                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.ResponseData.Link, ToolTipIcon.None);
+                this.ShowBalloonTip(2000, "Success!", Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.ResponseData.Link, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
                 item.Timestamp = DateTime.Now;
@@ -385,86 +385,86 @@ namespace EasyImgur
                 item.Deletehash = response.ResponseData.DeleteHash;
                 item.Title = response.ResponseData.Title;
                 item.Description = response.ResponseData.Description;
-                item.Anonymous = _Anonymous;
+                item.Anonymous = anonymous;
                 item.Album = true;
-                item.Thumbnail = response.CoverImage.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
-                Invoke(new Action(() => History.StoreHistoryItem(item)));
+                item.Thumbnail = response.CoverImage.GetThumbnailImage(this.pictureBoxHistoryThumb.Width, this.pictureBoxHistoryThumb.Height, null, IntPtr.Zero);
+                this.Invoke(new Action(() => History.StoreHistoryItem(item)));
             }
             else
-                ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.Status + "): " + response.ResponseData.Error, ToolTipIcon.None, true);
+                this.ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.Status + "): " + response.ResponseData.Error, ToolTipIcon.None, true);
 
             Statistics.GatherAndSend();
         }
 
-        private void UploadFile(bool _Anonymous, string[] _Paths = null)
+        private void UploadFile(bool anonymous, string[] paths = null)
         {
-            if (_Paths == null)
+            if (paths == null)
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Multiselect = true;
                 DialogResult res = dialog.ShowDialog();
                 if (res == DialogResult.OK)
-                    _Paths = dialog.FileNames;
+                    paths = dialog.FileNames;
             }
-            if (_Paths != null)
+            if (paths != null)
             {
-                if (_Paths.Length > 1 && Properties.Settings.Default.uploadMultipleImagesAsGallery)
+                if (paths.Length > 1 && Settings.Default.uploadMultipleImagesAsGallery)
                 {
-                    UploadAlbum(_Anonymous, _Paths, "");
+                    this.UploadAlbum(anonymous, paths, "");
                     return;
                 }
 
                 int success = 0;
                 int failure = 0;
                 int i = 0;
-                foreach (string fileName in _Paths)
+                foreach (string fileName in paths)
                 {
                     ++i;
 
                     if (fileName == null || fileName == string.Empty)
                         continue;
 
-                    string fileCounterString = (_Paths.Length > 1) ? (" (" + i.ToString() + "/" + _Paths.Length.ToString() + ") ") : (string.Empty);
+                    string fileCounterString = (paths.Length > 1) ? (" (" + i.ToString() + "/" + paths.Length.ToString() + ") ") : (string.Empty);
 
                     try
                     {
-                        ShowBalloonTip(2000, "Hold on..." + fileCounterString, "Attempting to upload image to Imgur...", ToolTipIcon.None);
+                        this.ShowBalloonTip(2000, "Hold on..." + fileCounterString, "Attempting to upload image to Imgur...", ToolTipIcon.None);
                         Image img;
                         APIResponses.ImageResponse resp;
-                        using (System.IO.FileStream stream = System.IO.File.Open(fileName, System.IO.FileMode.Open))
+                        using (FileStream stream = File.Open(fileName, FileMode.Open))
                         {
                             // a note to the future: ImgurAPI.UploadImage called Image.Save(); Image.Save()
                             // requires that the stream it was loaded from still be open, or else you get
                             // an immensely generic error. 
-                            img = System.Drawing.Image.FromStream(stream);
-                            FormattingHelper.FormattingContext format_context = new FormattingHelper.FormattingContext();
-                            format_context.FilePath = fileName;
-                            resp = ImgurAPI.UploadImage(img, GetTitleString(format_context), GetDescriptionString(format_context), _Anonymous);
+                            img = Image.FromStream(stream);
+                            FormattingHelper.FormattingContext formatContext = new FormattingHelper.FormattingContext();
+                            formatContext.FilePath = fileName;
+                            resp = ImgurAPI.UploadImage(img, this.GetTitleString(formatContext), this.GetDescriptionString(formatContext), anonymous);
                         }
                         if (resp.Success)
                         {
                             success++;
 
-                            if (Properties.Settings.Default.copyLinks)
+                            if (Settings.Default.copyLinks)
                             {
                                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
                                 if (System.Threading.Thread.CurrentThread.GetApartmentState() !=
                                     System.Threading.ApartmentState.STA)
                                 {
                                     this.Invoke(new Action(() =>
-                                        Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                                        Clipboard.SetText(Settings.Default.copyHttpsLinks
                                             ? resp.ResponseData.Link.Replace("http://", "https://")
                                             : resp.ResponseData.Link)));
                                 }
                                 else
                                 {
-                                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                                    Clipboard.SetText(Settings.Default.copyHttpsLinks
                                         ? resp.ResponseData.Link.Replace("http://", "https://")
                                         : resp.ResponseData.Link);
                                 }
                             }
 
-                            ShowBalloonTip(2000, "Success!" + fileCounterString, Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.ResponseData.Link, ToolTipIcon.None);
+                            this.ShowBalloonTip(2000, "Success!" + fileCounterString, Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.ResponseData.Link, ToolTipIcon.None);
 
                             HistoryItem item = new HistoryItem();
                             item.Timestamp = DateTime.Now;
@@ -473,33 +473,33 @@ namespace EasyImgur
                             item.Deletehash = resp.ResponseData.DeleteHash;
                             item.Title = resp.ResponseData.Title;
                             item.Description = resp.ResponseData.Description;
-                            item.Anonymous = _Anonymous;
-                            item.Thumbnail = img.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
-                            Invoke(new Action(() => History.StoreHistoryItem(item)));
+                            item.Anonymous = anonymous;
+                            item.Thumbnail = img.GetThumbnailImage(this.pictureBoxHistoryThumb.Width, this.pictureBoxHistoryThumb.Height, null, IntPtr.Zero);
+                            this.Invoke(new Action(() => History.StoreHistoryItem(item)));
                         }
                         else
                         {
                             failure++;
-                            ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.Status + "): " + resp.ResponseData.Error, ToolTipIcon.None, true);
+                            this.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.Status + "): " + resp.ResponseData.Error, ToolTipIcon.None, true);
                         }
                     }
                     catch (ArgumentException)
                     {
-                        ShowBalloonTip(2000, "Failed" + fileCounterString, "File (" + fileName + ") is not a valid image file.", ToolTipIcon.Error, true);
+                        this.ShowBalloonTip(2000, "Failed" + fileCounterString, "File (" + fileName + ") is not a valid image file.", ToolTipIcon.Error, true);
                     }
-                    catch (System.IO.FileNotFoundException)
+                    catch (FileNotFoundException)
                     {
                         failure++;
-                        ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error, true);
+                        this.ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not find image file on disk (" + fileName + "):", ToolTipIcon.Error, true);
                     }
                     catch (IOException)
                     {
-                        ShowBalloonTip(2000, "Failed" + fileCounterString, "Image is in use by another program (" + fileName + "):", ToolTipIcon.Error, true);
+                        this.ShowBalloonTip(2000, "Failed" + fileCounterString, "Image is in use by another program (" + fileName + "):", ToolTipIcon.Error, true);
                     }
                 }
-                if (_Paths.Length > 1)
+                if (paths.Length > 1)
                 {
-                    ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info, failure > 0);
+                    this.ShowBalloonTip(2000, "Done", "Successfully uploaded " + success.ToString() + " files" + ((failure > 0) ? (" (Warning: " + failure.ToString() + " failed)") : (string.Empty)), ToolTipIcon.Info, failure > 0);
                 }
             }
 
@@ -508,7 +508,7 @@ namespace EasyImgur
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            SaveSettings();
+            this.SaveSettings();
             //this.Hide();
         }
 
@@ -527,61 +527,61 @@ namespace EasyImgur
 
             }*/
             this.Show();
-            tabControl1.SelectedIndex = 2;
-            listBoxHistory.SelectedIndex = listBoxHistory.Items.Count - 1;
+            this.tabControl1.SelectedIndex = 2;
+            this.listBoxHistory.SelectedIndex = this.listBoxHistory.Items.Count - 1;
             this.BringToFront();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reload();
+            Settings.Default.Reload();
 
             // Assign control values. Most values are set using application binding on the control.
-            comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
+            this.comboBoxImageFormat.SelectedIndex = Settings.Default.imageFormat;
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
             if (!Program.InPortableMode)
             {
-                Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 string value = (string)registryKey.GetValue("EasyImgur", string.Empty); // string.Empty is returned if no key is present.
-                checkBoxLaunchAtBoot.Checked = value != string.Empty;
-                if (value != string.Empty && value != QuotedApplicationPath)
+                this.checkBoxLaunchAtBoot.Checked = value != string.Empty;
+                if (value != string.Empty && value != this.QuotedApplicationPath)
                 {
                     // A key exists, make sure we're using the most up-to-date path!
-                    registryKey.SetValue("EasyImgur", QuotedApplicationPath);
-                    ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
+                    registryKey.SetValue("EasyImgur", this.QuotedApplicationPath);
+                    this.ShowBalloonTip(2000, "EasyImgur", "Updated registry path", ToolTipIcon.Info);
                 }
-                UpdateRegistry(true); // this will need to be updated too, if we're using it
+                this.UpdateRegistry(true); // this will need to be updated too, if we're using it
             }
 
             // Bind the data source for the list of contributors.
             Contributors.BindingSource.DataSource = Contributors.ContributorList;
-            contributorsList.DataSource = Contributors.BindingSource.DataSource;
+            this.contributorsList.DataSource = Contributors.BindingSource.DataSource;
 
             this.ProxyAddress.Text = Settings.Default.ProxyAddress ?? string.Empty;
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveSettings();
+            this.SaveSettings();
             this.Hide();
 
-            e.Cancel = !CloseCommandWasSentFromExitButton;  // Don't want to *actually* close the form unless the Exit button was used.
+            e.Cancel = !this.closeCommandWasSentFromExitButton;  // Don't want to *actually* close the form unless the Exit button was used.
         }
 
         private void SaveSettings()
         {
             // Store control values. Most values are stored using application binding on the control.
-            Properties.Settings.Default.imageFormat = comboBoxImageFormat.SelectedIndex;
+            Settings.Default.imageFormat = this.comboBoxImageFormat.SelectedIndex;
 
             if (!Program.InPortableMode)
             {
-                using (Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+                using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
                 {
-                    if (checkBoxLaunchAtBoot.Checked)
+                    if (this.checkBoxLaunchAtBoot.Checked)
                     {
                         // If the checkbox was marked, set a value which will make EasyImgur start at boot.
-                        registryKey.SetValue("EasyImgur", QuotedApplicationPath);
+                        registryKey.SetValue("EasyImgur", this.QuotedApplicationPath);
                     }
                     else
                     {
@@ -590,7 +590,7 @@ namespace EasyImgur
                     }
                 }
 
-                UpdateRegistry(false);
+                this.UpdateRegistry(false);
             }
 
             var proxyAddress = this.ProxyAddress.Text;
@@ -602,15 +602,15 @@ namespace EasyImgur
             Settings.Default.Save();
         }
 
-        private void UpdateRegistry(bool _LoadingSettings)
+        private void UpdateRegistry(bool loadingSettings)
         {
-            if (_LoadingSettings) // update enableContextMenu if necessary
+            if (loadingSettings) // update enableContextMenu if necessary
             {
                 // look for one of our handlers; Directory is the easiest and most reliable
                 // Since HKCR is a merging of HKCU\Software\Classes and HKLM\Software\Classes, look there
                 using (RegistryKey dir = Registry.ClassesRoot.OpenSubKey("Directory"))
                 using (RegistryKey shell = dir.OpenSubKey("shell"))
-                    Properties.Settings.Default.enableContextMenu = shell != null && shell.OpenSubKey("imguruploadanonymous") != null;
+                    Settings.Default.enableContextMenu = shell != null && shell.OpenSubKey("imguruploadanonymous") != null;
             }
 
             // a note: Directory doesn't work if within SystemFileAssociations, and 
@@ -629,13 +629,13 @@ namespace EasyImgur
                     using (RegistryKey fileTypeKey = (fileType != "Directory" ? fileAssoc.CreateSubKey(fileType) : root.CreateSubKey(fileType)))
                     using (RegistryKey shell = fileTypeKey.CreateSubKey("shell"))
                     {
-                        if (Properties.Settings.Default.enableContextMenu)
+                        if (Settings.Default.enableContextMenu)
                         {
                             using (RegistryKey anonHandler = shell.CreateSubKey("imguruploadanonymous"))
-                                EnableContextMenu(anonHandler, "Upload to Imgur" +
+                                this.EnableContextMenu(anonHandler, "Upload to Imgur" +
                                     (fileType == "Directory" ? " as album" : "") + " (anonymous)", true);
                             using (RegistryKey accHandler = shell.CreateSubKey("imgurupload"))
-                                EnableContextMenu(accHandler, "Upload to Imgur" +
+                                this.EnableContextMenu(accHandler, "Upload to Imgur" +
                                     (fileType == "Directory" ? " as album" : ""), false);
                         }
                         else
@@ -649,9 +649,9 @@ namespace EasyImgur
         private void EnableContextMenu(RegistryKey key, string commandText, bool anonymous)
         {
             key.SetValue("", commandText);
-            key.SetValue("Icon", QuotedApplicationPath);
+            key.SetValue("Icon", this.QuotedApplicationPath);
             using (RegistryKey subKey = key.CreateSubKey("command"))
-                subKey.SetValue("", QuotedApplicationPath + (anonymous ? " /anonymous" : "") + " \"%1\"");
+                subKey.SetValue("", this.QuotedApplicationPath + (anonymous ? " /anonymous" : "") + " \"%1\"");
         }
 
         private void buttonChangeCredentials_Click(object sender, EventArgs e)
@@ -661,61 +661,61 @@ namespace EasyImgur
 
             if (ImgurAPI.HasBeenAuthorized())
             {
-                buttonForceTokenRefresh.Enabled = true;
+                this.buttonForceTokenRefresh.Enabled = true;
             }
             else
             {
-                buttonForceTokenRefresh.Enabled = false;
+                this.buttonForceTokenRefresh.Enabled = false;
             }
         }
 
         private void SelectedHistoryItemChanged()
         {
-            groupBoxHistorySelection.Text =
-                String.Format("Selection: {0} {1}", listBoxHistory.SelectedItems.Count, listBoxHistory.SelectedItems.Count == 1 ? "item" : "items");
-            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
+            this.groupBoxHistorySelection.Text =
+                String.Format("Selection: {0} {1}", this.listBoxHistory.SelectedItems.Count, this.listBoxHistory.SelectedItems.Count == 1 ? "item" : "items");
+            HistoryItem item = this.listBoxHistory.SelectedItem as HistoryItem;
             if (item == null)
             {
-                buttonRemoveFromImgur.Enabled = false;
-                buttonRemoveFromHistory.Enabled = false;
-                btnOpenImageLinkInBrowser.Enabled = false;
+                this.buttonRemoveFromImgur.Enabled = false;
+                this.buttonRemoveFromHistory.Enabled = false;
+                this.btnOpenImageLinkInBrowser.Enabled = false;
             }
             else
             {
-                buttonRemoveFromImgur.Enabled = item.Anonymous || (!item.Anonymous && ImgurAPI.HasBeenAuthorized());
-                buttonRemoveFromHistory.Enabled = true;
-                btnOpenImageLinkInBrowser.Enabled = true;
+                this.buttonRemoveFromImgur.Enabled = item.Anonymous || (!item.Anonymous && ImgurAPI.HasBeenAuthorized());
+                this.buttonRemoveFromHistory.Enabled = true;
+                this.btnOpenImageLinkInBrowser.Enabled = true;
             }
         }
 
         private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedHistoryItemChanged();
+            this.SelectedHistoryItemChanged();
         }
 
-        private string FormatInfoString(string _Input, FormattingHelper.FormattingContext _FormattingContext)
+        private string FormatInfoString(string input, FormattingHelper.FormattingContext formattingContext)
         {
-            return FormattingHelper.Format(_Input, _FormattingContext);
+            return FormattingHelper.Format(input, formattingContext);
         }
 
-        private string GetTitleString(FormattingHelper.FormattingContext _FormattingContext)
+        private string GetTitleString(FormattingHelper.FormattingContext formattingContext)
         {
-            return FormatInfoString(textBoxTitleFormat.Text, _FormattingContext);
+            return this.FormatInfoString(this.textBoxTitleFormat.Text, formattingContext);
         }
 
-        private string GetDescriptionString(FormattingHelper.FormattingContext _FormattingContext)
+        private string GetDescriptionString(FormattingHelper.FormattingContext formattingContext)
         {
-            return FormatInfoString(textBoxDescriptionFormat.Text, _FormattingContext);
+            return this.FormatInfoString(this.textBoxDescriptionFormat.Text, formattingContext);
         }
 
         private void buttonRemoveFromImgur_Click(object sender, EventArgs e)
         {
-            int count = listBoxHistory.SelectedItems.Count;
+            int count = this.listBoxHistory.SelectedItems.Count;
             bool isMultipleImages = count > 1;
             int currentCount = 0;
 
-            listBoxHistory.BeginUpdate();
-            List<HistoryItem> selectedItems = new List<HistoryItem>(listBoxHistory.SelectedItems.Cast<HistoryItem>());
+            this.listBoxHistory.BeginUpdate();
+            List<HistoryItem> selectedItems = new List<HistoryItem>(this.listBoxHistory.SelectedItems.Cast<HistoryItem>());
             foreach (HistoryItem item in selectedItems)
             {
                 ++currentCount;
@@ -723,18 +723,18 @@ namespace EasyImgur
                 if (item == null)
                     return;
 
-                string balloon_image_counter_text = (isMultipleImages ? (currentCount.ToString() + "/" + count.ToString()) : string.Empty);
-                string balloon_text = "Attempting to remove " + (item.Album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur...";
-                ShowBalloonTip(2000, "Hold on...", balloon_text, ToolTipIcon.None);
+                string balloonImageCounterText = (isMultipleImages ? (currentCount.ToString() + "/" + count.ToString()) : string.Empty);
+                string balloonText = "Attempting to remove " + (item.Album ? "album" : "image") + " " + balloonImageCounterText + " from Imgur...";
+                this.ShowBalloonTip(2000, "Hold on...", balloonText, ToolTipIcon.None);
                 if (item.Album ? ImgurAPI.DeleteAlbum(item.Deletehash, item.Anonymous) : ImgurAPI.DeleteImage(item.Deletehash, item.Anonymous))
                 {
-                    ShowBalloonTip(2000, "Success!", "Removed " + (item.Album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur and history", ToolTipIcon.None);
+                    this.ShowBalloonTip(2000, "Success!", "Removed " + (item.Album ? "album" : "image") + " " + balloonImageCounterText + " from Imgur and history", ToolTipIcon.None);
                     History.RemoveHistoryItem(item);
                 }
                 else
-                    ShowBalloonTip(2000, "Failed", "Failed to remove " + (item.Album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
+                    this.ShowBalloonTip(2000, "Failed", "Failed to remove " + (item.Album ? "album" : "image") + " " + balloonImageCounterText + " from Imgur", ToolTipIcon.Error);
             }
-            listBoxHistory.EndUpdate();
+            this.listBoxHistory.EndUpdate();
 
             Statistics.GatherAndSend();
         }
@@ -742,7 +742,7 @@ namespace EasyImgur
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
         {
             ImgurAPI.ForceRefreshTokens();
-            SetAuthorizationStatusUI(ImgurAPI.HasBeenAuthorized());
+            this.SetAuthorizationStatusUI(ImgurAPI.HasBeenAuthorized());
         }
 
         private void buttonFormatHelp_Click(object sender, EventArgs e)
@@ -766,7 +766,7 @@ namespace EasyImgur
             sb.Append(FormattingHelper.Format(exampleFormattedString, null));
 
             Point loc = this.Location;
-            loc.Offset(buttonFormatHelp.Location.X, buttonFormatHelp.Location.Y);
+            loc.Offset(this.buttonFormatHelp.Location.X, this.buttonFormatHelp.Location.Y);
             Help.ShowPopup(this, sb.ToString(), loc);
         }
 
@@ -781,8 +781,8 @@ namespace EasyImgur
 
         private void buttonRemoveFromHistory_Click(object sender, EventArgs e)
         {
-            listBoxHistory.BeginUpdate();
-            List<HistoryItem> selectedItems = new List<HistoryItem>(listBoxHistory.SelectedItems.Cast<HistoryItem>());
+            this.listBoxHistory.BeginUpdate();
+            List<HistoryItem> selectedItems = new List<HistoryItem>(this.listBoxHistory.SelectedItems.Cast<HistoryItem>());
             foreach (HistoryItem item in selectedItems)
             {
                 if (item == null)
@@ -792,27 +792,27 @@ namespace EasyImgur
 
                 History.RemoveHistoryItem(item);
             }
-            listBoxHistory.EndUpdate();
+            this.listBoxHistory.EndUpdate();
         }
 
         private void uploadClipboardAccountTrayMenuItem_Click(object sender, EventArgs e)
         {
-            UploadClipboard(false);
+            this.UploadClipboard(false);
         }
 
         private void uploadFileAccountTrayMenuItem_Click(object sender, EventArgs e)
         {
-            UploadFile(false);
+            this.UploadFile(false);
         }
 
         private void uploadClipboardAnonymousTrayMenuItem_Click(object sender, EventArgs e)
         {
-            UploadClipboard(true);
+            this.UploadClipboard(true);
         }
 
         private void uploadFileAnonymousTrayMenuItem_Click(object sender, EventArgs e)
         {
-            UploadFile(true);
+            this.UploadFile(true);
         }
 
         private void settingsTrayMenuItem_Click(object sender, EventArgs e)
@@ -823,7 +823,7 @@ namespace EasyImgur
 
         private void exitTrayMenuItem_Click(object sender, EventArgs e)
         {
-            CloseCommandWasSentFromExitButton = true;
+            this.closeCommandWasSentFromExitButton = true;
             Application.Exit();
         }
 
@@ -834,20 +834,20 @@ namespace EasyImgur
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://bryankeiren.com/");
+            Process.Start("http://bryankeiren.com/");
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://imgur.com/account/settings/apps");
+            Process.Start("http://imgur.com/account/settings/apps");
         }
 
         private void btnOpenImageLinkInBrowser_Click(object sender, EventArgs e)
         {
-            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
+            HistoryItem item = this.listBoxHistory.SelectedItem as HistoryItem;
             if (item != null)
             {
-                System.Diagnostics.Process.Start(item.Link);
+                Process.Start(item.Link);
             }
         }
 

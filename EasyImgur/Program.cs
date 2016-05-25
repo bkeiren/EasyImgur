@@ -11,11 +11,11 @@ namespace EasyImgur
     static class Program
     {
         static readonly Dictionary<string, Assembly> ResolvedAssemblyCache = new Dictionary<string, Assembly>();
-        static bool _isInPortableMode = false;
+        static bool isInPortableMode = false;
 
         static public bool InPortableMode
         {
-            get { return _isInPortableMode; }
+            get { return isInPortableMode; }
         }
 
         public static string RootFolder => !InPortableMode
@@ -43,12 +43,12 @@ namespace EasyImgur
                         if (arg == "/portable")
                         {
                             using (File.Open(portableFlag, FileMode.OpenOrCreate)) { }
-                            _isInPortableMode = true;
+                            isInPortableMode = true;
                         }
                     }
 
-                    _isInPortableMode |= File.Exists(portableFlag);
-                    if (_isInPortableMode)
+                    isInPortableMode |= File.Exists(portableFlag);
+                    if (isInPortableMode)
                     {
                         MakeSettingsPortable(Properties.Settings.Default);
                         Log.Info("Started in portable mode.");
