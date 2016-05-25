@@ -19,7 +19,7 @@ namespace EasyImgur
         /// <param name="contents">Text to write to file</param>
         public static void GZipWriteFile(string location, string contents)
         {
-            byte[] sourceBytes = Encoding.UTF8.GetBytes(contents); // UTF-8 without BOM
+            var sourceBytes = Encoding.UTF8.GetBytes(contents); // UTF-8 without BOM
 
             using (var inStream = new MemoryStream(sourceBytes))
             using (var fs = new FileStream(location, FileMode.Create, FileAccess.Write)) // Open file for writing, overwrite existing

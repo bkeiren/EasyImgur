@@ -19,9 +19,9 @@ namespace EasyImgur
         /// <summary>
         /// File name of the settings file.
         /// </summary>
-        private readonly string _fileName;
+        private readonly string fileName;
 
-        private XmlDocument _settingsXml;
+        private XmlDocument settingsXml;
 
         private XmlDocument SettingsXml
         {
@@ -29,31 +29,31 @@ namespace EasyImgur
             {
                 //If we dont hold an xml document, try opening one.  
                 //If it doesnt exist then create a new one ready.
-                if (_settingsXml != null)
-                    return _settingsXml;
+                if (this.settingsXml != null)
+                    return this.settingsXml;
 
-                _settingsXml = new XmlDocument();
+                this.settingsXml = new XmlDocument();
                 try
                 {
-                    _settingsXml.Load(Path.Combine(GetAppSettingsPath(), GetAppSettingsFilename()));
+                    this.settingsXml.Load(Path.Combine(this.GetAppSettingsPath(), this.GetAppSettingsFilename()));
                 }
                 catch (Exception)
                 {
                     //Create new document
-                    XmlDeclaration dec = _settingsXml.CreateXmlDeclaration("1.0", "utf-8", "");
-                    _settingsXml.AppendChild(dec);
+                    var dec = this.settingsXml.CreateXmlDeclaration("1.0", "utf-8", "");
+                    this.settingsXml.AppendChild(dec);
 
-                    XmlNode nodeRoot = _settingsXml.CreateNode(XmlNodeType.Element, SettingsRootNode, "");
-                    _settingsXml.AppendChild(nodeRoot);
+                    var nodeRoot = this.settingsXml.CreateNode(XmlNodeType.Element, SettingsRootNode, "");
+                    this.settingsXml.AppendChild(nodeRoot);
                 }
 
-                return _settingsXml;
+                return this.settingsXml;
             }
         }
 
         public PortableSettingsProvider(string fileName)
         {
-            _fileName = fileName;
+            this.fileName = fileName;
         }
 
         public override void Initialize(string name, NameValueCollection col)
@@ -87,7 +87,7 @@ namespace EasyImgur
         public virtual string GetAppSettingsFilename()
         {
             //return ApplicationName + ".settings";
-            return _fileName;
+            return this.fileName;
         }
 
         /// <summary>
@@ -106,12 +106,12 @@ namespace EasyImgur
             //Only dirty settings are included in propvals, and only ones relevant to this provider
             foreach (SettingsPropertyValue propval in propvals)
             {
-                SetValue(propval);
+                this.SetValue(propval);
             }
 
             try
             {
-                SettingsXml.Save(Path.Combine(GetAppSettingsPath(), GetAppSettingsFilename()));
+                this.SettingsXml.Save(Path.Combine(this.GetAppSettingsPath(), this.GetAppSettingsFilename()));
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace EasyImgur
             {
                 var value = new SettingsPropertyValue(setting);
                 value.IsDirty = false;
-                value.SerializedValue = GetValue(setting);
+                value.SerializedValue = this.GetValue(setting);
                 values.Add(value);
             }
             return values;
@@ -138,17 +138,17 @@ namespace EasyImgur
 
         private string GetValue(SettingsProperty setting)
         {
-            string ret = "";
+            var ret = "";
 
             try
             {
                 if (IsRoaming(setting))
                 {
-                    ret = SettingsXml.SelectSingleNode(SettingsRootNode + "/" + setting.Name).InnerText;
+                    ret = this.SettingsXml.SelectSingleNode(SettingsRootNode + "/" + setting.Name).InnerText;
                 }
                 else
                 {
-                    ret = SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName + "/" + setting.Name).InnerText;
+                    ret = this.SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName + "/" + setting.Name).InnerText;
                 }
             }
 
@@ -171,11 +171,11 @@ namespace EasyImgur
             {
                 if (IsRoaming(propVal.Property))
                 {
-                    settingNode = (XmlElement)SettingsXml.SelectSingleNode(SettingsRootNode + "/" + propVal.Name);
+                    settingNode = (XmlElement)this.SettingsXml.SelectSingleNode(SettingsRootNode + "/" + propVal.Name);
                 }
                 else
                 {
-                    settingNode = (XmlElement)SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName + "/" + propVal.Name);
+                    settingNode = (XmlElement)this.SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName + "/" + propVal.Name);
                 }
             }
             catch (Exception)
@@ -184,18 +184,18 @@ namespace EasyImgur
             }
 
             //Check to see if the node exists, if so then set its new value
-            if ((settingNode != null))
+            if (settingNode != null)
             {
-                settingNode.InnerText = propVal.SerializedValue.ToString();
+                settingNode.InnerText = propVal.SerializedValue?.ToString();
             }
             else
             {
                 if (IsRoaming(propVal.Property))
                 {
                     //Store the value as an element of the Settings Root Node
-                    settingNode = SettingsXml.CreateElement(propVal.Name);
-                    settingNode.InnerText = propVal.SerializedValue.ToString();
-                    SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(settingNode);
+                    settingNode = this.SettingsXml.CreateElement(propVal.Name);
+                    settingNode.InnerText = propVal.SerializedValue?.ToString();
+                    this.SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(settingNode);
                 }
                 else
                 {
@@ -205,21 +205,21 @@ namespace EasyImgur
                     try
                     {
 
-                        machineNode = (XmlElement)SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName);
+                        machineNode = (XmlElement)this.SettingsXml.SelectSingleNode(SettingsRootNode + "/" + Environment.MachineName);
                     }
                     catch (Exception)
                     {
-                        machineNode = SettingsXml.CreateElement(Environment.MachineName);
-                        SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(machineNode);
+                        machineNode = this.SettingsXml.CreateElement(Environment.MachineName);
+                        this.SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(machineNode);
                     }
 
                     if (machineNode == null)
                     {
-                        machineNode = SettingsXml.CreateElement(Environment.MachineName);
-                        SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(machineNode);
+                        machineNode = this.SettingsXml.CreateElement(Environment.MachineName);
+                        this.SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(machineNode);
                     }
 
-                    settingNode = SettingsXml.CreateElement(propVal.Name);
+                    settingNode = this.SettingsXml.CreateElement(propVal.Name);
                     settingNode.InnerText = propVal.SerializedValue.ToString();
                     machineNode.AppendChild(settingNode);
                 }
@@ -231,7 +231,7 @@ namespace EasyImgur
             // If running in portable mode, all settings must be NON-machine specific and must thus be considered roaming.
             if (Program.InPortableMode)
                 return true;
-            
+
             //Determine if the setting is marked as Roaming
             foreach (DictionaryEntry d in prop.Attributes)
             {

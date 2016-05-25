@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EasyImgur
@@ -13,16 +7,16 @@ namespace EasyImgur
     {
         public AuthorizeForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
             // Store credentials.
             // CredentialsHelper.StoreCredentials(textBoxPIN.Text, maskedTextBoxAccountPassword.Text);
-            
+
             // Do stuff with the PIN number (requesting access tokens and such).
-            ImgurAPI.RequestTokens(textBoxPIN.Text);
+            ImgurAPI.RequestTokens(this.textBoxPIN.Text);
             this.Close();
         }
 

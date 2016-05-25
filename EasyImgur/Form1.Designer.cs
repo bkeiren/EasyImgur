@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -54,6 +54,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxTitleFormat = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.ProxyAddress = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.buttonForgetTokens = new System.Windows.Forms.Button();
@@ -107,6 +110,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.clipboardSettingsContainer.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -125,10 +129,11 @@
             // 
             // buttonApplyGeneral
             // 
-            this.buttonApplyGeneral.Location = new System.Drawing.Point(500, 236);
-            this.buttonApplyGeneral.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonApplyGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonApplyGeneral.Location = new System.Drawing.Point(607, 320);
+            this.buttonApplyGeneral.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonApplyGeneral.Name = "buttonApplyGeneral";
-            this.buttonApplyGeneral.Size = new System.Drawing.Size(81, 29);
+            this.buttonApplyGeneral.Size = new System.Drawing.Size(94, 30);
             this.buttonApplyGeneral.TabIndex = 11;
             this.buttonApplyGeneral.Text = "Apply";
             this.buttonApplyGeneral.UseVisualStyleBackColor = true;
@@ -137,14 +142,16 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Location = new System.Drawing.Point(2, 2);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(595, 297);
+            this.tabControl1.Size = new System.Drawing.Size(716, 388);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -168,11 +175,11 @@
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.textBoxTitleFormat);
             this.tabPage1.Controls.Add(this.buttonApplyGeneral);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(587, 271);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabPage1.Size = new System.Drawing.Size(708, 358);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -182,9 +189,11 @@
             this.clipboardSettingsContainer.Controls.Add(this.checkBoxCopyHttpsLinks);
             this.clipboardSettingsContainer.Controls.Add(this.checkBoxClearClipboard);
             this.clipboardSettingsContainer.Enabled = global::EasyImgur.Properties.Settings.Default.copyLinks;
-            this.clipboardSettingsContainer.Location = new System.Drawing.Point(204, 7);
+            this.clipboardSettingsContainer.Location = new System.Drawing.Point(227, 7);
+            this.clipboardSettingsContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clipboardSettingsContainer.Name = "clipboardSettingsContainer";
-            this.clipboardSettingsContainer.Size = new System.Drawing.Size(378, 63);
+            this.clipboardSettingsContainer.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.clipboardSettingsContainer.Size = new System.Drawing.Size(441, 82);
             this.clipboardSettingsContainer.TabIndex = 23;
             this.clipboardSettingsContainer.TabStop = false;
             this.clipboardSettingsContainer.Text = "Clipboard";
@@ -195,11 +204,11 @@
             this.checkBoxCopyHttpsLinks.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxCopyHttpsLinks.Checked = global::EasyImgur.Properties.Settings.Default.copyHttpsLinks;
             this.checkBoxCopyHttpsLinks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "copyHttpsLinks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxCopyHttpsLinks.Location = new System.Drawing.Point(5, 18);
-            this.checkBoxCopyHttpsLinks.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxCopyHttpsLinks.Location = new System.Drawing.Point(6, 24);
+            this.checkBoxCopyHttpsLinks.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxCopyHttpsLinks.Name = "checkBoxCopyHttpsLinks";
             this.checkBoxCopyHttpsLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxCopyHttpsLinks.Size = new System.Drawing.Size(113, 17);
+            this.checkBoxCopyHttpsLinks.Size = new System.Drawing.Size(128, 21);
             this.checkBoxCopyHttpsLinks.TabIndex = 22;
             this.checkBoxCopyHttpsLinks.Text = "Copy HTTPS links";
             this.checkBoxCopyHttpsLinks.UseVisualStyleBackColor = true;
@@ -211,11 +220,11 @@
             this.checkBoxClearClipboard.Checked = global::EasyImgur.Properties.Settings.Default.clearClipboardOnUpload;
             this.checkBoxClearClipboard.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxClearClipboard.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "clearClipboardOnUpload", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxClearClipboard.Location = new System.Drawing.Point(5, 39);
-            this.checkBoxClearClipboard.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxClearClipboard.Location = new System.Drawing.Point(6, 51);
+            this.checkBoxClearClipboard.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxClearClipboard.Name = "checkBoxClearClipboard";
             this.checkBoxClearClipboard.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxClearClipboard.Size = new System.Drawing.Size(203, 17);
+            this.checkBoxClearClipboard.Size = new System.Drawing.Size(255, 21);
             this.checkBoxClearClipboard.TabIndex = 1;
             this.checkBoxClearClipboard.Text = "Clear clipboard immediately on upload";
             this.checkBoxClearClipboard.UseVisualStyleBackColor = true;
@@ -224,10 +233,10 @@
             // 
             this.labelPortableModeNote.AutoSize = true;
             this.labelPortableModeNote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.labelPortableModeNote.Location = new System.Drawing.Point(15, 247);
+            this.labelPortableModeNote.Location = new System.Drawing.Point(17, 323);
             this.labelPortableModeNote.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPortableModeNote.Name = "labelPortableModeNote";
-            this.labelPortableModeNote.Size = new System.Drawing.Size(251, 13);
+            this.labelPortableModeNote.Size = new System.Drawing.Size(316, 17);
             this.labelPortableModeNote.TabIndex = 21;
             this.labelPortableModeNote.Text = "NOTE: Some options are disabled in portable mode.";
             // 
@@ -236,11 +245,11 @@
             this.checkBoxCopyLinks.AutoSize = true;
             this.checkBoxCopyLinks.Checked = global::EasyImgur.Properties.Settings.Default.copyLinks;
             this.checkBoxCopyLinks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "copyLinks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxCopyLinks.Location = new System.Drawing.Point(67, 25);
-            this.checkBoxCopyLinks.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxCopyLinks.Location = new System.Drawing.Point(12, 7);
+            this.checkBoxCopyLinks.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxCopyLinks.Name = "checkBoxCopyLinks";
             this.checkBoxCopyLinks.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxCopyLinks.Size = new System.Drawing.Size(132, 17);
+            this.checkBoxCopyLinks.Size = new System.Drawing.Size(163, 21);
             this.checkBoxCopyLinks.TabIndex = 2;
             this.checkBoxCopyLinks.Text = "Copy links to clipboard";
             this.checkBoxCopyLinks.UseVisualStyleBackColor = true;
@@ -250,10 +259,10 @@
             // 
             this.label17.AutoSize = true;
             this.label17.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label17.Location = new System.Drawing.Point(204, 80);
+            this.label17.Location = new System.Drawing.Point(285, 105);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(279, 13);
+            this.label17.Size = new System.Drawing.Size(350, 17);
             this.label17.TabIndex = 20;
             this.label17.Text = "Only used when multiple files are selected in the file dialog";
             // 
@@ -263,11 +272,11 @@
             this.checkBoxGalleryUpload.Checked = global::EasyImgur.Properties.Settings.Default.uploadMultipleImagesAsGallery;
             this.checkBoxGalleryUpload.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxGalleryUpload.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "uploadMultipleImagesAsGallery", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxGalleryUpload.Location = new System.Drawing.Point(18, 79);
-            this.checkBoxGalleryUpload.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxGalleryUpload.Location = new System.Drawing.Point(8, 102);
+            this.checkBoxGalleryUpload.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxGalleryUpload.Name = "checkBoxGalleryUpload";
             this.checkBoxGalleryUpload.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxGalleryUpload.Size = new System.Drawing.Size(181, 17);
+            this.checkBoxGalleryUpload.Size = new System.Drawing.Size(226, 21);
             this.checkBoxGalleryUpload.TabIndex = 3;
             this.checkBoxGalleryUpload.Text = "Upload multiple images as gallery";
             this.checkBoxGalleryUpload.UseVisualStyleBackColor = true;
@@ -276,10 +285,10 @@
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label16.Location = new System.Drawing.Point(204, 216);
+            this.label16.Location = new System.Drawing.Point(180, 289);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(305, 13);
+            this.label16.Size = new System.Drawing.Size(380, 17);
             this.label16.TabIndex = 18;
             this.label16.Text = "Moving the .exe requires one manual launch to restore the path";
             // 
@@ -288,11 +297,11 @@
             this.checkBoxEnableContextMenu.AutoSize = true;
             this.checkBoxEnableContextMenu.Checked = global::EasyImgur.Properties.Settings.Default.enableContextMenu;
             this.checkBoxEnableContextMenu.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "enableContextMenu", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(73, 215);
-            this.checkBoxEnableContextMenu.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(8, 286);
+            this.checkBoxEnableContextMenu.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxEnableContextMenu.Name = "checkBoxEnableContextMenu";
             this.checkBoxEnableContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxEnableContextMenu.Size = new System.Drawing.Size(126, 17);
+            this.checkBoxEnableContextMenu.Size = new System.Drawing.Size(148, 21);
             this.checkBoxEnableContextMenu.TabIndex = 10;
             this.checkBoxEnableContextMenu.Text = "Enable context menu";
             this.checkBoxEnableContextMenu.UseVisualStyleBackColor = true;
@@ -302,11 +311,11 @@
             this.checkBoxShowTokenRefreshNotification.AutoSize = true;
             this.checkBoxShowTokenRefreshNotification.Checked = global::EasyImgur.Properties.Settings.Default.showNotificationOnTokenRefresh;
             this.checkBoxShowTokenRefreshNotification.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "showNotificationOnTokenRefresh", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(12, 194);
-            this.checkBoxShowTokenRefreshNotification.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxShowTokenRefreshNotification.Location = new System.Drawing.Point(8, 258);
+            this.checkBoxShowTokenRefreshNotification.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxShowTokenRefreshNotification.Name = "checkBoxShowTokenRefreshNotification";
             this.checkBoxShowTokenRefreshNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(187, 17);
+            this.checkBoxShowTokenRefreshNotification.Size = new System.Drawing.Size(227, 21);
             this.checkBoxShowTokenRefreshNotification.TabIndex = 9;
             this.checkBoxShowTokenRefreshNotification.Text = "Show notification on token refresh";
             this.checkBoxShowTokenRefreshNotification.UseVisualStyleBackColor = true;
@@ -315,31 +324,31 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label4.Location = new System.Drawing.Point(204, 174);
+            this.label4.Location = new System.Drawing.Point(278, 232);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(305, 13);
+            this.label4.Size = new System.Drawing.Size(380, 17);
             this.label4.TabIndex = 15;
             this.label4.Text = "Moving the .exe requires one manual launch to restore the path";
             // 
             // checkBoxLaunchAtBoot
             // 
             this.checkBoxLaunchAtBoot.AutoSize = true;
-            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(3, 173);
-            this.checkBoxLaunchAtBoot.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxLaunchAtBoot.Location = new System.Drawing.Point(8, 229);
+            this.checkBoxLaunchAtBoot.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxLaunchAtBoot.Name = "checkBoxLaunchAtBoot";
             this.checkBoxLaunchAtBoot.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxLaunchAtBoot.Size = new System.Drawing.Size(196, 17);
+            this.checkBoxLaunchAtBoot.Size = new System.Drawing.Size(234, 21);
             this.checkBoxLaunchAtBoot.TabIndex = 8;
             this.checkBoxLaunchAtBoot.Text = "Launch EasyImgur at Windows start";
             this.checkBoxLaunchAtBoot.UseVisualStyleBackColor = true;
             // 
             // buttonFormatHelp
             // 
-            this.buttonFormatHelp.Location = new System.Drawing.Point(525, 124);
-            this.buttonFormatHelp.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonFormatHelp.Location = new System.Drawing.Point(629, 163);
+            this.buttonFormatHelp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonFormatHelp.Name = "buttonFormatHelp";
-            this.buttonFormatHelp.Size = new System.Drawing.Size(56, 46);
+            this.buttonFormatHelp.Size = new System.Drawing.Size(65, 59);
             this.buttonFormatHelp.TabIndex = 7;
             this.buttonFormatHelp.Text = "Format help";
             this.buttonFormatHelp.UseVisualStyleBackColor = true;
@@ -349,22 +358,22 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label8.Location = new System.Drawing.Point(328, 103);
+            this.label8.Location = new System.Drawing.Point(553, 135);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label8.Size = new System.Drawing.Size(120, 13);
+            this.label8.Size = new System.Drawing.Size(150, 17);
             this.label8.TabIndex = 10;
             this.label8.Text = "Imgur may change this *";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(61, 103);
+            this.label7.Location = new System.Drawing.Point(8, 135);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label7.Size = new System.Drawing.Size(120, 13);
+            this.label7.Size = new System.Drawing.Size(155, 17);
             this.label7.TabIndex = 9;
             this.label7.Text = "* Preferred image format";
             // 
@@ -382,53 +391,81 @@
             "TIFF",
             "EMF",
             "WMF"});
-            this.comboBoxImageFormat.Location = new System.Drawing.Point(185, 100);
-            this.comboBoxImageFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxImageFormat.Location = new System.Drawing.Point(227, 130);
+            this.comboBoxImageFormat.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.comboBoxImageFormat.Name = "comboBoxImageFormat";
-            this.comboBoxImageFormat.Size = new System.Drawing.Size(139, 21);
+            this.comboBoxImageFormat.Size = new System.Drawing.Size(161, 25);
             this.comboBoxImageFormat.TabIndex = 4;
             // 
             // textBoxDescriptionFormat
             // 
             this.textBoxDescriptionFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::EasyImgur.Properties.Settings.Default, "descriptionFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(185, 149);
-            this.textBoxDescriptionFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxDescriptionFormat.Location = new System.Drawing.Point(227, 194);
+            this.textBoxDescriptionFormat.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxDescriptionFormat.Name = "textBoxDescriptionFormat";
-            this.textBoxDescriptionFormat.Size = new System.Drawing.Size(336, 20);
+            this.textBoxDescriptionFormat.Size = new System.Drawing.Size(391, 23);
             this.textBoxDescriptionFormat.TabIndex = 6;
             this.textBoxDescriptionFormat.Text = global::EasyImgur.Properties.Settings.Default.descriptionFormat;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(50, 152);
+            this.label6.Location = new System.Drawing.Point(8, 198);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label6.Size = new System.Drawing.Size(131, 13);
+            this.label6.Size = new System.Drawing.Size(166, 17);
             this.label6.TabIndex = 6;
             this.label6.Text = "Use this description format";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(85, 128);
+            this.label5.Location = new System.Drawing.Point(8, 167);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label5.Size = new System.Drawing.Size(96, 13);
+            this.label5.Size = new System.Drawing.Size(122, 17);
             this.label5.TabIndex = 5;
             this.label5.Text = "Use this title format";
             // 
             // textBoxTitleFormat
             // 
             this.textBoxTitleFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::EasyImgur.Properties.Settings.Default, "titleFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBoxTitleFormat.Location = new System.Drawing.Point(185, 125);
-            this.textBoxTitleFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxTitleFormat.Location = new System.Drawing.Point(227, 163);
+            this.textBoxTitleFormat.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxTitleFormat.Name = "textBoxTitleFormat";
-            this.textBoxTitleFormat.Size = new System.Drawing.Size(336, 20);
+            this.textBoxTitleFormat.Size = new System.Drawing.Size(391, 23);
             this.textBoxTitleFormat.TabIndex = 5;
             this.textBoxTitleFormat.Text = global::EasyImgur.Properties.Settings.Default.titleFormat;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.label14);
+            this.tabPage5.Controls.Add(this.ProxyAddress);
+            this.tabPage5.Location = new System.Drawing.Point(4, 26);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(708, 358);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Network";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(9, 10);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(40, 17);
+            this.label14.TabIndex = 1;
+            this.label14.Text = "Proxy";
+            // 
+            // ProxyAddress
+            // 
+            this.ProxyAddress.Location = new System.Drawing.Point(65, 7);
+            this.ProxyAddress.Name = "ProxyAddress";
+            this.ProxyAddress.Size = new System.Drawing.Size(203, 23);
+            this.ProxyAddress.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -439,11 +476,11 @@
             this.tabPage2.Controls.Add(this.label10);
             this.tabPage2.Controls.Add(this.buttonForceTokenRefresh);
             this.tabPage2.Controls.Add(this.buttonAuthorize);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(587, 271);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.tabPage2.Size = new System.Drawing.Size(708, 358);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Account";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -451,9 +488,9 @@
             // linkLabel3
             // 
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(355, 210);
+            this.linkLabel3.Location = new System.Drawing.Point(171, 275);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(199, 13);
+            this.linkLabel3.Size = new System.Drawing.Size(240, 17);
             this.linkLabel3.TabIndex = 5;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "http://imgur.com/account/settings/apps";
@@ -462,10 +499,10 @@
             // buttonForgetTokens
             // 
             this.buttonForgetTokens.Enabled = false;
-            this.buttonForgetTokens.Location = new System.Drawing.Point(232, 52);
-            this.buttonForgetTokens.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonForgetTokens.Location = new System.Drawing.Point(271, 68);
+            this.buttonForgetTokens.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonForgetTokens.Name = "buttonForgetTokens";
-            this.buttonForgetTokens.Size = new System.Drawing.Size(135, 22);
+            this.buttonForgetTokens.Size = new System.Drawing.Size(157, 28);
             this.buttonForgetTokens.TabIndex = 2;
             this.buttonForgetTokens.Text = "Forget tokens";
             this.buttonForgetTokens.UseVisualStyleBackColor = true;
@@ -474,43 +511,43 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(54, 158);
+            this.label15.Location = new System.Drawing.Point(125, 190);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(498, 65);
+            this.label15.Size = new System.Drawing.Size(398, 102);
             this.label15.TabIndex = 10;
             this.label15.Text = resources.GetString("label15.Text");
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.LightGray;
             this.label13.ForeColor = System.Drawing.Color.DarkBlue;
-            this.label13.Location = new System.Drawing.Point(292, 118);
+            this.label13.Location = new System.Drawing.Point(328, 154);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(77, 13);
+            this.label13.Size = new System.Drawing.Size(97, 17);
             this.label13.TabIndex = 4;
             this.label13.Text = "Not Authorized";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(248, 118);
+            this.label10.Location = new System.Drawing.Point(268, 154);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(40, 13);
+            this.label10.Size = new System.Drawing.Size(46, 17);
             this.label10.TabIndex = 8;
             this.label10.Text = "Status:";
             // 
             // buttonForceTokenRefresh
             // 
             this.buttonForceTokenRefresh.Enabled = false;
-            this.buttonForceTokenRefresh.Location = new System.Drawing.Point(232, 79);
-            this.buttonForceTokenRefresh.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonForceTokenRefresh.Location = new System.Drawing.Point(271, 103);
+            this.buttonForceTokenRefresh.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonForceTokenRefresh.Name = "buttonForceTokenRefresh";
-            this.buttonForceTokenRefresh.Size = new System.Drawing.Size(135, 22);
+            this.buttonForceTokenRefresh.Size = new System.Drawing.Size(157, 28);
             this.buttonForceTokenRefresh.TabIndex = 3;
             this.buttonForceTokenRefresh.Text = "Force token refresh";
             this.buttonForceTokenRefresh.UseVisualStyleBackColor = true;
@@ -518,10 +555,10 @@
             // 
             // buttonAuthorize
             // 
-            this.buttonAuthorize.Location = new System.Drawing.Point(232, 25);
-            this.buttonAuthorize.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonAuthorize.Location = new System.Drawing.Point(271, 33);
+            this.buttonAuthorize.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonAuthorize.Name = "buttonAuthorize";
-            this.buttonAuthorize.Size = new System.Drawing.Size(135, 22);
+            this.buttonAuthorize.Size = new System.Drawing.Size(157, 28);
             this.buttonAuthorize.TabIndex = 1;
             this.buttonAuthorize.Text = "Authorize this app...";
             this.buttonAuthorize.UseVisualStyleBackColor = true;
@@ -531,16 +568,19 @@
             // 
             this.tabPage3.Controls.Add(this.groupBox1);
             this.tabPage3.Controls.Add(this.listBoxHistory);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(587, 271);
+            this.tabPage3.Size = new System.Drawing.Size(708, 358);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "History";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label19);
             this.groupBox1.Controls.Add(this.checkBoxAlbum);
             this.groupBox1.Controls.Add(this.groupBoxHistorySelection);
@@ -555,11 +595,11 @@
             this.groupBox1.Controls.Add(this.textBoxLink);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(177, 2);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(198, 3);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(404, 264);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox1.Size = new System.Drawing.Size(506, 342);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
@@ -567,10 +607,10 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(27, 151);
+            this.label19.Location = new System.Drawing.Point(31, 197);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(45, 13);
+            this.label19.Size = new System.Drawing.Size(52, 17);
             this.label19.TabIndex = 22;
             this.label19.Text = "Preview";
             // 
@@ -579,11 +619,11 @@
             this.checkBoxAlbum.AutoSize = true;
             this.checkBoxAlbum.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "Album", true));
             this.checkBoxAlbum.Enabled = false;
-            this.checkBoxAlbum.Location = new System.Drawing.Point(235, 85);
-            this.checkBoxAlbum.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxAlbum.Location = new System.Drawing.Point(274, 110);
+            this.checkBoxAlbum.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxAlbum.Name = "checkBoxAlbum";
             this.checkBoxAlbum.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkBoxAlbum.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxAlbum.Size = new System.Drawing.Size(95, 21);
             this.checkBoxAlbum.TabIndex = 21;
             this.checkBoxAlbum.TabStop = false;
             this.checkBoxAlbum.Text = "Is an album";
@@ -597,9 +637,11 @@
             // 
             this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromImgur);
             this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromHistory);
-            this.groupBoxHistorySelection.Location = new System.Drawing.Point(230, 186);
+            this.groupBoxHistorySelection.Location = new System.Drawing.Point(268, 244);
+            this.groupBoxHistorySelection.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBoxHistorySelection.Name = "groupBoxHistorySelection";
-            this.groupBoxHistorySelection.Size = new System.Drawing.Size(169, 74);
+            this.groupBoxHistorySelection.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBoxHistorySelection.Size = new System.Drawing.Size(197, 96);
             this.groupBoxHistorySelection.TabIndex = 19;
             this.groupBoxHistorySelection.TabStop = false;
             this.groupBoxHistorySelection.Text = "Selection: 0 items";
@@ -607,10 +649,10 @@
             // buttonRemoveFromImgur
             // 
             this.buttonRemoveFromImgur.Enabled = false;
-            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(5, 46);
-            this.buttonRemoveFromImgur.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(6, 59);
+            this.buttonRemoveFromImgur.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonRemoveFromImgur.Name = "buttonRemoveFromImgur";
-            this.buttonRemoveFromImgur.Size = new System.Drawing.Size(156, 24);
+            this.buttonRemoveFromImgur.Size = new System.Drawing.Size(182, 31);
             this.buttonRemoveFromImgur.TabIndex = 8;
             this.buttonRemoveFromImgur.Text = "Delete from Imgur";
             this.buttonRemoveFromImgur.UseVisualStyleBackColor = true;
@@ -619,10 +661,10 @@
             // buttonRemoveFromHistory
             // 
             this.buttonRemoveFromHistory.Enabled = false;
-            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(5, 18);
-            this.buttonRemoveFromHistory.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(6, 24);
+            this.buttonRemoveFromHistory.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
-            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(156, 24);
+            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(182, 31);
             this.buttonRemoveFromHistory.TabIndex = 7;
             this.buttonRemoveFromHistory.Text = "Clear from history";
             this.buttonRemoveFromHistory.UseMnemonic = false;
@@ -631,9 +673,10 @@
             // 
             // btnOpenImageLinkInBrowser
             // 
-            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(234, 10);
+            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(273, 13);
+            this.btnOpenImageLinkInBrowser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
-            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(160, 46);
+            this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(187, 59);
             this.btnOpenImageLinkInBrowser.TabIndex = 6;
             this.btnOpenImageLinkInBrowser.Text = "Open in browser";
             this.btnOpenImageLinkInBrowser.UseVisualStyleBackColor = true;
@@ -642,20 +685,20 @@
             // textBoxTimestamp
             // 
             this.textBoxTimestamp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Timestamp", true));
-            this.textBoxTimestamp.Location = new System.Drawing.Point(76, 83);
-            this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxTimestamp.Location = new System.Drawing.Point(89, 109);
+            this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxTimestamp.Name = "textBoxTimestamp";
             this.textBoxTimestamp.ReadOnly = true;
-            this.textBoxTimestamp.Size = new System.Drawing.Size(149, 20);
+            this.textBoxTimestamp.Size = new System.Drawing.Size(173, 23);
             this.textBoxTimestamp.TabIndex = 5;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 86);
+            this.label9.Location = new System.Drawing.Point(16, 112);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(58, 13);
+            this.label9.Size = new System.Drawing.Size(72, 17);
             this.label9.TabIndex = 17;
             this.label9.Text = "Timestamp";
             // 
@@ -664,11 +707,11 @@
             this.checkBoxTiedToAccount.AutoSize = true;
             this.checkBoxTiedToAccount.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "TiedToAccount", true));
             this.checkBoxTiedToAccount.Enabled = false;
-            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(235, 61);
-            this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(274, 79);
+            this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
             this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(105, 17);
+            this.checkBoxTiedToAccount.Size = new System.Drawing.Size(123, 21);
             this.checkBoxTiedToAccount.TabIndex = 15;
             this.checkBoxTiedToAccount.TabStop = false;
             this.checkBoxTiedToAccount.Text = "On your account";
@@ -677,83 +720,86 @@
             // textBoxDeleteHash
             // 
             this.textBoxDeleteHash.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Deletehash", true));
-            this.textBoxDeleteHash.Location = new System.Drawing.Point(76, 59);
-            this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxDeleteHash.Location = new System.Drawing.Point(89, 76);
+            this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxDeleteHash.Name = "textBoxDeleteHash";
             this.textBoxDeleteHash.ReadOnly = true;
-            this.textBoxDeleteHash.Size = new System.Drawing.Size(149, 20);
+            this.textBoxDeleteHash.Size = new System.Drawing.Size(173, 23);
             this.textBoxDeleteHash.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 62);
+            this.label3.Location = new System.Drawing.Point(7, 81);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.Size = new System.Drawing.Size(78, 17);
             this.label3.TabIndex = 12;
             this.label3.Text = "Delete Hash";
             // 
             // pictureBoxHistoryThumb
             // 
             this.pictureBoxHistoryThumb.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.historyItemBindingSource, "Thumbnail", true));
-            this.pictureBoxHistoryThumb.Location = new System.Drawing.Point(76, 148);
-            this.pictureBoxHistoryThumb.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBoxHistoryThumb.Location = new System.Drawing.Point(89, 194);
+            this.pictureBoxHistoryThumb.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pictureBoxHistoryThumb.Name = "pictureBoxHistoryThumb";
-            this.pictureBoxHistoryThumb.Size = new System.Drawing.Size(148, 112);
+            this.pictureBoxHistoryThumb.Size = new System.Drawing.Size(173, 146);
             this.pictureBoxHistoryThumb.TabIndex = 11;
             this.pictureBoxHistoryThumb.TabStop = false;
             // 
             // textBoxID
             // 
             this.textBoxID.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Id", true));
-            this.textBoxID.Location = new System.Drawing.Point(76, 11);
-            this.textBoxID.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxID.Location = new System.Drawing.Point(89, 14);
+            this.textBoxID.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxID.Name = "textBoxID";
             this.textBoxID.ReadOnly = true;
-            this.textBoxID.Size = new System.Drawing.Size(149, 20);
+            this.textBoxID.Size = new System.Drawing.Size(173, 23);
             this.textBoxID.TabIndex = 2;
             // 
             // textBoxLink
             // 
             this.textBoxLink.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Link", true));
-            this.textBoxLink.Location = new System.Drawing.Point(76, 35);
-            this.textBoxLink.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLink.Location = new System.Drawing.Point(89, 45);
+            this.textBoxLink.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.textBoxLink.Name = "textBoxLink";
             this.textBoxLink.ReadOnly = true;
-            this.textBoxLink.Size = new System.Drawing.Size(149, 20);
+            this.textBoxLink.Size = new System.Drawing.Size(173, 23);
             this.textBoxLink.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(45, 38);
+            this.label2.Location = new System.Drawing.Point(52, 50);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
+            this.label2.Size = new System.Drawing.Size(31, 17);
             this.label2.TabIndex = 3;
             this.label2.Text = "Link";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 14);
+            this.label1.Location = new System.Drawing.Point(63, 18);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.Size = new System.Drawing.Size(21, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "ID";
             // 
             // listBoxHistory
             // 
+            this.listBoxHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listBoxHistory.DataSource = this.historyItemBindingSource;
             this.listBoxHistory.DisplayMember = "ListName";
             this.listBoxHistory.FormattingEnabled = true;
-            this.listBoxHistory.Location = new System.Drawing.Point(2, 2);
-            this.listBoxHistory.Margin = new System.Windows.Forms.Padding(2);
+            this.listBoxHistory.ItemHeight = 17;
+            this.listBoxHistory.Location = new System.Drawing.Point(2, 3);
+            this.listBoxHistory.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.listBoxHistory.Name = "listBoxHistory";
             this.listBoxHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxHistory.Size = new System.Drawing.Size(171, 264);
+            this.listBoxHistory.Size = new System.Drawing.Size(192, 344);
             this.listBoxHistory.TabIndex = 1;
             this.listBoxHistory.SelectedIndexChanged += new System.EventHandler(this.listBoxHistory_SelectedIndexChanged);
             // 
@@ -766,10 +812,10 @@
             this.tabPage4.Controls.Add(this.linkLabel2);
             this.tabPage4.Controls.Add(this.linkLabel1);
             this.tabPage4.Controls.Add(this.appDescriptionLabel);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage4.Location = new System.Drawing.Point(4, 26);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(587, 271);
+            this.tabPage4.Size = new System.Drawing.Size(708, 358);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "About";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -777,44 +823,47 @@
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(217, 95);
+            this.versionLabel.Location = new System.Drawing.Point(253, 125);
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(0, 13);
+            this.versionLabel.Size = new System.Drawing.Size(0, 17);
             this.versionLabel.TabIndex = 6;
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(359, 21);
+            this.label18.Location = new System.Drawing.Point(384, 27);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(225, 13);
+            this.label18.Size = new System.Drawing.Size(281, 17);
             this.label18.TabIndex = 5;
             this.label18.Text = "A massive thanks to the following contributors:";
             // 
             // contributorsList
             // 
             this.contributorsList.FormattingEnabled = true;
-            this.contributorsList.Location = new System.Drawing.Point(362, 48);
+            this.contributorsList.ItemHeight = 17;
+            this.contributorsList.Location = new System.Drawing.Point(386, 74);
+            this.contributorsList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.contributorsList.Name = "contributorsList";
             this.contributorsList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.contributorsList.Size = new System.Drawing.Size(218, 212);
+            this.contributorsList.Size = new System.Drawing.Size(290, 259);
             this.contributorsList.TabIndex = 4;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::EasyImgur.Properties.Resources.ei_logo;
-            this.pictureBox2.Location = new System.Drawing.Point(150, 21);
+            this.pictureBox2.Location = new System.Drawing.Point(119, 27);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(65, 65);
+            this.pictureBox2.Size = new System.Drawing.Size(76, 85);
             this.pictureBox2.TabIndex = 3;
             this.pictureBox2.TabStop = false;
             // 
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(155, 95);
+            this.linkLabel2.Location = new System.Drawing.Point(126, 125);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(56, 13);
+            this.linkLabel2.Size = new System.Drawing.Size(69, 17);
             this.linkLabel2.TabIndex = 1;
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "EasyImgur";
@@ -823,9 +872,9 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(121, 198);
+            this.linkLabel1.Location = new System.Drawing.Point(86, 275);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(121, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(146, 17);
             this.linkLabel1.TabIndex = 2;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "http://bryankeiren.com/";
@@ -834,13 +883,13 @@
             // appDescriptionLabel
             // 
             this.appDescriptionLabel.AutoSize = true;
-            this.appDescriptionLabel.Location = new System.Drawing.Point(8, 146);
+            this.appDescriptionLabel.Location = new System.Drawing.Point(9, 191);
             this.appDescriptionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.appDescriptionLabel.Name = "appDescriptionLabel";
-            this.appDescriptionLabel.Size = new System.Drawing.Size(349, 39);
+            this.appDescriptionLabel.Size = new System.Drawing.Size(269, 68);
             this.appDescriptionLabel.TabIndex = 0;
-            this.appDescriptionLabel.Text = "EasyImgur is a small and simple tool to easily upload images to imgur.com\r\n\r\nThis" +
-    " application was created by Bryan Keiren\r\n";
+            this.appDescriptionLabel.Text = "EasyImgur is a small and simple tool to\r\neasily upload images to imgur.com\r\n\r\nThi" +
+    "s application was created by Bryan Keiren\r\n";
             this.appDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label11
@@ -950,13 +999,15 @@
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 301);
+            this.ClientSize = new System.Drawing.Size(716, 388);
             this.Controls.Add(this.tabControl1);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "EasyImgur";
             this.tabControl1.ResumeLayout(false);
@@ -964,6 +1015,8 @@
             this.tabPage1.PerformLayout();
             this.clipboardSettingsContainer.ResumeLayout(false);
             this.clipboardSettingsContainer.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
@@ -1055,6 +1108,9 @@
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
         private System.Windows.Forms.GroupBox clipboardSettingsContainer;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox ProxyAddress;
     }
 }
 

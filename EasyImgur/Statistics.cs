@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
+using System.Net;
 using System.Text;
 using EasyImgur.StatisticsMetrics;
-using System.Net;
 
 namespace EasyImgur
 {
@@ -17,9 +16,9 @@ namespace EasyImgur
             {"histsize",    new MetricHistorySize()},               // The size of the history list.
             {"histanon",    new MetricHistoryAnonymousUploads()},   // The number of anonymous uploads in the history list.
             {"os",          new MetricOperatingSystem()},           // The operating system version.
-            {"clrversion",  new MetricCLRVersion()},                // The Common Language Runtime version.
+            {"clrversion",  new MetricClrVersion()},                // The Common Language Runtime version.
             {"langfull",    new MetricLanguageFull()},              // The current UI language's full English name.
-            {"langiso",     new MetricLanguageISO()},               // The current UI language's 3-letter ISO code.
+            {"langiso",     new MetricLanguageIso()},               // The current UI language's 3-letter ISO code.
             {"portable",    new MetricPortableMode()},              // Whether the application is running in portable mode.
             {"id",          new MetricMachineId()},                 // The (hopefully) unique machine ID.
             {"version",     new MetricVersion()},                   // The version of the application.
@@ -27,7 +26,7 @@ namespace EasyImgur
 
         public static bool GatherAndSend()
         {
-            bool success = true;
+            var success = true;
 
             try
             {
@@ -35,13 +34,13 @@ namespace EasyImgur
                 {
                     try
                     {
-                        int count = 1;
+                        var count = 1;
                         var sb = new StringBuilder();
                         var values = new NameValueCollection();
 
-                        foreach (KeyValuePair<String, StatisticsMetric> metric in StatisticsMetrics)
+                        foreach (var metric in StatisticsMetrics)
                         {
-                            object value = metric.Value.Value;
+                            var value = metric.Value.Value;
                             if (value != null)
                             {
                                 values.Add(metric.Key, value.ToString());

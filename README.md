@@ -18,7 +18,7 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 
 ### Downloading and running
 
-[Download EasyImgur](https://github.com/Rycul/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
+[Download EasyImgur](https://github.com/Cologler/EasyImgur/releases) (rar archive) and extract the archive contents to a folder.
 
 Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
 > ![](http://i.imgur.com/3UL7hBe.png)
@@ -53,11 +53,13 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
 3. Select *Allow* and copy the code that is displayed on the next page.
 
 4. Go back to the EasyImgur window. You will see that a popup has been opened:
+
     > ![](http://i.imgur.com/wdxlEPC.png)
-   
+
    Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
 
 5. A balloon popup will be shown to inform you that the authorization was successful. The EasyImgur window will now display *Status: Authorized*:
+
     > ![](http://i.imgur.com/U11116k.png)
     
     **NOTE**: To revoke access at any time, you can visit http://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
@@ -69,6 +71,7 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
 ## Viewing uploaded images
 
 Uploaded images (and their URLs) can be found under the ***History*** tab. From here you can view your previously uploaded images and their details. This tab also contains convenient controls that allow you to:
+
   - Remove an uploaded image from Imgur.
   - Remove an uploaded image from your local history database.
   - Open an image's link in your browser.
@@ -82,50 +85,63 @@ EasyImgur has a number of different customizable settings. These can be accessed
 ![Settings tab screenshot](http://i.imgur.com/ssvIAZl.png)
 
 #### Copy links to clipboard
+
 Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
 
 #### Clear clipboard immediately on upload
+
 Determines whether the clipboard will be cleared after uploading from it.
 
 #### Upload multiple images as gallery
+
 Determines whether multiple images upload using the file dialog window are uploaded as separate images or contained in an album.
 
 #### Preferred image format
+
 This option gives a hint to Imgur as to what image format is preferred. Note that it only hints at this by providing the source image in a certain format. Imgur can (and sometimes will) change the format to something else if it chooses to do so.
 
 #### Use this ... format
+
 These define two strings that are used as the title and description for every uploaded image. The strings can contain special symbols which are converted to set values before uploading. For a complete set of symbols, click the *Format help* button.
 
-##### Example:
+##### Example
 
 Format used:
 
     Image_%n%_%date%_%time%
-    
+
 Title of the uploaded image:
 
     Image_0_19-08-2013_13:37:00
-    
+
 In this example, `%n%` is converted to an integer denoting how many images have currently been uploaded, `%date` is converted to the current date in DD-MM-YYYY format, and `%time%` is converted to the current time in HH-MM-SS format.
 
 #### Launch EasyImgur at Windows start
+
 This determines whether EasyImgur should have a registry key set to allow it to be started when Windows is started. Note that if you move the EasyImgur.exe file, the registry path will become incorrect and a manual start of EasyImgur is required to restore it (EasyImgur detects this and can take care of that when it starts).
 
 #### Show notification on token refresh
+
 If you have authorized EasyImgur to use your Imgur account, it can notify you each time it refreshes its authentication tokens. Enabling this option will allow EasyImgur to show a balloon tooltip pop up from your icon tray each time it refreshes its tokens.
 
 #### Enable context menu
+
 This option determines whether the following options are added to the file context menu (right click menu) to allow even easier uploading!:
+
     - Upload to Imgur
     - Upload to Imgur (anonymous)
-	
+
 ## Running in portable mode
 
-EasyImgur can be run in portable mode to allow you to take your settings and account authorization tokens with you on (for example) a USB drive! To run EasyImgur in portable mode simply start it with the command line switch `/portable`:
+EasyImgur can be run in portable mode to allow you to take your settings and account authorization tokens with you on (for example) a USB drive!
+
+In portable mode your history, logs, and settings are saved to the local EasyImgur.exe folder.
+
+To run EasyImgur in portable mode simply start it with the command line switch `/portable`:
 
     EasyImgur.exe /portable
 
-In portable mode your history, logs, and settings are saved to the local EasyImgur.exe folder.
+or, just make a file name `portable` in the folder.
 
 ## Command Line Parameters
 

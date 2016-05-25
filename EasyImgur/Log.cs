@@ -1,27 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Security;
-using System.Text;
 
 namespace EasyImgur
 {
     public static class Log
     {
         private static readonly Object LogfileLock = new Object();
-        private static bool _firstInvocation = true;
-        private static string SaveLocation
-        {
-            get
-            {
-                // In portable mode we want to save in the local folder, otherwise AppData.
-                return Program.InPortableMode
-                    ? AppDomain.CurrentDomain.BaseDirectory
-                    : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
-            }
-        }
+        private static bool firstInvocation = true;
+        private static string SaveLocation => Program.RootFolder;
         private static string LogFile { get { return Path.Combine(SaveLocation, "log.log"); } }
 
         /// <summary>
@@ -66,8 +54,8 @@ namespace EasyImgur
         /// <returns>Logged line containing the log channel and timestamp.</returns>
         private static string LogMessage(string prefix, string message, bool consoleOnly)
         {
-            string timeStamp = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", CultureInfo.InvariantCulture);
-            string line = timeStamp + " [" + prefix + "] " + message;
+            var timeStamp = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", CultureInfo.InvariantCulture);
+            var line = timeStamp + " [" + prefix + "] " + message;
 
             Console.WriteLine(line);
             if (consoleOnly)
@@ -75,12 +63,12 @@ namespace EasyImgur
 
             lock (LogfileLock)
             {
-                if (_firstInvocation)
-                    _firstInvocation = false;
-                
+                if (firstInvocation)
+                    firstInvocation = false;
+
                 try
                 {
-                    if (_firstInvocation)
+                    if (firstInvocation)
                         File.WriteAllText(LogFile, line + Environment.NewLine);
                     else
                         File.AppendAllText(LogFile, line + Environment.NewLine);

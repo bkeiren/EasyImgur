@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -42,11 +40,11 @@ namespace EasyImgur.StatisticsMetrics
         }
     }
 
-    class MetricCLRVersion : StatisticsMetric
+    class MetricClrVersion : StatisticsMetric
     {
         protected override object Gather()
         {
-            return Environment.Version;            
+            return Environment.Version;
         }
     }
 
@@ -58,7 +56,7 @@ namespace EasyImgur.StatisticsMetrics
         }
     }
 
-    class MetricLanguageISO : StatisticsMetric
+    class MetricLanguageIso : StatisticsMetric
     {
         protected override object Gather()
         {
@@ -85,7 +83,7 @@ namespace EasyImgur.StatisticsMetrics
             // Unfortunately the way this is set up means that if any of these change, we will no longer be able to uniquely identify
             // the machine (for example, if the users replaces their CPU).
 
-            return GetInt64HashCode(GetUserNameString() + GetNICString() + GetBaseBoardString() + GetCPUSerialNumberString() + GetHardDriveSerialNumberString());
+            return GetInt64HashCode(GetUserNameString() + GetNicString() + GetBaseBoardString() + GetCpuSerialNumberString() + GetHardDriveSerialNumberString());
         }
 
         // Code obtained from http://www.codeproject.com/Articles/34309/Convert-String-to-64bit-Integer (Accessed 13-03-2015 @ 23:25).
@@ -95,17 +93,17 @@ namespace EasyImgur.StatisticsMetrics
             if (!string.IsNullOrEmpty(strText))
             {
                 //Unicode Encode Covering all characterset
-                byte[] byteContents = Encoding.Unicode.GetBytes(strText);
+                var byteContents = Encoding.Unicode.GetBytes(strText);
                 SHA256 hash = new SHA256CryptoServiceProvider();
-                byte[] hashText = hash.ComputeHash(byteContents);
+                var hashText = hash.ComputeHash(byteContents);
                 //32Byte hashText separate
                 //hashCodeStart = 0~7  8Byte
                 //hashCodeMedium = 8~23  8Byte
                 //hashCodeEnd = 24~31  8Byte
                 //and Fold
-                long hashCodeStart = BitConverter.ToInt64(hashText, 0);
-                long hashCodeMedium = BitConverter.ToInt64(hashText, 8);
-                long hashCodeEnd = BitConverter.ToInt64(hashText, 24);
+                var hashCodeStart = BitConverter.ToInt64(hashText, 0);
+                var hashCodeMedium = BitConverter.ToInt64(hashText, 8);
+                var hashCodeEnd = BitConverter.ToInt64(hashText, 24);
                 hashCode = hashCodeStart ^ hashCodeMedium ^ hashCodeEnd;
             }
             return hashCode;
@@ -116,13 +114,13 @@ namespace EasyImgur.StatisticsMetrics
             return Environment.UserName;
         }
 
-        private static string GetNICString()
+        private static string GetNicString()
         {
             // Use the physical address (MAC) of the first network interface that has a non-null MAC address.
-            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface nic in nics)
+            var nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (var nic in nics)
             {
-                PhysicalAddress mac = nic.GetPhysicalAddress();
+                var mac = nic.GetPhysicalAddress();
                 if (!mac.Equals(PhysicalAddress.None))
                     return mac.ToString();
             }
@@ -132,31 +130,31 @@ namespace EasyImgur.StatisticsMetrics
 
         private static string GetBaseBoardString()
         {
-            return GetPropertiesOfWMIObjects("Win32_BaseBoard", "SerialNumber");
+            return GetPropertiesOfWmiObjects("Win32_BaseBoard", "SerialNumber");
         }
 
-        private static string GetCPUSerialNumberString()
+        private static string GetCpuSerialNumberString()
         {
-            return GetPropertiesOfWMIObjects("Win32_Processor", "ProcessorId");
+            return GetPropertiesOfWmiObjects("Win32_Processor", "ProcessorId");
         }
 
         private static string GetHardDriveSerialNumberString()
         {
-            return GetPropertiesOfWMIObjects("Win32_PhysicalMedia", "SerialNumber");
+            return GetPropertiesOfWmiObjects("Win32_PhysicalMedia", "SerialNumber");
         }
 
-        private static string GetPropertiesOfWMIObjects(string queryTarget, string propertyName)
+        private static string GetPropertiesOfWmiObjects(string queryTarget, string propertyName)
         {
             try
             {
                 var sb = new StringBuilder();
 
                 using (var searcher = new ManagementObjectSearcher("SELECT * FROM " + queryTarget))
-                using (ManagementObjectCollection wmiCollection = searcher.Get())
+                using (var wmiCollection = searcher.Get())
                 {
-                    foreach (ManagementBaseObject wmiObject in wmiCollection)
+                    foreach (var wmiObject in wmiCollection)
                     {
-                        object property = wmiObject[propertyName];
+                        var property = wmiObject[propertyName];
                         if (property != null)
                             sb.Append(property);
                     }

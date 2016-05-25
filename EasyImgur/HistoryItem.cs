@@ -1,9 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace EasyImgur
 {
@@ -46,7 +43,7 @@ namespace EasyImgur
         [JsonIgnore]
         public bool TiedToAccount
         {
-            get { return !Anonymous; }
+            get { return !this.Anonymous; }
         }
 
         [JsonIgnore]
@@ -54,7 +51,7 @@ namespace EasyImgur
         {
             get
             {
-                return Title + "//" + Id;
+                return this.Title + "//" + this.Id;
             }
         }
     }

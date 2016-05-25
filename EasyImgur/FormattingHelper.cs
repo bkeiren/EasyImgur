@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace EasyImgur
 {
@@ -10,9 +8,9 @@ namespace EasyImgur
     {
         public class FormattingScheme
         {
-            public string Symbol { get; private set; }
+            public string Symbol { get; }
             public string Description { get; private set; }
-            public ReplacementFactory Factory { get; private set; }
+            public ReplacementFactory Factory { get; }
 
             public FormattingScheme(string symbol, string description, ReplacementFactory factory)
             {
@@ -29,7 +27,7 @@ namespace EasyImgur
 
             public FormattingContext()
             {
-                FilePath = "";
+                this.FilePath = "";
             }
         }
 
@@ -40,7 +38,7 @@ namespace EasyImgur
             new FormattingScheme(
                 "%n%",
                 "The position of the current upload. Ex.: First uploaded image is 1, fifth 5, tenth is 10, etc.",
-                context => (ImgurAPI.numSuccessfulUploads + 1).ToString()),
+                context => (ImgurAPI.NumSuccessfulUploads + 1).ToString()),
             new FormattingScheme(
                 "%date%",
                 "Current date in DD-MM-YYYY format.",
@@ -86,10 +84,10 @@ namespace EasyImgur
                 "The position of the image in the album (0-n, where n = the number of images. Only applies if an album is being uploaded)",
                 context => context.AlbumIndex.ToString())
         };
-        
+
         static public string Format(string input, FormattingContext ctx)
         {
-            FormattingContext context = ctx ?? new FormattingContext();
+            var context = ctx ?? new FormattingContext();
             // Aggregate is essentially a foreach loop through the FormattingSchemes, doing
             // current = current.Replace(...);
             return FormattingSchemes

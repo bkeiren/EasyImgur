@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace EasyImgur
@@ -16,14 +13,16 @@ namespace EasyImgur
 
             public override string ToString()
             {
-                string str = Name;
-                if (!string.IsNullOrEmpty(Alias))
-                    str += " (" + Alias + ")";
+                var str = this.Name;
+                if (!string.IsNullOrEmpty(this.Alias))
+                    str += " (" + this.Alias + ")";
                 return str;
             }
         }
+
         public static List<Contributor> ContributorList { get; private set; }
-        static public BindingSource BindingSource { get; private set; }
+
+        public static BindingSource BindingSource { get; private set; }
 
         static Contributors()
         {
