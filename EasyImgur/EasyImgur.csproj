@@ -119,6 +119,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebClientFactory.cs" />
     <EmbeddedResource Include="AuthorizeForm.resx">
       <DependentUpon>AuthorizeForm.cs</DependentUpon>
     </EmbeddedResource>

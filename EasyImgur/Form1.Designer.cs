@@ -104,6 +104,9 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.ProxyAddress = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.clipboardSettingsContainer.SuspendLayout();
@@ -115,6 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.tabPage5.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -138,6 +142,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
@@ -963,6 +968,34 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.label14);
+            this.tabPage5.Controls.Add(this.ProxyAddress);
+            this.tabPage5.Location = new System.Drawing.Point(4, 26);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(708, 358);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Network";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // ProxyAddress
+            // 
+            this.ProxyAddress.Location = new System.Drawing.Point(65, 7);
+            this.ProxyAddress.Name = "ProxyAddress";
+            this.ProxyAddress.Size = new System.Drawing.Size(203, 23);
+            this.ProxyAddress.TabIndex = 0;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(9, 10);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(40, 17);
+            this.label14.TabIndex = 1;
+            this.label14.Text = "Proxy";
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -993,6 +1026,8 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1073,6 +1108,9 @@
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
         private System.Windows.Forms.GroupBox clipboardSettingsContainer;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox ProxyAddress;
     }
 }
 

@@ -4,8 +4,11 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using EasyImgur.Properties;
 using Microsoft.Win32;
 
 namespace EasyImgur
@@ -554,6 +557,8 @@ namespace EasyImgur
             // Bind the data source for the list of contributors.
             Contributors.BindingSource.DataSource = Contributors.ContributorList;
             contributorsList.DataSource = Contributors.BindingSource;
+
+            this.ProxyAddress.Text = Settings.Default.ProxyAddress ?? string.Empty;
         }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -588,7 +593,13 @@ namespace EasyImgur
                 UpdateRegistry(false);
             }
 
-            Properties.Settings.Default.Save();
+            var proxyAddress = this.ProxyAddress.Text;
+            Settings.Default.ProxyAddress = !string.IsNullOrWhiteSpace(proxyAddress) &&
+                Regex.Match(proxyAddress, "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}:\\d{1,5}$").Success
+                ? proxyAddress
+                : null;
+            ImgurAPI.WebClientFactory.ReloadSetting();
+            Settings.Default.Save();
         }
 
         private void UpdateRegistry(bool _LoadingSettings)
