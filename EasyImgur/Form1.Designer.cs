@@ -54,6 +54,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxTitleFormat = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.ProxyAddress = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.buttonForgetTokens = new System.Windows.Forms.Button();
@@ -104,12 +107,10 @@
             this.settingsTrayMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.exitTrayMenuItem = new System.Windows.Forms.MenuItem();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.ProxyAddress = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.clipboardSettingsContainer.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -118,7 +119,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.tabPage5.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -438,6 +438,34 @@
             this.textBoxTitleFormat.Size = new System.Drawing.Size(391, 23);
             this.textBoxTitleFormat.TabIndex = 5;
             this.textBoxTitleFormat.Text = global::EasyImgur.Properties.Settings.Default.titleFormat;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.label14);
+            this.tabPage5.Controls.Add(this.ProxyAddress);
+            this.tabPage5.Location = new System.Drawing.Point(4, 26);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(708, 358);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Network";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(9, 10);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(40, 17);
+            this.label14.TabIndex = 1;
+            this.label14.Text = "Proxy";
+            // 
+            // ProxyAddress
+            // 
+            this.ProxyAddress.Location = new System.Drawing.Point(65, 7);
+            this.ProxyAddress.Name = "ProxyAddress";
+            this.ProxyAddress.Size = new System.Drawing.Size(203, 23);
+            this.ProxyAddress.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -968,34 +996,6 @@
             this.exitTrayMenuItem.Text = "Exit";
             this.exitTrayMenuItem.Click += new System.EventHandler(this.exitTrayMenuItem_Click);
             // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.label14);
-            this.tabPage5.Controls.Add(this.ProxyAddress);
-            this.tabPage5.Location = new System.Drawing.Point(4, 26);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(708, 358);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Network";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // ProxyAddress
-            // 
-            this.ProxyAddress.Location = new System.Drawing.Point(65, 7);
-            this.ProxyAddress.Name = "ProxyAddress";
-            this.ProxyAddress.Size = new System.Drawing.Size(203, 23);
-            this.ProxyAddress.TabIndex = 0;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(9, 10);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(40, 17);
-            this.label14.TabIndex = 1;
-            this.label14.Text = "Proxy";
-            // 
             // Form1
             // 
             this.AcceptButton = this.buttonApplyGeneral;
@@ -1015,6 +1015,8 @@
             this.tabPage1.PerformLayout();
             this.clipboardSettingsContainer.ResumeLayout(false);
             this.clipboardSettingsContainer.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
@@ -1026,8 +1028,6 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
             this.ResumeLayout(false);
 
         }
