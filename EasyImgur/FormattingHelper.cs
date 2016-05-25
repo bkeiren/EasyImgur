@@ -8,9 +8,9 @@ namespace EasyImgur
     {
         public class FormattingScheme
         {
-            public string Symbol { get; private set; }
+            public string Symbol { get; }
             public string Description { get; private set; }
-            public ReplacementFactory Factory { get; private set; }
+            public ReplacementFactory Factory { get; }
 
             public FormattingScheme(string symbol, string description, ReplacementFactory factory)
             {
