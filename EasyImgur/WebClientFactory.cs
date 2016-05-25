@@ -21,7 +21,7 @@ namespace EasyImgur
 
         public void ReloadSetting()
         {
-            if (Settings.Default.ProxyAddress != null)
+            if (!string.IsNullOrWhiteSpace(Settings.Default.ProxyAddress))
             {
                 var ap = Settings.Default.ProxyAddress.Split(':');
                 this.Proxy = new WebProxy(ap[0], int.Parse(ap[1]));

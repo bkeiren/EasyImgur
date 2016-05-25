@@ -556,7 +556,7 @@ namespace EasyImgur
 
             // Bind the data source for the list of contributors.
             Contributors.BindingSource.DataSource = Contributors.ContributorList;
-            contributorsList.DataSource = Contributors.BindingSource;
+            contributorsList.DataSource = Contributors.BindingSource.DataSource;
 
             this.ProxyAddress.Text = Settings.Default.ProxyAddress ?? string.Empty;
         }
