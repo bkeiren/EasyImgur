@@ -13,7 +13,7 @@ namespace EasyImgur
 
             public override string ToString()
             {
-                string str = this.Name;
+                var str = this.Name;
                 if (!string.IsNullOrEmpty(this.Alias))
                     str += " (" + this.Alias + ")";
                 return str;

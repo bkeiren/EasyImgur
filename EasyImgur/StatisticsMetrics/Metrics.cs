@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -46,7 +44,7 @@ namespace EasyImgur.StatisticsMetrics
     {
         protected override object Gather()
         {
-            return Environment.Version;            
+            return Environment.Version;
         }
     }
 
@@ -95,17 +93,17 @@ namespace EasyImgur.StatisticsMetrics
             if (!string.IsNullOrEmpty(strText))
             {
                 //Unicode Encode Covering all characterset
-                byte[] byteContents = Encoding.Unicode.GetBytes(strText);
+                var byteContents = Encoding.Unicode.GetBytes(strText);
                 SHA256 hash = new SHA256CryptoServiceProvider();
-                byte[] hashText = hash.ComputeHash(byteContents);
+                var hashText = hash.ComputeHash(byteContents);
                 //32Byte hashText separate
                 //hashCodeStart = 0~7  8Byte
                 //hashCodeMedium = 8~23  8Byte
                 //hashCodeEnd = 24~31  8Byte
                 //and Fold
-                long hashCodeStart = BitConverter.ToInt64(hashText, 0);
-                long hashCodeMedium = BitConverter.ToInt64(hashText, 8);
-                long hashCodeEnd = BitConverter.ToInt64(hashText, 24);
+                var hashCodeStart = BitConverter.ToInt64(hashText, 0);
+                var hashCodeMedium = BitConverter.ToInt64(hashText, 8);
+                var hashCodeEnd = BitConverter.ToInt64(hashText, 24);
                 hashCode = hashCodeStart ^ hashCodeMedium ^ hashCodeEnd;
             }
             return hashCode;
@@ -119,10 +117,10 @@ namespace EasyImgur.StatisticsMetrics
         private static string GetNicString()
         {
             // Use the physical address (MAC) of the first network interface that has a non-null MAC address.
-            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface nic in nics)
+            var nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (var nic in nics)
             {
-                PhysicalAddress mac = nic.GetPhysicalAddress();
+                var mac = nic.GetPhysicalAddress();
                 if (!mac.Equals(PhysicalAddress.None))
                     return mac.ToString();
             }
@@ -152,11 +150,11 @@ namespace EasyImgur.StatisticsMetrics
                 var sb = new StringBuilder();
 
                 using (var searcher = new ManagementObjectSearcher("SELECT * FROM " + queryTarget))
-                using (ManagementObjectCollection wmiCollection = searcher.Get())
+                using (var wmiCollection = searcher.Get())
                 {
-                    foreach (ManagementBaseObject wmiObject in wmiCollection)
+                    foreach (var wmiObject in wmiCollection)
                     {
-                        object property = wmiObject[propertyName];
+                        var property = wmiObject[propertyName];
                         if (property != null)
                             sb.Append(property);
                     }

@@ -44,18 +44,18 @@ namespace EasyImgur
                 throw new ArgumentNullException();
             }
 
-            string url = mEndPoint + "image";
+            var url = mEndPoint + "image";
 
-            string responseString = string.Empty;
+            var responseString = string.Empty;
             byte[] response = null;
 
             APIResponses.ImageResponse resp = null;
-            using (System.IO.MemoryStream memStream = new System.IO.MemoryStream())
+            using (var memStream = new System.IO.MemoryStream())
             {
                 if (!_URL)
                 {
-                    Image image = obj as Image;
-                    System.Drawing.Imaging.ImageFormat format = image.RawFormat;
+                    var image = obj as Image;
+                    var format = image.RawFormat;
                     switch (Properties.Settings.Default.imageFormat)
                     {
                         case 1:
@@ -126,9 +126,9 @@ namespace EasyImgur
                     image.Save(memStream, format);
                 }
 
-                int status = 0;
-                string error = "An unknown error occurred.";
-                using (WebClient t = WebClientFactory.Create())
+                var status = 0;
+                var error = "An unknown error occurred.";
+                using (var t = WebClientFactory.Create())
                 {
                     t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(anonymous);
                     try
@@ -164,9 +164,9 @@ namespace EasyImgur
                         {
                             int.TryParse(ex.Message.Split('(')[1].Split(')')[0], out status); // gets status code from message string in case of emergency
                             error = ex.Message.Split('(')[1].Split(')')[1]; // I believe this gets the rest of the error message supplied, but Imgur went back up before I could test it
-                            System.IO.Stream stream = ex.Response.GetResponseStream();
-                            int currByte = -1;
-                            StringBuilder strBuilder = new StringBuilder();
+                            var stream = ex.Response.GetResponseStream();
+                            var currByte = -1;
+                            var strBuilder = new StringBuilder();
                             while ((currByte = stream.ReadByte()) != -1)
                             {
                                 strBuilder.Append((char)currByte);
@@ -226,10 +226,10 @@ namespace EasyImgur
 
         static public APIResponses.AlbumResponse UploadAlbum(Image[] images, string albumTitle, bool anonymous, string[] titles, string[] descriptions)
         {
-            string url = mEndPoint + "album";
-            string responseString = "";
+            var url = mEndPoint + "album";
+            var responseString = "";
 
-            using (WebClient t = WebClientFactory.Create())
+            using (var t = WebClientFactory.Create())
             {
                 t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(anonymous);
                 try
@@ -254,9 +254,9 @@ namespace EasyImgur
                     }
                     else
                     {
-                        System.IO.Stream stream = ex.Response.GetResponseStream();
-                        int currByte = -1;
-                        StringBuilder strBuilder = new StringBuilder();
+                        var stream = ex.Response.GetResponseStream();
+                        var currByte = -1;
+                        var strBuilder = new StringBuilder();
                         while ((currByte = stream.ReadByte()) != -1)
                         {
                             strBuilder.Append((char)currByte);
@@ -303,15 +303,15 @@ namespace EasyImgur
             }
 
             // in case I need them later 
-            List<APIResponses.ImageResponse> responses = new List<APIResponses.ImageResponse>();
-            for (int i = 0; i < images.Count(); ++i)
+            var responses = new List<APIResponses.ImageResponse>();
+            for (var i = 0; i < images.Count(); ++i)
             {
-                Image image = images[i];
-                string title = string.Empty;
+                var image = images[i];
+                var title = string.Empty;
                 if (i < titles.Count())
                     title = titles[i];
 
-                string description = string.Empty;
+                var description = string.Empty;
                 if (i < descriptions.Count())
                     description = descriptions[i];
 
@@ -320,9 +320,9 @@ namespace EasyImgur
 
             // since an album creation doesn't return very much in the manner of information, make a request to 
             // get the fully populated album
-            string deletehash = resp.ResponseData.DeleteHash; // save deletehash
+            var deletehash = resp.ResponseData.DeleteHash; // save deletehash
             responseString = "";
-            using (WebClient t = WebClientFactory.Create())
+            using (var t = WebClientFactory.Create())
             {
                 t.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(anonymous);
                 try
@@ -337,9 +337,9 @@ namespace EasyImgur
                     }
                     else
                     {
-                        System.IO.Stream stream = ex.Response.GetResponseStream();
-                        int currByte = -1;
-                        StringBuilder strBuilder = new StringBuilder();
+                        var stream = ex.Response.GetResponseStream();
+                        var currByte = -1;
+                        var strBuilder = new StringBuilder();
                         while ((currByte = stream.ReadByte()) != -1)
                         {
                             strBuilder.Append((char)currByte);
@@ -353,7 +353,7 @@ namespace EasyImgur
                 }
             }
 
-            APIResponses.AlbumResponse oldResp = resp;
+            var oldResp = resp;
             try
             {
                 resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.AlbumResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
@@ -370,7 +370,7 @@ namespace EasyImgur
 
             if (resp.Success)
             {
-                int i = 0;
+                var i = 0;
                 foreach (var response in resp.ResponseData.Images)
                     if (response.Id == resp.ResponseData.Cover)
                         break;
@@ -395,7 +395,7 @@ namespace EasyImgur
 
         static public bool DeleteAlbum(string deleteHash, bool anonymousAlbum)
         {
-            string url = mEndPoint + "album/" + deleteHash;
+            var url = mEndPoint + "album/" + deleteHash;
 
             if (!anonymousAlbum && !HasBeenAuthorized())
             {
@@ -403,8 +403,8 @@ namespace EasyImgur
                 return false;
             }
 
-            string responseString = string.Empty;
-            using (WebClient wc = WebClientFactory.Create())
+            var responseString = string.Empty;
+            using (var wc = WebClientFactory.Create())
             {
                 wc.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(false);
                 try
@@ -454,7 +454,7 @@ namespace EasyImgur
 
         static public bool DeleteImage(string deleteHash, bool anonymousImage)
         {
-            string url = mEndPoint + "image/" + deleteHash;
+            var url = mEndPoint + "image/" + deleteHash;
 
             if (!anonymousImage && !HasBeenAuthorized())
             {
@@ -462,8 +462,8 @@ namespace EasyImgur
                 return false;
             }
 
-            string responseString = string.Empty;
-            using (WebClient wc = WebClientFactory.Create())
+            var responseString = string.Empty;
+            using (var wc = WebClientFactory.Create())
             {
                 wc.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(false);
                 try
@@ -513,17 +513,17 @@ namespace EasyImgur
 
         static public void OpenAuthorizationPage()
         {
-            string url = "https://api.imgur.com/oauth2/authorize?client_id=" + mClientId + "&response_type=pin&state=";
+            var url = "https://api.imgur.com/oauth2/authorize?client_id=" + mClientId + "&response_type=pin&state=";
 
             System.Diagnostics.Process.Start(url);
         }
 
         static public void RequestTokens(string pin)
         {
-            string url = "https://api.imgur.com/oauth2/token";
+            var url = "https://api.imgur.com/oauth2/token";
 
-            string responseString = string.Empty;
-            using (WebClient wc = WebClientFactory.Create())
+            var responseString = string.Empty;
+            using (var wc = WebClientFactory.Create())
             {
                 //t.Headers[HttpRequestHeader.Authorization] = "Client-ID " + m_ClientID;
                 try
@@ -543,7 +543,7 @@ namespace EasyImgur
                             "pin", pin
                         }
                     };
-                    byte[] response = wc.UploadValues(url, "POST", values);
+                    var response = wc.UploadValues(url, "POST", values);
                     responseString = Encoding.ASCII.GetString(response);
                 }
                 catch (WebException ex)
@@ -554,9 +554,9 @@ namespace EasyImgur
                     }
                     else
                     {
-                        System.IO.Stream stream = ex.Response.GetResponseStream();
-                        int currByte = -1;
-                        StringBuilder strBuilder = new StringBuilder();
+                        var stream = ex.Response.GetResponseStream();
+                        var currByte = -1;
+                        var strBuilder = new StringBuilder();
                         while ((currByte = stream.ReadByte()) != -1)
                         {
                             strBuilder.Append((char)currByte);
@@ -575,7 +575,7 @@ namespace EasyImgur
                 return;
             }
 
-            APIResponses.TokenResponse resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
+            var resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.TokenResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
             if (resp != null && resp.AccessToken != null && resp.RefreshToken != null)
             {
                 StoreNewTokens(resp.ExpiresIn, resp.AccessToken, resp.RefreshToken);
@@ -614,10 +614,10 @@ namespace EasyImgur
                 return false;
             }
 
-            string url = "https://api.imgur.com/oauth2/token";
+            var url = "https://api.imgur.com/oauth2/token";
 
-            string responseString = string.Empty;
-            using (WebClient wc = WebClientFactory.Create())
+            var responseString = string.Empty;
+            using (var wc = WebClientFactory.Create())
             {
                 try
                 {
@@ -636,7 +636,7 @@ namespace EasyImgur
                             "refresh_token", mCurrentRefreshToken
                         }
                     };
-                    byte[] response = wc.UploadValues(url, "POST", values);
+                    var response = wc.UploadValues(url, "POST", values);
                     responseString = Encoding.ASCII.GetString(response);
                 }
                 catch (WebException ex)
@@ -647,9 +647,9 @@ namespace EasyImgur
                     }
                     else
                     {
-                        System.IO.Stream stream = ex.Response.GetResponseStream();
-                        int currByte = -1;
-                        StringBuilder strBuilder = new StringBuilder();
+                        var stream = ex.Response.GetResponseStream();
+                        var currByte = -1;
+                        var strBuilder = new StringBuilder();
                         while ((currByte = stream.ReadByte()) != -1)
                         {
                             strBuilder.Append((char)currByte);
@@ -730,7 +730,7 @@ namespace EasyImgur
             Log.Info("Token thread started");
             while (true)
             {
-                TimeSpan timeSpan = (mTokensExpireAt > DateTime.Now) ? (mTokensExpireAt - DateTime.Now) : (DateTime.Now.AddSeconds(60.0) - DateTime.Now);
+                var timeSpan = (mTokensExpireAt > DateTime.Now) ? (mTokensExpireAt - DateTime.Now) : (DateTime.Now.AddSeconds(60.0) - DateTime.Now);
                 Log.Info("Token thread will refresh in " + timeSpan.TotalSeconds + " seconds");
                 System.Threading.Thread.Sleep(timeSpan);
                 if (!RefreshTokens())
@@ -746,8 +746,8 @@ namespace EasyImgur
         // in order to be able to persistently keep the app authorized after the user doing so once.
         static public void AttemptRefreshTokensFromDisk()
         {
-            string accessToken = Properties.Settings.Default.accessToken;
-            string refreshToken = Properties.Settings.Default.refreshToken;
+            var accessToken = Properties.Settings.Default.accessToken;
+            var refreshToken = Properties.Settings.Default.refreshToken;
 
             if (accessToken != null &&
                 accessToken != string.Empty &&

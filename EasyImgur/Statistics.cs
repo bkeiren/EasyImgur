@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
+using System.Net;
 using System.Text;
 using EasyImgur.StatisticsMetrics;
-using System.Net;
 
 namespace EasyImgur
 {
@@ -27,7 +26,7 @@ namespace EasyImgur
 
         public static bool GatherAndSend()
         {
-            bool success = true;
+            var success = true;
 
             try
             {
@@ -35,13 +34,13 @@ namespace EasyImgur
                 {
                     try
                     {
-                        int count = 1;
+                        var count = 1;
                         var sb = new StringBuilder();
                         var values = new NameValueCollection();
 
-                        foreach (KeyValuePair<String, StatisticsMetric> metric in StatisticsMetrics)
+                        foreach (var metric in StatisticsMetrics)
                         {
-                            object value = metric.Value.Value;
+                            var value = metric.Value.Value;
                             if (value != null)
                             {
                                 values.Add(metric.Key, value.ToString());

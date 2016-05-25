@@ -54,8 +54,8 @@ namespace EasyImgur
         /// <returns>Logged line containing the log channel and timestamp.</returns>
         private static string LogMessage(string prefix, string message, bool consoleOnly)
         {
-            string timeStamp = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", CultureInfo.InvariantCulture);
-            string line = timeStamp + " [" + prefix + "] " + message;
+            var timeStamp = DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss:ffff]", CultureInfo.InvariantCulture);
+            var line = timeStamp + " [" + prefix + "] " + message;
 
             Console.WriteLine(line);
             if (consoleOnly)

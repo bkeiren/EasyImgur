@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace EasyImgur
 {
@@ -19,10 +19,7 @@ namespace EasyImgur
 
         private static string SaveLocation => Program.RootFolder;
 
-        public static int Count
-        {
-            get { return historyBinding.Count; }
-        }
+        public static int Count => historyBinding.Count;
 
         public static int AnonymousCount
         {
@@ -32,17 +29,7 @@ namespace EasyImgur
             }
         }
 
-        static History()
-        {
-            // add empty event handlers to avoid checking if the event is null
-            HistoryItemAdded += v => { };
-            HistoryItemRemoved += v => { };
-        }
-
-        public static int AccountCount
-        {
-            get { return Count - AnonymousCount; }
-        }
+        public static int AccountCount => Count - AnonymousCount;
 
         // required to be the first method called
         public static void BindData(BindingSource source)
@@ -52,12 +39,12 @@ namespace EasyImgur
 
         public static void InitializeFromDisk()
         {
-            List<HistoryItem> history = GetHistoryFromDisk();
+            var history = GetHistoryFromDisk();
             if (history == null) return;
-            foreach (HistoryItem item in history)
+            foreach (var item in history)
             {
                 historyBinding.Add(item);
-                HistoryItemAdded(item);
+                HistoryItemAdded?.Invoke(item);
             }
         }
 
@@ -111,7 +98,7 @@ namespace EasyImgur
             }
 
             historyBinding.Add(item);
-            HistoryItemAdded(item);
+            HistoryItemAdded?.Invoke(item);
 
             StoreHistoryOnDisk();
         }
@@ -127,13 +114,13 @@ namespace EasyImgur
             historyBinding.Remove(item);
 
             StoreHistoryOnDisk();
-            HistoryItemRemoved(item);
+            HistoryItemRemoved?.Invoke(item);
         }
 
         private static bool StoreHistoryOnDisk()
         {
-            bool success = true;
-            string jsonString = JsonConvert.SerializeObject(historyBinding.List, Formatting.None, new ImageConverter());
+            var success = true;
+            var jsonString = JsonConvert.SerializeObject(historyBinding.List, Formatting.None, new ImageConverter());
             try
             {
                 FileHelper.GZipWriteFile(Path.Combine(SaveLocation, "history"), jsonString);

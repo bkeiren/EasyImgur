@@ -58,7 +58,7 @@ namespace EasyImgur
                 {
                     client.Connect(200);
 
-                    foreach (string argument in arguments)
+                    foreach (var argument in arguments)
                         writer.WriteLine(argument);
                 }
                 return true;

@@ -40,10 +40,10 @@ namespace EasyImgur
                 catch (Exception)
                 {
                     //Create new document
-                    XmlDeclaration dec = this.settingsXml.CreateXmlDeclaration("1.0", "utf-8", "");
+                    var dec = this.settingsXml.CreateXmlDeclaration("1.0", "utf-8", "");
                     this.settingsXml.AppendChild(dec);
 
-                    XmlNode nodeRoot = this.settingsXml.CreateNode(XmlNodeType.Element, SettingsRootNode, "");
+                    var nodeRoot = this.settingsXml.CreateNode(XmlNodeType.Element, SettingsRootNode, "");
                     this.settingsXml.AppendChild(nodeRoot);
                 }
 
@@ -138,7 +138,7 @@ namespace EasyImgur
 
         private string GetValue(SettingsProperty setting)
         {
-            string ret = "";
+            var ret = "";
 
             try
             {

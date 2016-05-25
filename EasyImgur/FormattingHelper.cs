@@ -87,7 +87,7 @@ namespace EasyImgur
 
         static public string Format(string input, FormattingContext ctx)
         {
-            FormattingContext context = ctx ?? new FormattingContext();
+            var context = ctx ?? new FormattingContext();
             // Aggregate is essentially a foreach loop through the FormattingSchemes, doing
             // current = current.Replace(...);
             return FormattingSchemes

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthorizeForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthorizeForm));
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxPIN = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();

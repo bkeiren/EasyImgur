@@ -38,7 +38,7 @@ namespace EasyImgur
                     AppDomain.CurrentDomain.AssemblyResolve += FindDll;
 
                     const string portableFlag = "portable";
-                    foreach (string arg in args.Where(s => s != null))
+                    foreach (var arg in args.Where(s => s != null))
                     {
                         if (arg == "/portable")
                         {
@@ -87,14 +87,14 @@ namespace EasyImgur
         // FindDLL technique and routine obtained from http://stackoverflow.com/a/15077288 (Accessed 02-01-2014 @ 15:37).
         private static Assembly FindDll(object sender, ResolveEventArgs args)
         {
-            string keyName = new AssemblyName(args.Name).Name;
+            var keyName = new AssemblyName(args.Name).Name;
 
             // If DLL is loaded then don't load it again just return
             Assembly value;
             if (ResolvedAssemblyCache.TryGetValue(keyName, out value)) return value;
 
-            string assemblyName = "EasyImgur." + keyName + ".dll";
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyName))
+            var assemblyName = "EasyImgur." + keyName + ".dll";
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyName))
             {
                 if (stream == null)
                 {
@@ -103,8 +103,8 @@ namespace EasyImgur
                 }
                 using (var reader = new BinaryReader(stream))
                 {
-                    byte[] buffer = reader.ReadBytes((int)stream.Length);
-                    Assembly assembly = Assembly.Load(buffer);
+                    var buffer = reader.ReadBytes((int)stream.Length);
+                    var assembly = Assembly.Load(buffer);
                     ResolvedAssemblyCache[keyName] = assembly;
 
                     Log.Info("Loaded assembly: '" + assemblyName + "'.");
