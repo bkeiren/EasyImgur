@@ -184,9 +184,9 @@ namespace EasyImgur
             }
 
             //Check to see if the node exists, if so then set its new value
-            if ((settingNode != null))
+            if (settingNode != null)
             {
-                settingNode.InnerText = propVal.SerializedValue.ToString();
+                settingNode.InnerText = propVal.SerializedValue?.ToString();
             }
             else
             {
@@ -194,7 +194,7 @@ namespace EasyImgur
                 {
                     //Store the value as an element of the Settings Root Node
                     settingNode = this.SettingsXml.CreateElement(propVal.Name);
-                    settingNode.InnerText = propVal.SerializedValue.ToString();
+                    settingNode.InnerText = propVal.SerializedValue?.ToString();
                     this.SettingsXml.SelectSingleNode(SettingsRootNode).AppendChild(settingNode);
                 }
                 else
