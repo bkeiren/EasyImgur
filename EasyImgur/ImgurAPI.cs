@@ -731,6 +731,8 @@ namespace EasyImgur
             while (true)
             {
                 TimeSpan timeSpan = (m_TokensExpireAt > DateTime.Now) ? (m_TokensExpireAt - DateTime.Now) : (DateTime.Now.AddSeconds(60.0) - DateTime.Now);
+                if (TooGreatToSleep(timeSpan)) timeSpan = new TimeSpan(24, 0, 0); // refresh tomorrow just in case
+
                 Log.Info("Token thread will refresh in " + timeSpan.TotalSeconds + " seconds");
                 System.Threading.Thread.Sleep(timeSpan);
                 if (!RefreshTokens())
@@ -739,6 +741,13 @@ namespace EasyImgur
                     break;
                 }
             }
+        }
+
+        static private bool TooGreatToSleep(TimeSpan ts)
+        {
+            // Token's lifespan extends beyond the max sleep time (Int32.MaxValue milliseconds, that is, approx. 24 days)
+            // Thread.Sleep(TimeSpan) uses (int)ts.TotalMilliseconds to get the sleep time.
+            return ts.TotalMilliseconds > Int32.MaxValue;
         }
 
         // This function attempts to read any old refresh and access tokens from the settings file
