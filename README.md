@@ -21,12 +21,12 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 [Download EasyImgur](https://github.com/Rycul/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
 
 Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
-> ![](http://i.imgur.com/3UL7hBe.png)
+> ![](http://i.imgur.com/HPVTZJz.png)
 
 ### Uploading from the tray
 
 Open the EasyImgur menu by right-clicking on the tray icon:
-> ![](http://i.imgur.com/vmGPAlO.png)
+> ![](http://i.imgur.com/wjLl8o2.png)
 
 **Upload a file or a clipboard image** (a screenshot or a text URL that you've copied, for example) anonymously by using the *Upload from file...* and *Upload from clipboard* options.
 
