@@ -34,6 +34,7 @@
             this.buttonApplyGeneral = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.checkBoxShowStartupNotification = new System.Windows.Forms.CheckBox();
             this.clipboardSettingsContainer = new System.Windows.Forms.GroupBox();
             this.checkBoxCopyHttpsLinks = new System.Windows.Forms.CheckBox();
             this.checkBoxClearClipboard = new System.Windows.Forms.CheckBox();
@@ -125,7 +126,7 @@
             // 
             // buttonApplyGeneral
             // 
-            this.buttonApplyGeneral.Location = new System.Drawing.Point(500, 236);
+            this.buttonApplyGeneral.Location = new System.Drawing.Point(500, 264);
             this.buttonApplyGeneral.Margin = new System.Windows.Forms.Padding(2);
             this.buttonApplyGeneral.Name = "buttonApplyGeneral";
             this.buttonApplyGeneral.Size = new System.Drawing.Size(81, 29);
@@ -144,11 +145,12 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(595, 297);
+            this.tabControl1.Size = new System.Drawing.Size(595, 325);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBoxShowStartupNotification);
             this.tabPage1.Controls.Add(this.clipboardSettingsContainer);
             this.tabPage1.Controls.Add(this.labelPortableModeNote);
             this.tabPage1.Controls.Add(this.checkBoxCopyLinks);
@@ -172,10 +174,25 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(587, 271);
+            this.tabPage1.Size = new System.Drawing.Size(587, 299);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowStartupNotification
+            // 
+            this.checkBoxShowStartupNotification.AutoSize = true;
+            this.checkBoxShowStartupNotification.Checked = global::EasyImgur.Properties.Settings.Default.showNotificationOnStartUp;
+            this.checkBoxShowStartupNotification.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxShowStartupNotification.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "showNotificationOnStartUp", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBoxShowStartupNotification.Location = new System.Drawing.Point(42, 215);
+            this.checkBoxShowStartupNotification.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxShowStartupNotification.Name = "checkBoxShowStartupNotification";
+            this.checkBoxShowStartupNotification.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShowStartupNotification.Size = new System.Drawing.Size(157, 17);
+            this.checkBoxShowStartupNotification.TabIndex = 24;
+            this.checkBoxShowStartupNotification.Text = "Show notification on startup";
+            this.checkBoxShowStartupNotification.UseVisualStyleBackColor = true;
             // 
             // clipboardSettingsContainer
             // 
@@ -224,7 +241,7 @@
             // 
             this.labelPortableModeNote.AutoSize = true;
             this.labelPortableModeNote.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.labelPortableModeNote.Location = new System.Drawing.Point(15, 247);
+            this.labelPortableModeNote.Location = new System.Drawing.Point(15, 275);
             this.labelPortableModeNote.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPortableModeNote.Name = "labelPortableModeNote";
             this.labelPortableModeNote.Size = new System.Drawing.Size(251, 13);
@@ -276,7 +293,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label16.Location = new System.Drawing.Point(204, 216);
+            this.label16.Location = new System.Drawing.Point(201, 237);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(305, 13);
@@ -288,7 +305,7 @@
             this.checkBoxEnableContextMenu.AutoSize = true;
             this.checkBoxEnableContextMenu.Checked = global::EasyImgur.Properties.Settings.Default.enableContextMenu;
             this.checkBoxEnableContextMenu.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "enableContextMenu", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(73, 215);
+            this.checkBoxEnableContextMenu.Location = new System.Drawing.Point(73, 236);
             this.checkBoxEnableContextMenu.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEnableContextMenu.Name = "checkBoxEnableContextMenu";
             this.checkBoxEnableContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -443,7 +460,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(587, 271);
+            this.tabPage2.Size = new System.Drawing.Size(587, 299);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Account";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -534,7 +551,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(587, 271);
+            this.tabPage3.Size = new System.Drawing.Size(587, 299);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "History";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -769,7 +786,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(587, 271);
+            this.tabPage4.Size = new System.Drawing.Size(587, 299);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "About";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -952,7 +969,7 @@
             this.AcceptButton = this.buttonApplyGeneral;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 301);
+            this.ClientSize = new System.Drawing.Size(598, 327);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1055,6 +1072,7 @@
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
         private System.Windows.Forms.GroupBox clipboardSettingsContainer;
+        private System.Windows.Forms.CheckBox checkBoxShowStartupNotification;
     }
 }
 

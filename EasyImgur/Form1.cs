@@ -43,7 +43,7 @@ namespace EasyImgur
             History.InitializeFromDisk();
 
             // if we have arguments, we're going to show a tip when we handle those arguments. 
-            if(_Args.Length == 0) 
+            if(_Args.Length == 0 && Properties.Settings.Default.showNotificationOnStartUp) 
                 ShowBalloonTip(2000, "EasyImgur is ready for use!", "Right-click EasyImgur's icon in the tray to use it!", ToolTipIcon.Info);
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
