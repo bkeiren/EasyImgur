@@ -45,7 +45,7 @@ You can also upload images or folders with images using the context menu of your
 To upload images to your Imgur account, you must first authorize EasyImgur to access your account.
 
 1. Open the settings dialog by selecting *Settings* from the context menu shown when right-clicking on the EasyImgur icon in the tray. This opens the EasyImgur window. Go to the *Account* tab:
-    > ![](http://i.imgur.com/i34VILO.png)
+    > ![](http://i.imgur.com/v0LSGDW.png)
 
 2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
     > ![](http://i.imgur.com/zdcWcp0.png)
@@ -53,12 +53,12 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
 3. Select *Allow* and copy the code that is displayed on the next page.
 
 4. Go back to the EasyImgur window. You will see that a popup has been opened:
-    > ![](http://i.imgur.com/wdxlEPC.png)
+    > ![](http://i.imgur.com/99IRt3S.png)
    
    Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
 
 5. A balloon popup will be shown to inform you that the authorization was successful. The EasyImgur window will now display *Status: Authorized*:
-    > ![](http://i.imgur.com/U11116k.png)
+    > ![](http://i.imgur.com/yFdSheG.png)
     
     **NOTE**: To revoke access at any time, you can visit http://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
 
