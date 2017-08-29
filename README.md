@@ -35,10 +35,10 @@ Open the EasyImgur menu by right-clicking on the tray icon:
 You can also upload images or folders with images using the context menu of your file explorer. Note that you will need to tick **Enable context menu** in the settings to access these features.
 
 **Upload a file** by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)** from the context menu.
-> ![](http://i.imgur.com/IWx0XWs.png)
+> ![](http://i.imgur.com/0CrGjVJ.png)
 
 **Upload an album** from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (**excluding** the pictures in subfolders) will be uploaded and placed into an album.
-> ![](http://i.imgur.com/rKfBjYx.png)
+> ![](http://i.imgur.com/EvKCFug.png)
 
 ## Using EasyImgur to upload images to your Imgur account
 
