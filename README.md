@@ -79,7 +79,7 @@ Uploaded images (and their URLs) can be found under the ***History*** tab. From 
 
 EasyImgur has a number of different customizable settings. These can be accessed from the *General* tab in the EasyImgur settings window:
 
-![Settings tab screenshot](http://i.imgur.com/ssvIAZl.png)
+![Settings tab screenshot](http://i.imgur.com/7K53osF.png)
 
 #### Copy links to clipboard
 Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
@@ -113,6 +113,9 @@ This determines whether EasyImgur should have a registry key set to allow it to 
 
 #### Show notification on token refresh
 If you have authorized EasyImgur to use your Imgur account, it can notify you each time it refreshes its authentication tokens. Enabling this option will allow EasyImgur to show a balloon tooltip pop up from your icon tray each time it refreshes its tokens.
+
+#### Show notification on startup
+EasyImgur will by default show a notification when it starts up to let you know it's ready for use. You can disable this from the settings tab.
 
 #### Enable context menu
 This option determines whether the following options are added to the file context menu (right click menu) to allow even easier uploading!:
