@@ -39,8 +39,8 @@ namespace EasyImgur
                 new Contributor
                 {
                     Name = "Joona Heikkilä",
-                    Alias = "cubrr",
-                    Url = "https://github.com/cubrr"
+                    Alias = "cxcorp",
+                    Url = "https://github.com/cxcorp"
                 },
                 // Add new contributor here
 
