@@ -45,7 +45,7 @@ You can also upload images or folders with images using the context menu of your
 To upload images to your Imgur account, you must first authorize EasyImgur to access your account.
 
 1. Open the settings dialog by selecting *Settings* from the context menu shown when right-clicking on the EasyImgur icon in the tray. This opens the EasyImgur window. Go to the *Account* tab:
-    > ![](http://i.imgur.com/v0LSGDW.png)
+    > ![](http://i.imgur.com/v0LSGDW.png)
 
 2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
     > ![](http://i.imgur.com/zdcWcp0.png)
