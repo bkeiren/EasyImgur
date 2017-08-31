@@ -811,16 +811,16 @@
             // contributorsList
             // 
             this.contributorsList.FormattingEnabled = true;
-            this.contributorsList.Location = new System.Drawing.Point(362, 48);
+            this.contributorsList.Location = new System.Drawing.Point(362, 53);
             this.contributorsList.Name = "contributorsList";
             this.contributorsList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.contributorsList.Size = new System.Drawing.Size(218, 212);
+            this.contributorsList.Size = new System.Drawing.Size(218, 238);
             this.contributorsList.TabIndex = 4;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::EasyImgur.Properties.Resources.ei_logo;
-            this.pictureBox2.Location = new System.Drawing.Point(150, 21);
+            this.pictureBox2.Location = new System.Drawing.Point(152, 53);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(65, 65);
             this.pictureBox2.TabIndex = 3;
@@ -829,7 +829,7 @@
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(155, 95);
+            this.linkLabel2.Location = new System.Drawing.Point(155, 126);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(56, 13);
             this.linkLabel2.TabIndex = 1;
@@ -840,7 +840,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(121, 198);
+            this.linkLabel1.Location = new System.Drawing.Point(121, 229);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(121, 13);
             this.linkLabel1.TabIndex = 2;
@@ -851,7 +851,7 @@
             // appDescriptionLabel
             // 
             this.appDescriptionLabel.AutoSize = true;
-            this.appDescriptionLabel.Location = new System.Drawing.Point(8, 146);
+            this.appDescriptionLabel.Location = new System.Drawing.Point(8, 177);
             this.appDescriptionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.appDescriptionLabel.Name = "appDescriptionLabel";
             this.appDescriptionLabel.Size = new System.Drawing.Size(349, 39);
