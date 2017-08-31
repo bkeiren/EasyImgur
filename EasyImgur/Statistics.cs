@@ -10,7 +10,7 @@ namespace EasyImgur
 {
     static class Statistics
     {
-        private const string StatisticsServerUrl = "http://bryankeiren.com/easyimgur/stats.php";
+        private const string StatisticsServerUrl = "https://bryankeiren.com/easyimgur/stats.php";
         private static readonly Dictionary<String, StatisticsMetric> StatisticsMetrics = new Dictionary<String, StatisticsMetric>()
         {
             {"authorized",  new MetricAuthorized()},                // Whether the user has authorized EasyImgur.
