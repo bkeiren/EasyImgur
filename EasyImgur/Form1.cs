@@ -320,15 +320,32 @@ namespace EasyImgur
         private void UploadAlbum( bool _Anonymous, string[] _Paths, string _AlbumTitle )
         {
             ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
-            List<Image> images = new List<Image>();
+            List<string> validImgPaths = new List<string>();
+            bool hasAtLeastOneFullyValidatedImageFile = false;
             List<string> titles = new List<string>();
             List<string> descriptions = new List<string>();
             int i = 0;
             foreach (string path in _Paths)
             {
+                // instead of loading every file into memory, peek only their header to check if they are valid images
                 try
                 {
-                    images.Add(Image.FromStream(new MemoryStream(File.ReadAllBytes(path))));
+                    if (FileHelper.CheckIfValidImageFileHeader(path))
+                        validImgPaths.Add(path);
+
+                    // in rare case the file might have valid image file header, but upon reading it throws error (maybe corrupted file)
+                    // we can skip those files but at that time code has already done create new album
+                    // so we will only create album if there is at least one fully valid image
+                    if (!hasAtLeastOneFullyValidatedImageFile)
+                    {
+                        try
+                        {
+                            Image.FromStream(new MemoryStream(File.ReadAllBytes(path)));
+                            hasAtLeastOneFullyValidatedImageFile = true;
+                        }
+                        catch { }
+                    }
+
                     //ìmages.Add(System.Drawing.Image.FromStream(stream));
                     string title = string.Empty;
                     string description = string.Empty;
@@ -352,13 +369,13 @@ namespace EasyImgur
                     ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error, true);
                 }
             }
-            if (images.Count == 0)
+            if (validImgPaths.Count == 0 || !hasAtLeastOneFullyValidatedImageFile)
             {
                 Log.Error("Album upload failed: No valid images in selected images!");
                 ShowBalloonTip(2000, "Failed", "Album upload cancelled: No valid images to upload!", ToolTipIcon.Error, true);
                 return;
             }
-            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
+            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(validImgPaths.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
             if (response.Success)
             {
                 // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
