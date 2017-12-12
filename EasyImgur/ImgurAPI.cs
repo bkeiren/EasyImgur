@@ -224,10 +224,11 @@ namespace EasyImgur
             return InternalUploadImage(_URL, true, _Title, _Description, _Anonymous);
         }
 
-        static public APIResponses.AlbumResponse UploadAlbum(Image[] _Images, string _AlbumTitle, bool _Anonymous, string[] _Titles, string[] _Descriptions)
+        static public APIResponses.AlbumResponse UploadAlbum(string[] _Paths, string _AlbumTitle, bool _Anonymous, string[] _Titles, string[] _Descriptions)
         {
             string url = m_EndPoint + "album";
             string responseString = "";
+            Image albumCoverImg = null;
 
             using(WebClient t = new WebClient())
             {
@@ -304,9 +305,18 @@ namespace EasyImgur
 
             // in case I need them later 
             List<APIResponses.ImageResponse> responses = new List<APIResponses.ImageResponse>();
-            for (int i = 0; i < _Images.Count(); ++i)
+            for (int i = 0; i < _Paths.Count(); ++i)
             {
-                Image image = _Images[i];
+                Image image = null;
+                try
+                {
+                    image = Image.FromStream(new System.IO.MemoryStream(System.IO.File.ReadAllBytes(_Paths[i])));
+                    if (image != null) albumCoverImg = image;
+                }
+                catch { }
+
+                if (image == null) continue; //invalid image
+
                 string title = string.Empty;
                 if (i < _Titles.Count())
                     title = _Titles[i];
@@ -376,10 +386,8 @@ namespace EasyImgur
                         break;
                     else
                         i++;
-                if(i < _Images.Length)
-                    resp.CoverImage = _Images[i];
-                else
-                    resp.CoverImage = null;
+
+                 resp.CoverImage = albumCoverImg;
             }
 
             if(resp.Success)
