@@ -320,24 +320,46 @@ namespace EasyImgur
         private void UploadAlbum( bool _Anonymous, string[] _Paths, string _AlbumTitle )
         {
             ShowBalloonTip(2000, "Hold on...", "Attempting to upload album to Imgur (this may take a while)...", ToolTipIcon.None);
-            List<Image> images = new List<Image>();
-            List<string> titles = new List<string>();
-            List<string> descriptions = new List<string>();
-            int i = 0;
+            
+            // Create the album
+            APIResponses.AlbumResponse album_response = ImgurAPI.CreateAlbum(_AlbumTitle, _Anonymous);
+            if (!album_response.Success)
+            {
+                ShowBalloonTip(2000, "Failed", "Could not create album (" + album_response.Status + "): " + album_response.ResponseData.Error, ToolTipIcon.None, true);
+                Statistics.GatherAndSend();
+                return;
+            }
+
+            // If we did manage to create the album we can now try to add images to it
+            int succeeded_count = 0;
+            int failed_count = 0;
+            int image_idx = 0;
+            Image album_thumbnail = null;
+
             foreach (string path in _Paths)
             {
+                // Instead of loading every file into memory, peek only their header to check if they are valid images
                 try
                 {
-                    images.Add(Image.FromStream(new MemoryStream(File.ReadAllBytes(path))));
-                    //ìmages.Add(System.Drawing.Image.FromStream(stream));
+                    Image img = Image.FromStream(new MemoryStream(File.ReadAllBytes(path)));
+                    
                     string title = string.Empty;
                     string description = string.Empty;
 
                     FormattingHelper.FormattingContext format_context = new FormattingHelper.FormattingContext();
                     format_context.FilePath = path;
-                    format_context.AlbumIndex = ++i;
-                    titles.Add(GetTitleString(format_context));
-                    descriptions.Add(GetDescriptionString(format_context));
+                    format_context.AlbumIndex = ++image_idx;
+
+                    APIResponses.ImageResponse resp = ImgurAPI.UploadImage(img, GetTitleString(format_context), GetDescriptionString(format_context), _Anonymous, ref album_response);
+
+                    // If we haven't selected any thumbnail yet, or if the currently uploaded image has been turned into the cover image of the album, turn it into a thumbnail for the history view.
+                    if (album_thumbnail == null || resp.ResponseData.Id == album_response.ResponseData.Cover)
+                        album_thumbnail = img.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+
+                    if (resp.Success)
+                        succeeded_count++;
+                    else
+                        failed_count++;
                 }
                 catch (ArgumentException)
                 {
@@ -352,46 +374,53 @@ namespace EasyImgur
                     ShowBalloonTip(2000, "Failed", "Image is in use by another program (" + path + "):", ToolTipIcon.Error, true);
                 }
             }
-            if (images.Count == 0)
+
+            // If no images managed to upload to the album we should delete it again
+            if (failed_count == _Paths.Count())
             {
-                Log.Error("Album upload failed: No valid images in selected images!");
-                ShowBalloonTip(2000, "Failed", "Album upload cancelled: No valid images to upload!", ToolTipIcon.Error, true);
+                ShowBalloonTip(2000, "Album upload cancelled", "All images failed to upload! Check the log for more info.", ToolTipIcon.Error, true);
+
+                // Delete the album because we couldn't upload anything
+                ImgurAPI.DeleteAlbum(album_response.ResponseData.DeleteHash, _Anonymous);
+
+                Statistics.GatherAndSend();
                 return;
             }
-            APIResponses.AlbumResponse response = ImgurAPI.UploadAlbum(images.ToArray(), _AlbumTitle, _Anonymous, titles.ToArray(), descriptions.ToArray());
-            if (response.Success)
+            
+            // Did we succeed in uploading the album?
+            if (album_response.Success)
             {
-                // clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
+                // Clipboard calls can only be made on an STA thread, threading model is MTA when invoked from context menu
                 if (System.Threading.Thread.CurrentThread.GetApartmentState() != System.Threading.ApartmentState.STA)
                 {
                     this.Invoke(new Action(() =>
                         Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
-                            ? response.ResponseData.Link.Replace("http://", "https://")
-                            : response.ResponseData.Link)));
+                            ? album_response.ResponseData.Link.Replace("http://", "https://")
+                            : album_response.ResponseData.Link)));
                 }
                 else
                 {
                     Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
-                        ? response.ResponseData.Link.Replace("http://", "https://")
-                        : response.ResponseData.Link);
+                        ? album_response.ResponseData.Link.Replace("http://", "https://")
+                        : album_response.ResponseData.Link);
                 }
-
-                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + response.ResponseData.Link, ToolTipIcon.None);
+                
+                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + album_response.ResponseData.Link, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
                 item.Timestamp = DateTime.Now;
-                item.Id = response.ResponseData.Id;
-                item.Link = response.ResponseData.Link;
-                item.Deletehash = response.ResponseData.DeleteHash;
-                item.Title = response.ResponseData.Title;
-                item.Description = response.ResponseData.Description;
+                item.Id = album_response.ResponseData.Id;
+                item.Link = album_response.ResponseData.Link;
+                item.Deletehash = album_response.ResponseData.DeleteHash;
+                item.Title = album_response.ResponseData.Title;
+                item.Description = album_response.ResponseData.Description;
                 item.Anonymous = _Anonymous;
                 item.Album = true;
-                item.Thumbnail = response.CoverImage.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+                item.Thumbnail = album_thumbnail;
                 Invoke(new Action(() => History.StoreHistoryItem(item)));
             }
             else
-                ShowBalloonTip(2000, "Failed", "Could not upload album (" + response.Status + "): " + response.ResponseData.Error, ToolTipIcon.None, true);
+                ShowBalloonTip(2000, "Failed", "Could not upload album (" + album_response.Status + "): " + album_response.ResponseData.Error, ToolTipIcon.None, true);
 
             Statistics.GatherAndSend();
         }

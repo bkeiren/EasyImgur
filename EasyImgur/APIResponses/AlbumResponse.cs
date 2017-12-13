@@ -27,10 +27,10 @@ namespace EasyImgur.APIResponses
             public string Cover { get; set; }
 
             [JsonProperty("cover_width")]
-            public int CoverWidth { get; set; }
+            public int? CoverWidth { get; set; }
 
             [JsonProperty("cover_height")]
-            public int CoverHeight { get; set; }
+            public int? CoverHeight { get; set; }
 
             [JsonProperty("account_url")]
             public string AccountUrl { get; set; }

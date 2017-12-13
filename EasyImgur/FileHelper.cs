@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 
 namespace EasyImgur
@@ -17,12 +19,12 @@ namespace EasyImgur
         /// </summary>
         /// <param name="location">Path of the file to write</param>
         /// <param name="contents">Text to write to file</param>
-        public static void GZipWriteFile(string location, string contents)
+        public static void GZipWriteFile( string _Location, string _Contents )
         {
-            byte[] sourceBytes = Encoding.UTF8.GetBytes(contents); // UTF-8 without BOM
+            byte[] sourceBytes = Encoding.UTF8.GetBytes(_Contents); // UTF-8 without BOM
 
             using (var inStream = new MemoryStream(sourceBytes))
-            using (var fs = new FileStream(location, FileMode.Create, FileAccess.Write)) // Open file for writing, overwrite existing
+            using (var fs = new FileStream(_Location, FileMode.Create, FileAccess.Write)) // Open file for writing, overwrite existing
             using (var outStream = new GZipStream(fs, CompressionMode.Compress))
             {
                 inStream.CopyTo(outStream);
@@ -34,16 +36,16 @@ namespace EasyImgur
         /// </summary>
         /// <param name="location">Path of the file to read.</param>
         /// <returns>Decompressed contents of the file.</returns>
-        public static string GZipReadFile(string location)
+        public static string GZipReadFile( string _Location )
         {
             // 4096 is the default buffer size. Don't know if PeekBytes conflicts with
             // SequentialScan but there doesn't appear to be any difference.
-            using (var fs = new FileStream(location, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
+            using (var fs = new FileStream(_Location, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
             {
                 Stream inStream;
 
                 // Check if file starts with the gzip magic number
-                if (BitConverter.ToUInt16(fs.PeekBytes(2), 0) != GZipMagicNumber) // Could this be shorter with `?:`? Yes! Would it be legible? No!
+                if (BitConverter.ToUInt16(PeekBytes(fs, 2), 0) != GZipMagicNumber) // Could this be shorter with `?:`? Yes! Would it be legible? No!
                 {
                     // Not gzip-compressed, probably old history file version in plain text
                     // or machine is big-endian. We'll worry about the latter when someone
@@ -71,14 +73,14 @@ namespace EasyImgur
         /// <param name="stream">Stream to peek</param>
         /// <param name="count">Amount of bytes to peek</param>
         /// <returns>Peeked bytes</returns>
-        public static byte[] PeekBytes(this Stream stream, int count)
+        public static byte[] PeekBytes( Stream _Stream, int _Count )
         {
-            var buffer = new byte[count];
-            if (!stream.CanSeek)
+            var buffer = new byte[_Count];
+            if (!_Stream.CanSeek)
                 return buffer;
 
-            stream.Read(buffer, 0, count);
-            stream.Seek(0, SeekOrigin.Begin);
+            _Stream.Read(buffer, 0, _Count);
+            _Stream.Seek(0, SeekOrigin.Begin);
             return buffer;
         }
     }
