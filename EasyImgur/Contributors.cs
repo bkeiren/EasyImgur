@@ -42,6 +42,12 @@ namespace EasyImgur
                     Alias = "cxcorp",
                     Url = "https://github.com/cxcorp"
                 },
+                new Contributor
+                {
+                    Name = "sobaarcier",
+                    Alias = null,
+                    Url = "https://github.com/sobaarcier"
+                },
                 // Add new contributor here
 
                 new Contributor // Leave this for last at all times.
