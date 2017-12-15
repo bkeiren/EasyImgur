@@ -12,7 +12,7 @@ namespace EasyImgur
     {
         private static readonly Object LogfileLock = new Object();
         private static bool _firstInvocation = true;
-        private static string SaveLocation
+        public static string SaveLocation
         {
             get
             {
@@ -22,7 +22,7 @@ namespace EasyImgur
                     : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasyImgur\\";
             }
         }
-        private static string LogFile { get { return Path.Combine(SaveLocation, "log.log"); } }
+        public static string LogFile { get { return Path.Combine(SaveLocation, "easyimgur.log"); } }
 
         /// <summary>
         /// Logs an informative message.

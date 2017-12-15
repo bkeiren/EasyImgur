@@ -83,6 +83,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.buttonOpenLogFolder = new System.Windows.Forms.Button();
+            this.buttonViewLog = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.versionLabel = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -114,6 +117,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
             this.groupBoxHistorySelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).BeginInit();
+            this.tabPage5.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -140,6 +144,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(2, 2);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -774,6 +779,46 @@
             this.listBoxHistory.TabIndex = 1;
             this.listBoxHistory.SelectedIndexChanged += new System.EventHandler(this.listBoxHistory_SelectedIndexChanged);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.buttonOpenLogFolder);
+            this.tabPage5.Controls.Add(this.buttonViewLog);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(587, 299);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Log";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // buttonOpenLogFolder
+            // 
+            this.buttonOpenLogFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOpenLogFolder.Location = new System.Drawing.Point(229, 133);
+            this.buttonOpenLogFolder.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOpenLogFolder.Name = "buttonOpenLogFolder";
+            this.buttonOpenLogFolder.Size = new System.Drawing.Size(129, 29);
+            this.buttonOpenLogFolder.TabIndex = 13;
+            this.buttonOpenLogFolder.Text = "Open Log Folder";
+            this.buttonOpenLogFolder.UseVisualStyleBackColor = true;
+            this.buttonOpenLogFolder.Click += new System.EventHandler(this.buttonOpenLogFolder_Click);
+            // 
+            // buttonViewLog
+            // 
+            this.buttonViewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonViewLog.Location = new System.Drawing.Point(229, 100);
+            this.buttonViewLog.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonViewLog.Name = "buttonViewLog";
+            this.buttonViewLog.Size = new System.Drawing.Size(129, 29);
+            this.buttonViewLog.TabIndex = 12;
+            this.buttonViewLog.Text = "View Log";
+            this.buttonViewLog.UseVisualStyleBackColor = true;
+            this.buttonViewLog.Click += new System.EventHandler(this.buttonViewLog_Click);
+            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.versionLabel);
@@ -989,6 +1034,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
             this.groupBoxHistorySelection.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).EndInit();
+            this.tabPage5.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -1073,6 +1119,9 @@
         private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
         private System.Windows.Forms.GroupBox clipboardSettingsContainer;
         private System.Windows.Forms.CheckBox checkBoxShowStartupNotification;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Button buttonViewLog;
+        private System.Windows.Forms.Button buttonOpenLogFolder;
     }
 }
 

@@ -870,5 +870,15 @@ namespace EasyImgur
         {
             this.clipboardSettingsContainer.Enabled = this.checkBoxCopyLinks.Checked;
         }
+
+        private void buttonOpenLogFolder_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Log.SaveLocation);
+        }
+
+        private void buttonViewLog_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Log.LogFile);
+        }
     }
 }
