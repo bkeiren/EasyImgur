@@ -189,14 +189,14 @@ namespace EasyImgur
                         Log.Error("Unexpected Exception: " + ex.ToString());
                     }
                 }
-
+                
                 try
                 {
                     resp = Newtonsoft.Json.JsonConvert.DeserializeObject<APIResponses.ImageResponse>(responseString, new Newtonsoft.Json.JsonSerializerSettings { PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects });
                 }
                 catch (System.Exception ex)
                 {
-                    Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "Stack trace:\n\r" + ex.StackTrace);
+                    Log.Error("Newtonsoft.Json.JsonConvert.DeserializeObject threw an exception!: " + ex.Message + "\nStack trace:\n" + ex.StackTrace + "\nAPI response string:\n" + responseString);
                     resp = null;
                 }
 
@@ -207,7 +207,7 @@ namespace EasyImgur
                     resp = new APIResponses.ImageResponse();
                     resp.Success = false;
                     resp.Status = status;
-                    resp.ResponseData = new APIResponses.ImageResponse.Data() { Error = error };
+                    resp.ResponseData = new APIResponses.ImageResponse.Data() { Error = new APIResponses.BaseResponse.BaseResponseError(error) };
                 }
 
                 if (resp.Success)
@@ -316,7 +316,7 @@ namespace EasyImgur
             {
                 Log.Error("Anonymous album creation didn't return deletehash. Can't add to album.");
                 resp.Success = false;
-                resp.ResponseData.Error = "Imgur API error. Try again in a minute.";
+                resp.ResponseData.Error = new APIResponses.BaseResponse.BaseResponseError("Imgur API error. Try again in a minute.");
                 // can't even be responsible and delete our orphaned album
                 return resp;
             }

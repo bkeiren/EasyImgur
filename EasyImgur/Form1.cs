@@ -325,7 +325,7 @@ namespace EasyImgur
             APIResponses.AlbumResponse album_response = ImgurAPI.CreateAlbum(_AlbumTitle, _Anonymous);
             if (!album_response.Success)
             {
-                ShowBalloonTip(2000, "Failed", "Could not create album (" + album_response.Status + "): " + album_response.ResponseData.Error, ToolTipIcon.None, true);
+                ShowBalloonTip(2000, "Failed", "Could not create album (" + album_response.Status + "): " + album_response.ResponseData.Error.Message, ToolTipIcon.None, true);
                 Statistics.GatherAndSend();
                 return;
             }
@@ -420,7 +420,7 @@ namespace EasyImgur
                 Invoke(new Action(() => History.StoreHistoryItem(item)));
             }
             else
-                ShowBalloonTip(2000, "Failed", "Could not upload album (" + album_response.Status + "): " + album_response.ResponseData.Error, ToolTipIcon.None, true);
+                ShowBalloonTip(2000, "Failed", "Could not upload album (" + album_response.Status + "): " + album_response.ResponseData.Error.Message, ToolTipIcon.None, true);
 
             Statistics.GatherAndSend();
         }
@@ -509,7 +509,7 @@ namespace EasyImgur
                         else
                         {
                             failure++;
-                            ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.Status + "): " + resp.ResponseData.Error, ToolTipIcon.None, true);
+                            ShowBalloonTip(2000, "Failed" + fileCounterString, "Could not upload image (" + resp.Status + "): " + resp.ResponseData.Error.Message, ToolTipIcon.None, true);
                         }
                     }
                     catch (ArgumentException)

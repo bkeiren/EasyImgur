@@ -52,6 +52,9 @@ namespace EasyImgur.APIResponses
             [JsonProperty("section")]
             public string Section { get; set; }
 
+            [JsonProperty("in_gallery")]
+            public bool InGallery { get; set; }
+
             [JsonProperty("deletehash")]
             public string DeleteHash { get; set; }
 
