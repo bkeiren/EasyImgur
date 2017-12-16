@@ -64,7 +64,7 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
 
 6. You can now use the *Upload from file... (to account)* and *Upload from clipboard (to account)* options from the EasyImgur menu.
 
-**NOTE**: EasyImgur will periodically retrieve new authorization codes from Imgur. When this happens, a balloon popup will appear to inform you that EasyImgur has successfully done so (or not, if that should be the case).
+**NOTE**: EasyImgur will periodically retrieve new authorization codes from Imgur. When this happens, a balloon popup will appear to inform you that EasyImgur has successfully done so (or not, if that should be the case). This popup can be disabled from the settings tab.
 
 ## Viewing uploaded images
 
