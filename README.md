@@ -1,4 +1,4 @@
-# ![](http://i.imgur.com/ZbNpyDX.png) EasyImgur
+# ![](https://i.imgur.com/ZbNpyDX.png) EasyImgur
 
 EasyImgur is a small and simple tool to easily upload images to imgur.com from your desktop.
 
@@ -21,12 +21,12 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 [Download EasyImgur](https://github.com/Rycul/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
 
 Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
-> ![](http://i.imgur.com/HPVTZJz.png)
+> ![](https://i.imgur.com/HPVTZJz.png)
 
 ### Uploading from the tray
 
 Open the EasyImgur menu by right-clicking on the tray icon:
-> ![](http://i.imgur.com/wjLl8o2.png)
+> ![](https://i.imgur.com/wjLl8o2.png)
 
 **Upload a file or a clipboard image** (a screenshot or a text URL that you've copied, for example) anonymously by using the *Upload from file...* and *Upload from clipboard* options.
 
@@ -35,32 +35,32 @@ Open the EasyImgur menu by right-clicking on the tray icon:
 You can also upload images or folders with images using the context menu of your file explorer. Note that you will need to tick **Enable context menu** in the settings to access these features.
 
 **Upload a file** by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)** from the context menu.
-> ![](http://i.imgur.com/0CrGjVJ.png)
+> ![](https://i.imgur.com/0CrGjVJ.png)
 
 **Upload an album** from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (**excluding** the pictures in subfolders) will be uploaded and placed into an album.
-> ![](http://i.imgur.com/EvKCFug.png)
+> ![](https://i.imgur.com/EvKCFug.png)
 
 ## Using EasyImgur to upload images to your Imgur account
 
 To upload images to your Imgur account, you must first authorize EasyImgur to access your account.
 
 1. Open the settings dialog by selecting *Settings* from the context menu shown when right-clicking on the EasyImgur icon in the tray. This opens the EasyImgur window. Go to the *Account* tab:
-    > ![](http://i.imgur.com/v0LSGDW.png)
+    > ![](https://i.imgur.com/7h9i2Qi.png)
 
 2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
-    > ![](http://i.imgur.com/zdcWcp0.png)
+    > ![](https://i.imgur.com/ZgYVU6D.png)
 
 3. Select *Allow* and copy the code that is displayed on the next page.
 
 4. Go back to the EasyImgur window. You will see that a popup has been opened:
-    > ![](http://i.imgur.com/99IRt3S.png)
+    > ![](https://i.imgur.com/99IRt3S.png)
    
    Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
 
 5. A balloon popup will be shown to inform you that the authorization was successful. The EasyImgur window will now display *Status: Authorized*:
-    > ![](http://i.imgur.com/yFdSheG.png)
+    > ![](https://i.imgur.com/OrXgcjx.png)
     
-    **NOTE**: To revoke access at any time, you can visit http://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
+    **NOTE**: To revoke access at any time, you can visit https://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
 
 6. You can now use the *Upload from file... (to account)* and *Upload from clipboard (to account)* options from the EasyImgur menu.
 
@@ -79,7 +79,7 @@ Uploaded images (and their URLs) can be found under the ***History*** tab. From 
 
 EasyImgur has a number of different customizable settings. These can be accessed from the *General* tab in the EasyImgur settings window:
 
-![Settings tab screenshot](http://i.imgur.com/7K53osF.png)
+![Settings tab screenshot](https://i.imgur.com/9WeCEzm.png)
 
 #### Copy links to clipboard
 Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
