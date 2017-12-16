@@ -54,6 +54,11 @@ def zipFolder(path, ziph):
 			# Don't attempt to zip the target zipfile itself if it is present in the target directory.
 			if file == os.path.basename(ziph.filename):
 				continue
+
+			# Don't attempt to zip any zip files in the directory because they could be from previous releases
+			if file.endswith(".zip"):
+				print " ignoring: {0}".format(file)
+				continue
 				
 			print " zipping: {0}".format(file)
 			ziph.write(os.path.join(root, file), file)
