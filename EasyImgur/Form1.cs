@@ -429,7 +429,7 @@ namespace EasyImgur
         {
             if(_Paths == null)
             {
-                OpenFileDialog dialog = new OpenFileDialog();
+                System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog();
                 dialog.Multiselect = true;
                 DialogResult res = dialog.ShowDialog();
                 if(res == DialogResult.OK)

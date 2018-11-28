@@ -57,5 +57,11 @@ namespace EasyImgur
                 return Title + "//" + Id;
             }
         }
+        
+        [JsonIgnore]
+        public string ItemType
+        {
+            get { return Album ? "Album" : "Image"; }
+        }
     }
 }

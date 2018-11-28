@@ -27,6 +27,13 @@ namespace EasyImgur
 
         public static bool GatherAndSend()
         {
+            // If the user doesn't want telemetry to be collected we can early out.
+            if (!Properties.Settings.Default.collectTelemetry)
+            {
+                Log.Info("Skipped uploading of metrics because of the user's settings");
+                return true;
+            }
+
             bool success = true;
 
             try
