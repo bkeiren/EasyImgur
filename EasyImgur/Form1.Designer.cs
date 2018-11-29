@@ -307,6 +307,7 @@
             this.checkBoxCopyHttpsLinks.AutoSize = true;
             this.checkBoxCopyHttpsLinks.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxCopyHttpsLinks.Checked = global::EasyImgur.Properties.Settings.Default.copyHttpsLinks;
+            this.checkBoxCopyHttpsLinks.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCopyHttpsLinks.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EasyImgur.Properties.Settings.Default, "copyHttpsLinks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBoxCopyHttpsLinks.Location = new System.Drawing.Point(2, 2);
             this.checkBoxCopyHttpsLinks.Margin = new System.Windows.Forms.Padding(2);
@@ -909,13 +910,13 @@
             // 
             this.linkLabel3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(59, 216);
+            this.linkLabel3.Location = new System.Drawing.Point(56, 216);
             this.linkLabel3.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(199, 13);
+            this.linkLabel3.Size = new System.Drawing.Size(204, 13);
             this.linkLabel3.TabIndex = 5;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "http://imgur.com/account/settings/apps";
+            this.linkLabel3.Text = "https://imgur.com/account/settings/apps";
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // tabPage3
@@ -1315,8 +1316,8 @@
             this.flowLayoutPanel10.Controls.Add(this.linkLabel2);
             this.flowLayoutPanel10.Controls.Add(this.versionLabel);
             this.flowLayoutPanel10.Controls.Add(this.appDescriptionLabel);
-            this.flowLayoutPanel10.Controls.Add(this.linkLabel1);
             this.flowLayoutPanel10.Controls.Add(this.label27);
+            this.flowLayoutPanel10.Controls.Add(this.linkLabel1);
             this.flowLayoutPanel10.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel10.Location = new System.Drawing.Point(164, 87);
             this.flowLayoutPanel10.Name = "flowLayoutPanel10";
@@ -1372,19 +1373,19 @@
             // 
             this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(116, 215);
+            this.linkLabel1.Location = new System.Drawing.Point(134, 228);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(121, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(85, 13);
             this.linkLabel1.TabIndex = 2;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://bryankeiren.com/";
+            this.linkLabel1.Text = "bryankeiren.com";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label27
             // 
             this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(136, 228);
+            this.label27.Location = new System.Drawing.Point(136, 215);
             this.label27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(81, 13);

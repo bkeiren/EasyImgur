@@ -844,17 +844,17 @@ namespace EasyImgur
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://easyimgur.bryankeiren.com/");
+            System.Diagnostics.Process.Start("https://easyimgur.bryankeiren.com/");
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://bryankeiren.com/");
+            System.Diagnostics.Process.Start("https://bryankeiren.com/");
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://imgur.com/account/settings/apps");
+            System.Diagnostics.Process.Start("https://imgur.com/account/settings/apps");
         }
 
         private void btnOpenImageLinkInBrowser_Click(object sender, EventArgs e)
