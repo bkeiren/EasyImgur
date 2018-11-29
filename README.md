@@ -1,4 +1,4 @@
-# ![](https://i.imgur.com/ZbNpyDX.png) EasyImgur
+# ![](https://i.imgur.com/eplOTLf.png) EasyImgur
 
 EasyImgur is a small and simple tool to easily upload images to imgur.com from your desktop.
 
