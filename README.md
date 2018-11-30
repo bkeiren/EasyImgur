@@ -73,8 +73,6 @@ Uploaded images (and their URLs) can be found under the ***History*** tab. From 
   - Remove an uploaded image from your local history database.
   - Open an image's link in your browser.
 
-<!-- TODO: Screenshot of history tab -->
-
 ## Settings
 
 EasyImgur has a number of different customizable settings. These can be accessed from the *General* tab in the EasyImgur settings window:
@@ -127,6 +125,17 @@ This option determines whether the following options are added to the file conte
 	
 #### Enable telemetry
 This option determines whether EasyImgur will send telemetry data regarding how it's being used. This data is used to determine how we can improve EasyImgur.
+
+## History
+
+Your upload history with EasyImgur can be accessed through the *History* tab in the EasyImgur settings window:
+
+> ![](assets/guide/settings_history.png)
+
+This window allows you to:
+- View a list of your uploads
+- View previews and a summary of information of your uploads
+- Remove uploads from Imgur
 
 ## Running in portable mode
 
