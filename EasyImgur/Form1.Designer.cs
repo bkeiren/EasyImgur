@@ -118,7 +118,6 @@
             this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
             this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel13 = new System.Windows.Forms.FlowLayoutPanel();
@@ -980,7 +979,6 @@
             // 
             this.flowLayoutPanel7.Controls.Add(this.groupBox1);
             this.flowLayoutPanel7.Controls.Add(this.groupBoxHistorySelection);
-            this.flowLayoutPanel7.Controls.Add(this.label32);
             this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel7.Name = "flowLayoutPanel7";
@@ -1338,17 +1336,6 @@
             this.label33.TabIndex = 27;
             this.label33.Text = "* Cannot be undone";
             this.label33.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label32
-            // 
-            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label32.AutoSize = true;
-            this.label32.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label32.Location = new System.Drawing.Point(3, 413);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(90, 13);
-            this.label32.TabIndex = 27;
-            this.label32.Text = "This is permanent";
             // 
             // tabPage5
             // 
@@ -1859,7 +1846,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
         private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label label32;
     }
 }
 
