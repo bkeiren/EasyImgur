@@ -1,4 +1,4 @@
-# ![](https://i.imgur.com/eplOTLf.png) EasyImgur
+# ![](assets/logo/logo64.png) EasyImgur
 
 EasyImgur is a small and simple tool to easily upload images to imgur.com from your desktop.
 
@@ -21,12 +21,12 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 [Download EasyImgur](https://github.com/Rycul/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
 
 Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
-> ![](https://i.imgur.com/HPVTZJz.png)
+> ![](assets/guide/tray_icon.png)
 
 ### Uploading from the tray
 
 Open the EasyImgur menu by right-clicking on the tray icon:
-> ![](https://i.imgur.com/wjLl8o2.png)
+> ![](assets/guide/tray_icon_context_menu.png)
 
 **Upload a file or a clipboard image** (a screenshot or a text URL that you've copied, for example) anonymously by using the *Upload from file...* and *Upload from clipboard* options.
 
@@ -35,17 +35,17 @@ Open the EasyImgur menu by right-clicking on the tray icon:
 You can also upload images or folders with images using the context menu of your file explorer. Note that you will need to tick **Enable context menu** in the settings to access these features.
 
 **Upload a file** by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)** from the context menu.
-> ![](https://i.imgur.com/0CrGjVJ.png)
+> ![](assets/guide/file_context_menu.png)
 
 **Upload an album** from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (**excluding** the pictures in subfolders) will be uploaded and placed into an album.
-> ![](https://i.imgur.com/EvKCFug.png)
+> ![](assets/guide/folder_context_menu.png)
 
 ## Using EasyImgur to upload images to your Imgur account
 
 To upload images to your Imgur account, you must first authorize EasyImgur to access your account.
 
 1. Open the settings dialog by selecting *Settings* from the context menu shown when right-clicking on the EasyImgur icon in the tray. This opens the EasyImgur window. Go to the *Account* tab:
-    > ![](https://i.imgur.com/7h9i2Qi.png)
+    > ![](assets/guide/settings_account.png)
 
 2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
     > ![](https://i.imgur.com/ZgYVU6D.png)
@@ -58,7 +58,7 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
    Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
 
 5. A balloon popup will be shown to inform you that the authorization was successful. The EasyImgur window will now display *Status: Authorized*:
-    > ![](https://i.imgur.com/OrXgcjx.png)
+    > ![](assets/guide/settings_account_authorized.png)
     
     **NOTE**: To revoke access at any time, you can visit https://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
 
@@ -79,7 +79,7 @@ Uploaded images (and their URLs) can be found under the ***History*** tab. From 
 
 EasyImgur has a number of different customizable settings. These can be accessed from the *General* tab in the EasyImgur settings window:
 
-![Settings tab screenshot](https://i.imgur.com/9WeCEzm.png)
+![General settings tab screenshot](assets/guide/settings_general.png)
 
 #### Copy links to clipboard
 Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
