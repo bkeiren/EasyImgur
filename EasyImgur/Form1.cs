@@ -252,6 +252,29 @@ namespace EasyImgur
             }
         }
 
+        // Resize @a _Image to an image that fits in [_MaxWidth, _MaxHeight], with the original aspect ratio retained
+        private Image GenerateThumbnailImage(Image _Image, int _MaxWidth, int _MaxHeight)
+        {
+            int original_width = _Image.Width;
+            int original_height = _Image.Height;
+
+            float scale_factor = 1.0f;
+
+            if (_MaxWidth < _MaxHeight)
+                scale_factor = (float)_MaxWidth / original_width;  
+            else
+                scale_factor = (float)_MaxHeight / original_height;
+
+            // Only need to generate a new image if the old one is too large to serve as a thumbnail as-is
+            if (scale_factor >= 1.0f)
+                return _Image;
+
+            int new_width = Math.Max((int)((float)original_width * scale_factor), 1);
+            int new_height = Math.Max((int)((float)original_height * scale_factor), 1);
+
+            return _Image.GetThumbnailImage(new_width, new_height, null, System.IntPtr.Zero);
+        }
+
         private void UploadClipboard( bool _Anonymous )
         {
             APIResponses.ImageResponse resp = null;
@@ -305,8 +328,10 @@ namespace EasyImgur
                 item.Title = resp.ResponseData.Title;
                 item.Description = resp.ResponseData.Description;
                 item.Anonymous = anonymous;
+                item.Width = resp.ResponseData.Width;
+                item.Height = resp.ResponseData.Height;
                 if (clipboardImage != null)
-                    item.Thumbnail = clipboardImage.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+                    item.Thumbnail = GenerateThumbnailImage(clipboardImage, pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height);
                 History.StoreHistoryItem(item);
             }
             else
@@ -360,7 +385,7 @@ namespace EasyImgur
 
                     // If we haven't selected any thumbnail yet, or if the currently uploaded image has been turned into the cover image of the album, turn it into a thumbnail for the history view.
                     if (album_thumbnail == null || resp.ResponseData.Id == album_response.ResponseData.Cover)
-                        album_thumbnail = img.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+                        album_thumbnail = GenerateThumbnailImage(img, pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height);
 
                     if (resp.Success)
                         succeeded_count++;
@@ -509,7 +534,9 @@ namespace EasyImgur
                             item.Title = resp.ResponseData.Title;
                             item.Description = resp.ResponseData.Description;
                             item.Anonymous = _Anonymous;
-                            item.Thumbnail = img.GetThumbnailImage(pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height, null, System.IntPtr.Zero);
+                            item.Width = resp.ResponseData.Width;
+                            item.Height = resp.ResponseData.Height;
+                            item.Thumbnail = GenerateThumbnailImage(img, pictureBoxHistoryThumb.Width, pictureBoxHistoryThumb.Height);
                             Invoke(new Action(() => History.StoreHistoryItem(item)));
                         }
                         else
@@ -866,9 +893,11 @@ namespace EasyImgur
 
         private void btnOpenImageLinkInBrowser_Click(object sender, EventArgs e)
         {
-            HistoryItem item = listBoxHistory.SelectedItem as HistoryItem;
-            if (item != null)
+            foreach (HistoryItem item in listBoxHistory.SelectedItems)
             {
+                if (item == null)
+                    continue;
+            
                 System.Diagnostics.Process.Start(item.Link);
             }
         }

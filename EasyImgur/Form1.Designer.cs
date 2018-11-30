@@ -89,27 +89,36 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
             this.historyItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.pictureBoxHistoryThumb = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxID = new System.Windows.Forms.TextBox();
             this.textBoxLink = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel15 = new System.Windows.Forms.FlowLayoutPanel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBoxTimestamp = new System.Windows.Forms.TextBox();
             this.textBoxDeleteHash = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.textBoxHistoryItemType = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
             this.checkBoxTiedToAccount = new System.Windows.Forms.CheckBox();
-            this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label19 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBoxHistoryItemType = new System.Windows.Forms.TextBox();
             this.groupBoxHistorySelection = new System.Windows.Forms.GroupBox();
-            this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
-            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
+            this.flowLayoutPanel16 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnOpenImageLinkInBrowser = new System.Windows.Forms.Button();
-            this.pictureBoxHistoryThumb = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonRemoveFromHistory = new System.Windows.Forms.Button();
+            this.buttonRemoveFromImgur = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel13 = new System.Windows.Forms.FlowLayoutPanel();
@@ -122,8 +131,8 @@
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.versionLabel = new System.Windows.Forms.Label();
             this.appDescriptionLabel = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label27 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.flowLayoutPanel11 = new System.Windows.Forms.FlowLayoutPanel();
             this.label18 = new System.Windows.Forms.Label();
             this.contributorsList = new System.Windows.Forms.ListBox();
@@ -165,10 +174,13 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).BeginInit();
+            this.flowLayoutPanel7.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.groupBoxHistorySelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).BeginInit();
+            this.flowLayoutPanel15.SuspendLayout();
+            this.groupBoxHistorySelection.SuspendLayout();
+            this.flowLayoutPanel16.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel13.SuspendLayout();
@@ -942,9 +954,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel7);
             this.splitContainer1.Size = new System.Drawing.Size(918, 416);
-            this.splitContainer1.SplitterDistance = 301;
+            this.splitContainer1.SplitterDistance = 256;
             this.splitContainer1.TabIndex = 4;
             // 
             // listBoxHistory
@@ -954,10 +966,9 @@
             this.listBoxHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxHistory.FormattingEnabled = true;
             this.listBoxHistory.Location = new System.Drawing.Point(0, 0);
-            this.listBoxHistory.Margin = new System.Windows.Forms.Padding(2);
             this.listBoxHistory.Name = "listBoxHistory";
             this.listBoxHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxHistory.Size = new System.Drawing.Size(301, 416);
+            this.listBoxHistory.Size = new System.Drawing.Size(256, 416);
             this.listBoxHistory.TabIndex = 1;
             this.listBoxHistory.SelectedIndexChanged += new System.EventHandler(this.listBoxHistory_SelectedIndexChanged);
             // 
@@ -965,20 +976,25 @@
             // 
             this.historyItemBindingSource.DataSource = typeof(EasyImgur.HistoryItem);
             // 
+            // flowLayoutPanel7
+            // 
+            this.flowLayoutPanel7.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel7.Controls.Add(this.groupBoxHistorySelection);
+            this.flowLayoutPanel7.Controls.Add(this.label32);
+            this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel7.Name = "flowLayoutPanel7";
+            this.flowLayoutPanel7.Size = new System.Drawing.Size(658, 416);
+            this.flowLayoutPanel7.TabIndex = 20;
+            // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.groupBox1.Controls.Add(this.tableLayoutPanel2);
-            this.groupBox1.Controls.Add(this.flowLayoutPanel7);
-            this.groupBox1.Controls.Add(this.label19);
-            this.groupBox1.Controls.Add(this.groupBoxHistorySelection);
-            this.groupBox1.Controls.Add(this.btnOpenImageLinkInBrowser);
-            this.groupBox1.Controls.Add(this.pictureBoxHistoryThumb);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(613, 416);
+            this.groupBox1.Size = new System.Drawing.Size(459, 407);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Info";
@@ -986,50 +1002,80 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label19, 0, 7);
+            this.tableLayoutPanel2.Controls.Add(this.label29, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.pictureBoxHistoryThumb, 1, 7);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.label9, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.textBoxID, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.textBoxLink, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel15, 1, 5);
             this.tableLayoutPanel2.Controls.Add(this.textBoxTimestamp, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.textBoxDeleteHash, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.label24, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.textBoxHistoryItemType, 1, 4);
             this.tableLayoutPanel2.Controls.Add(this.label25, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.checkBoxTiedToAccount, 1, 5);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 18);
+            this.tableLayoutPanel2.Controls.Add(this.checkBoxTiedToAccount, 1, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label24, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.textBoxHistoryItemType, 1, 4);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(2, 15);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 6;
+            this.tableLayoutPanel2.RowCount = 8;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(371, 143);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(455, 390);
             this.tableLayoutPanel2.TabIndex = 24;
             // 
-            // label1
+            // label19
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(72, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "ID";
+            this.label19.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(21, 269);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(45, 13);
+            this.label19.TabIndex = 25;
+            this.label19.Text = "Preview";
+            // 
+            // label29
+            // 
+            this.label29.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(9, 125);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(57, 13);
+            this.label29.TabIndex = 26;
+            this.label29.Text = "Resolution";
+            // 
+            // pictureBoxHistoryThumb
+            // 
+            this.pictureBoxHistoryThumb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxHistoryThumb.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.historyItemBindingSource, "Thumbnail", true));
+            this.pictureBoxHistoryThumb.Location = new System.Drawing.Point(71, 164);
+            this.pictureBoxHistoryThumb.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBoxHistoryThumb.Name = "pictureBoxHistoryThumb";
+            this.pictureBoxHistoryThumb.Size = new System.Drawing.Size(382, 224);
+            this.pictureBoxHistoryThumb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxHistoryThumb.TabIndex = 11;
+            this.pictureBoxHistoryThumb.TabStop = false;
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(63, 24);
+            this.label2.Location = new System.Drawing.Point(40, 29);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 13);
@@ -1038,20 +1084,20 @@
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 48);
+            this.label3.Location = new System.Drawing.Point(3, 53);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Delete Hash";
+            this.label3.Text = "Delete hash";
             // 
             // label9
             // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(32, 72);
+            this.label9.Location = new System.Drawing.Point(9, 77);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(58, 13);
@@ -1062,72 +1108,98 @@
             // 
             this.textBoxID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxID.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Id", true));
-            this.textBoxID.Location = new System.Drawing.Point(94, 2);
+            this.textBoxID.Location = new System.Drawing.Point(71, 2);
             this.textBoxID.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxID.Name = "textBoxID";
             this.textBoxID.ReadOnly = true;
-            this.textBoxID.Size = new System.Drawing.Size(275, 20);
+            this.textBoxID.Size = new System.Drawing.Size(382, 20);
             this.textBoxID.TabIndex = 2;
             // 
             // textBoxLink
             // 
             this.textBoxLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLink.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Link", true));
-            this.textBoxLink.Location = new System.Drawing.Point(94, 26);
+            this.textBoxLink.Location = new System.Drawing.Point(71, 26);
             this.textBoxLink.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLink.Name = "textBoxLink";
             this.textBoxLink.ReadOnly = true;
-            this.textBoxLink.Size = new System.Drawing.Size(275, 20);
+            this.textBoxLink.Size = new System.Drawing.Size(382, 20);
             this.textBoxLink.TabIndex = 3;
+            // 
+            // flowLayoutPanel15
+            // 
+            this.flowLayoutPanel15.AutoSize = true;
+            this.flowLayoutPanel15.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel15.Controls.Add(this.textBox1);
+            this.flowLayoutPanel15.Controls.Add(this.label30);
+            this.flowLayoutPanel15.Controls.Add(this.textBox2);
+            this.flowLayoutPanel15.Location = new System.Drawing.Point(69, 120);
+            this.flowLayoutPanel15.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel15.Name = "flowLayoutPanel15";
+            this.flowLayoutPanel15.Size = new System.Drawing.Size(160, 24);
+            this.flowLayoutPanel15.TabIndex = 27;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Width", true));
+            this.textBox1.Location = new System.Drawing.Point(2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(68, 20);
+            this.textBox1.TabIndex = 26;
+            // 
+            // label30
+            // 
+            this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(74, 0);
+            this.label30.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(12, 24);
+            this.label30.TabIndex = 29;
+            this.label30.Text = "x";
+            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Height", true));
+            this.textBox2.Location = new System.Drawing.Point(90, 2);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(68, 20);
+            this.textBox2.TabIndex = 28;
             // 
             // textBoxTimestamp
             // 
             this.textBoxTimestamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTimestamp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Timestamp", true));
-            this.textBoxTimestamp.Location = new System.Drawing.Point(94, 74);
+            this.textBoxTimestamp.Location = new System.Drawing.Point(71, 74);
             this.textBoxTimestamp.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTimestamp.Name = "textBoxTimestamp";
             this.textBoxTimestamp.ReadOnly = true;
-            this.textBoxTimestamp.Size = new System.Drawing.Size(275, 20);
+            this.textBoxTimestamp.Size = new System.Drawing.Size(382, 20);
             this.textBoxTimestamp.TabIndex = 5;
             // 
             // textBoxDeleteHash
             // 
             this.textBoxDeleteHash.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxDeleteHash.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "Deletehash", true));
-            this.textBoxDeleteHash.Location = new System.Drawing.Point(94, 50);
+            this.textBoxDeleteHash.Location = new System.Drawing.Point(71, 50);
             this.textBoxDeleteHash.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxDeleteHash.Name = "textBoxDeleteHash";
             this.textBoxDeleteHash.ReadOnly = true;
-            this.textBoxDeleteHash.Size = new System.Drawing.Size(275, 20);
+            this.textBoxDeleteHash.Size = new System.Drawing.Size(382, 20);
             this.textBoxDeleteHash.TabIndex = 4;
-            // 
-            // label24
-            // 
-            this.label24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(3, 120);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(86, 13);
-            this.label24.TabIndex = 22;
-            this.label24.Text = "On your account";
-            // 
-            // textBoxHistoryItemType
-            // 
-            this.textBoxHistoryItemType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxHistoryItemType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "ItemType", true));
-            this.textBoxHistoryItemType.Location = new System.Drawing.Point(94, 98);
-            this.textBoxHistoryItemType.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxHistoryItemType.Name = "textBoxHistoryItemType";
-            this.textBoxHistoryItemType.ReadOnly = true;
-            this.textBoxHistoryItemType.Size = new System.Drawing.Size(275, 20);
-            this.textBoxHistoryItemType.TabIndex = 25;
             // 
             // label25
             // 
-            this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label25.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(58, 96);
+            this.label25.Location = new System.Drawing.Point(35, 101);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(31, 13);
             this.label25.TabIndex = 25;
@@ -1135,10 +1207,11 @@
             // 
             // checkBoxTiedToAccount
             // 
+            this.checkBoxTiedToAccount.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.checkBoxTiedToAccount.AutoSize = true;
             this.checkBoxTiedToAccount.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.historyItemBindingSource, "TiedToAccount", true));
             this.checkBoxTiedToAccount.Enabled = false;
-            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(94, 122);
+            this.checkBoxTiedToAccount.Location = new System.Drawing.Point(71, 146);
             this.checkBoxTiedToAccount.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxTiedToAccount.Name = "checkBoxTiedToAccount";
             this.checkBoxTiedToAccount.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1147,62 +1220,69 @@
             this.checkBoxTiedToAccount.TabStop = false;
             this.checkBoxTiedToAccount.UseVisualStyleBackColor = true;
             // 
-            // flowLayoutPanel7
+            // label1
             // 
-            this.flowLayoutPanel7.Location = new System.Drawing.Point(57, 302);
-            this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-            this.flowLayoutPanel7.Size = new System.Drawing.Size(200, 100);
-            this.flowLayoutPanel7.TabIndex = 23;
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(49, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "ID";
             // 
-            // label19
+            // label24
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(9, 189);
-            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(45, 13);
-            this.label19.TabIndex = 22;
-            this.label19.Text = "Preview";
+            this.label24.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(3, 146);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(63, 13);
+            this.label24.TabIndex = 22;
+            this.label24.Text = "On account";
+            // 
+            // textBoxHistoryItemType
+            // 
+            this.textBoxHistoryItemType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxHistoryItemType.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.historyItemBindingSource, "ItemType", true));
+            this.textBoxHistoryItemType.Location = new System.Drawing.Point(71, 98);
+            this.textBoxHistoryItemType.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxHistoryItemType.Name = "textBoxHistoryItemType";
+            this.textBoxHistoryItemType.ReadOnly = true;
+            this.textBoxHistoryItemType.Size = new System.Drawing.Size(382, 20);
+            this.textBoxHistoryItemType.TabIndex = 25;
             // 
             // groupBoxHistorySelection
             // 
-            this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromImgur);
-            this.groupBoxHistorySelection.Controls.Add(this.buttonRemoveFromHistory);
-            this.groupBoxHistorySelection.Location = new System.Drawing.Point(230, 186);
+            this.groupBoxHistorySelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxHistorySelection.AutoSize = true;
+            this.groupBoxHistorySelection.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBoxHistorySelection.Controls.Add(this.flowLayoutPanel16);
+            this.groupBoxHistorySelection.Location = new System.Drawing.Point(468, 3);
             this.groupBoxHistorySelection.Name = "groupBoxHistorySelection";
-            this.groupBoxHistorySelection.Size = new System.Drawing.Size(169, 74);
+            this.groupBoxHistorySelection.Size = new System.Drawing.Size(180, 216);
             this.groupBoxHistorySelection.TabIndex = 19;
             this.groupBoxHistorySelection.TabStop = false;
             this.groupBoxHistorySelection.Text = "Selection: 0 items";
             // 
-            // buttonRemoveFromImgur
+            // flowLayoutPanel16
             // 
-            this.buttonRemoveFromImgur.Enabled = false;
-            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(5, 46);
-            this.buttonRemoveFromImgur.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonRemoveFromImgur.Name = "buttonRemoveFromImgur";
-            this.buttonRemoveFromImgur.Size = new System.Drawing.Size(156, 24);
-            this.buttonRemoveFromImgur.TabIndex = 8;
-            this.buttonRemoveFromImgur.Text = "Delete from Imgur";
-            this.buttonRemoveFromImgur.UseVisualStyleBackColor = true;
-            this.buttonRemoveFromImgur.Click += new System.EventHandler(this.buttonRemoveFromImgur_Click);
-            // 
-            // buttonRemoveFromHistory
-            // 
-            this.buttonRemoveFromHistory.Enabled = false;
-            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(5, 18);
-            this.buttonRemoveFromHistory.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
-            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(156, 24);
-            this.buttonRemoveFromHistory.TabIndex = 7;
-            this.buttonRemoveFromHistory.Text = "Clear from history";
-            this.buttonRemoveFromHistory.UseMnemonic = false;
-            this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
-            this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
+            this.flowLayoutPanel16.AutoSize = true;
+            this.flowLayoutPanel16.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel16.Controls.Add(this.btnOpenImageLinkInBrowser);
+            this.flowLayoutPanel16.Controls.Add(this.panel1);
+            this.flowLayoutPanel16.Controls.Add(this.buttonRemoveFromHistory);
+            this.flowLayoutPanel16.Controls.Add(this.buttonRemoveFromImgur);
+            this.flowLayoutPanel16.Controls.Add(this.label33);
+            this.flowLayoutPanel16.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel16.Location = new System.Drawing.Point(8, 31);
+            this.flowLayoutPanel16.Name = "flowLayoutPanel16";
+            this.flowLayoutPanel16.Size = new System.Drawing.Size(166, 166);
+            this.flowLayoutPanel16.TabIndex = 25;
             // 
             // btnOpenImageLinkInBrowser
             // 
-            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(382, 18);
+            this.btnOpenImageLinkInBrowser.Location = new System.Drawing.Point(3, 3);
             this.btnOpenImageLinkInBrowser.Name = "btnOpenImageLinkInBrowser";
             this.btnOpenImageLinkInBrowser.Size = new System.Drawing.Size(160, 46);
             this.btnOpenImageLinkInBrowser.TabIndex = 6;
@@ -1210,15 +1290,65 @@
             this.btnOpenImageLinkInBrowser.UseVisualStyleBackColor = true;
             this.btnOpenImageLinkInBrowser.Click += new System.EventHandler(this.btnOpenImageLinkInBrowser_Click);
             // 
-            // pictureBoxHistoryThumb
+            // panel1
             // 
-            this.pictureBoxHistoryThumb.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.historyItemBindingSource, "Thumbnail", true));
-            this.pictureBoxHistoryThumb.Location = new System.Drawing.Point(58, 186);
-            this.pictureBoxHistoryThumb.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBoxHistoryThumb.Name = "pictureBoxHistoryThumb";
-            this.pictureBoxHistoryThumb.Size = new System.Drawing.Size(148, 112);
-            this.pictureBoxHistoryThumb.TabIndex = 11;
-            this.pictureBoxHistoryThumb.TabStop = false;
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Location = new System.Drawing.Point(3, 55);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(160, 39);
+            this.panel1.TabIndex = 25;
+            // 
+            // buttonRemoveFromHistory
+            // 
+            this.buttonRemoveFromHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemoveFromHistory.Enabled = false;
+            this.buttonRemoveFromHistory.Location = new System.Drawing.Point(2, 99);
+            this.buttonRemoveFromHistory.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonRemoveFromHistory.Name = "buttonRemoveFromHistory";
+            this.buttonRemoveFromHistory.Size = new System.Drawing.Size(162, 24);
+            this.buttonRemoveFromHistory.TabIndex = 7;
+            this.buttonRemoveFromHistory.Text = "Clear from history *";
+            this.buttonRemoveFromHistory.UseMnemonic = false;
+            this.buttonRemoveFromHistory.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromHistory.Click += new System.EventHandler(this.buttonRemoveFromHistory_Click);
+            // 
+            // buttonRemoveFromImgur
+            // 
+            this.buttonRemoveFromImgur.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemoveFromImgur.Enabled = false;
+            this.buttonRemoveFromImgur.Location = new System.Drawing.Point(2, 127);
+            this.buttonRemoveFromImgur.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonRemoveFromImgur.Name = "buttonRemoveFromImgur";
+            this.buttonRemoveFromImgur.Size = new System.Drawing.Size(162, 24);
+            this.buttonRemoveFromImgur.TabIndex = 8;
+            this.buttonRemoveFromImgur.Text = "Delete from Imgur *";
+            this.buttonRemoveFromImgur.UseVisualStyleBackColor = true;
+            this.buttonRemoveFromImgur.Click += new System.EventHandler(this.buttonRemoveFromImgur_Click);
+            // 
+            // label33
+            // 
+            this.label33.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label33.AutoSize = true;
+            this.label33.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.label33.Location = new System.Drawing.Point(61, 153);
+            this.label33.Name = "label33";
+            this.label33.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label33.Size = new System.Drawing.Size(102, 13);
+            this.label33.TabIndex = 27;
+            this.label33.Text = "* Cannot be undone";
+            this.label33.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label32
+            // 
+            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label32.AutoSize = true;
+            this.label32.ForeColor = System.Drawing.Color.OrangeRed;
+            this.label32.Location = new System.Drawing.Point(3, 413);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(90, 13);
+            this.label32.TabIndex = 27;
+            this.label32.Text = "This is permanent";
             // 
             // tabPage5
             // 
@@ -1369,18 +1499,6 @@
             this.appDescriptionLabel.Text = "EasyImgur is a small and simple tool to easily upload images to imgur.com";
             this.appDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(134, 228);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(85, 13);
-            this.linkLabel1.TabIndex = 2;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "bryankeiren.com";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
             // label27
             // 
             this.label27.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -1392,6 +1510,18 @@
             this.label27.TabIndex = 7;
             this.label27.Text = "by Bryan Keiren";
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(134, 228);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(85, 13);
+            this.linkLabel1.TabIndex = 2;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "bryankeiren.com";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // flowLayoutPanel11
             // 
@@ -1579,12 +1709,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.historyItemBindingSource)).EndInit();
+            this.flowLayoutPanel7.ResumeLayout(false);
+            this.flowLayoutPanel7.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.groupBoxHistorySelection.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistoryThumb)).EndInit();
+            this.flowLayoutPanel15.ResumeLayout(false);
+            this.flowLayoutPanel15.PerformLayout();
+            this.groupBoxHistorySelection.ResumeLayout(false);
+            this.groupBoxHistorySelection.PerformLayout();
+            this.flowLayoutPanel16.ResumeLayout(false);
+            this.flowLayoutPanel16.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
@@ -1670,7 +1807,6 @@
         private System.Windows.Forms.BindingSource historyItemBindingSource;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ListBox contributorsList;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.CheckBox checkBoxCopyHttpsLinks;
         private System.Windows.Forms.CheckBox checkBoxShowStartupNotification;
@@ -1693,7 +1829,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
         private System.Windows.Forms.TextBox textBoxHistoryItemType;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
@@ -1714,6 +1849,17 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Label labelPortableModeNote;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel15;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel16;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label32;
     }
 }
 
