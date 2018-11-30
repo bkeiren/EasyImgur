@@ -18,7 +18,7 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 
 ### Downloading and running
 
-[Download EasyImgur](https://github.com/Rycul/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
+[Download EasyImgur](https://github.com/bkeiren/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
 
 Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
 > ![](assets/guide/tray_icon.png)
@@ -48,12 +48,12 @@ To upload images to your Imgur account, you must first authorize EasyImgur to ac
     > ![](assets/guide/settings_account.png)
 
 2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
-    > ![](https://i.imgur.com/ZgYVU6D.png)
+    > ![](assets/guide/imgur_authorization_page.png)
 
 3. Select *Allow* and copy the code that is displayed on the next page.
 
 4. Go back to the EasyImgur window. You will see that a popup has been opened:
-    > ![](https://i.imgur.com/99IRt3S.png)
+    > ![](assets/guide/authorization_pin_dialog.png)
    
    Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
 
@@ -83,6 +83,9 @@ EasyImgur has a number of different customizable settings. These can be accessed
 
 #### Copy links to clipboard
 Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
+
+#### As HTTPS links
+Determines whether uploaded image links will be put on the clipboard as HTTPS links or HTTP links (if possible at all)
 
 #### Clear clipboard immediately on upload
 Determines whether the clipboard will be cleared after uploading from it.
@@ -122,6 +125,9 @@ This option determines whether the following options are added to the file conte
     - Upload to Imgur
     - Upload to Imgur (anonymous)
 	
+#### Enable telemetry
+This option determines whether EasyImgur will send telemetry data regarding how it's being used. This data is used to determine how we can improve EasyImgur.
+
 ## Running in portable mode
 
 EasyImgur can be run in portable mode to allow you to take your settings and account authorization tokens with you on (for example) a USB drive! To run EasyImgur in portable mode simply start it with the command line switch `/portable`:
