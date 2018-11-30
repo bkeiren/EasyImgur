@@ -55,6 +55,12 @@ namespace EasyImgur
                 singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Args });
         }
 
+        // Ensure that the clipboard settings container is enabled or disabled based on the master clipboard setting
+        private void SyncClipboardSettingsContainerEnabledState()
+        {
+            this.clipboardSettingsContainer.Enabled = this.checkBoxCopyLinks.Checked;
+        }
+
         private void InitializeEventHandlers()
         {
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
@@ -567,6 +573,7 @@ namespace EasyImgur
 
             // Assign control values. Most values are set using application binding on the control.
             comboBoxImageFormat.SelectedIndex = Properties.Settings.Default.imageFormat;
+            SyncClipboardSettingsContainerEnabledState();
 
             // Check the registry for a key describing whether EasyImgur should be started on boot.
             Microsoft.Win32.RegistryKey registryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -868,7 +875,7 @@ namespace EasyImgur
 
         private void checkBoxCopyLinks_CheckedChanged(object sender, EventArgs e)
         {
-            this.clipboardSettingsContainer.Enabled = this.checkBoxCopyLinks.Checked;
+            SyncClipboardSettingsContainerEnabledState();
         }
 
         private void buttonOpenLogFolder_Click(object sender, EventArgs e)
