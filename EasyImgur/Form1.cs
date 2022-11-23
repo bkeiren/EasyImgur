@@ -27,11 +27,12 @@ namespace EasyImgur
         public Form1(SingleInstance _SingleInstance, string[] _Args)
         {
             InitializeComponent();
+            
 
             ImplementPortableMode();
 
             CreateHandle(); // force the handle to be created so Invoke succeeds; see issue #8 for more detail
-
+            HotKey.RegisterHotKey(Handle, 101, 0, Keys.F3);
             this.notifyIcon1.ContextMenu = this.trayMenu;
 
             this.versionLabel.Text = "Version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -48,11 +49,68 @@ namespace EasyImgur
 
             ImgurAPI.AttemptRefreshTokensFromDisk();
 
-            Statistics.GatherAndSend();
+            //禁止收集信息
+            //Statistics.GatherAndSend();
 
             _SingleInstance.ArgumentsReceived += singleInstance_ArgumentsReceived;
             if(_Args.Length > 0) // handle initial arguments
                 singleInstance_ArgumentsReceived(this, new ArgumentsReceivedEventArgs() { Args = _Args });
+        }
+        class HotKey
+        {
+            //如果函数执行成功，返回值不为0。
+            //如果函数执行失败，返回值为0。要得到扩展错误信息，调用GetLastError。
+            [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+            public static extern bool RegisterHotKey(IntPtr hWnd,                //要定义热键的窗口的句柄
+               int id,                     //定义热键ID（不能与其它ID重复）
+                KeyModifiers fsModifiers,   //标识热键是否在按Alt、Ctrl、Shift、Windows等键时才会生效
+                Keys vk                     //定义热键的内容
+                );
+            [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+            public static extern bool UnregisterHotKey(
+                IntPtr hWnd,                //要取消热键的窗口的句柄
+                int id                      //要取消热键的ID
+                );
+            //定义了辅助键的名称（将数字转变为字符以便于记忆，也可去除此枚举而直接使用数值）
+            [Flags()]
+            public enum KeyModifiers
+            {
+                None = 0,
+                Alt = 1,
+                Ctrl = 2,
+                Shift = 4,
+                WindowsKey = 8
+            }
+        }
+        protected override void WndProc(ref Message m)
+        {
+
+            const int WM_HOTKEY = 0x0312;
+            //按快捷键 
+            switch (m.Msg)
+            {
+                case WM_HOTKEY:
+                    switch (m.WParam.ToInt32())
+                    {
+                        case 100:    //按下的是Shift+S
+                                     //此处填写快捷键响应代码 
+                            break;
+                        case 101:
+                            {//按下的是Ctrl+B
+                             //此处填写快捷键响应代码
+                             //MessageBox.Show("hot key");
+                                this.Show();
+                                // private void uploadClipboardAnonymousTrayMenuItem_Click(object sender, EventArgs e)
+                                UploadClipboard(true);
+                            }
+                            break;
+                        case 102:    //按下的是Alt+D
+                                     //此处填写快捷键响应代码
+                            break;
+                    }
+                    break;
+            }
+            base.WndProc(ref m);
         }
 
         // Ensure that the clipboard settings container is enabled or disabled based on the master clipboard setting
@@ -203,7 +261,7 @@ namespace EasyImgur
 
         private void ApplicationExit( object sender, EventArgs e )
         {
-            Statistics.GatherAndSend();
+            //Statistics.GatherAndSend();
 
             ImgurAPI.OnMainThreadExit();
             if (notifyIcon1 != null)
@@ -277,6 +335,7 @@ namespace EasyImgur
 
         private void UploadClipboard( bool _Anonymous )
         {
+            string result = "";
             APIResponses.ImageResponse resp = null;
             Image clipboardImage = null;
             string clipboardURL = string.Empty;
@@ -313,12 +372,25 @@ namespace EasyImgur
                 // this doesn't need an invocation guard because this function can't be called from the context menu
                 if (Properties.Settings.Default.copyLinks)
                 {
-                    Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
-                        ? resp.ResponseData.Link.Replace("http://", "https://")
-                        : resp.ResponseData.Link);
+                    //Clipboard.SetText(Properties.Settings.Default.copyHttpsLinks
+                       // ? resp.ResponseData.Link.Replace("http://", "https://")
+                        //: resp.ResponseData.Link);
+
+                    // 增加markdown判断
+                    if (checkBox_markdown.Checked == true)
+                    {
+                        result = "![](" + resp.ResponseData.Link + ")";
+                        Clipboard.SetText(result);
+                    }
+                    else if (checkBox_markdown.Checked == false)
+                    {
+                        result = resp.ResponseData.Link;
+                        Clipboard.SetText(result);
+
+                    }
                 }
 
-                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard" : "Upload placed in history: " + resp.ResponseData.Link, ToolTipIcon.None);
+                ShowBalloonTip(2000, "Success!", Properties.Settings.Default.copyLinks ? "Link copied to clipboard"+'\n' + result : "Upload placed in history: " + result, ToolTipIcon.None);
 
                 HistoryItem item = new HistoryItem();
                 item.Timestamp = DateTime.Now;
@@ -345,7 +417,7 @@ namespace EasyImgur
                     Clipboard.SetText(clipboardURL, TextDataFormat.UnicodeText);
             }
 
-            Statistics.GatherAndSend();
+            //Statistics.GatherAndSend();
         }
 
         private void UploadAlbum( bool _Anonymous, string[] _Paths, string _AlbumTitle )
@@ -357,7 +429,7 @@ namespace EasyImgur
             if (!album_response.Success)
             {
                 ShowBalloonTip(2000, "Failed", "Could not create album (" + album_response.Status + "): " + album_response.ResponseData.Error.Message, ToolTipIcon.None, true);
-                Statistics.GatherAndSend();
+                //Statistics.GatherAndSend();
                 return;
             }
 
@@ -414,7 +486,7 @@ namespace EasyImgur
                 // Delete the album because we couldn't upload anything
                 ImgurAPI.DeleteAlbum(album_response.ResponseData.DeleteHash, _Anonymous);
 
-                Statistics.GatherAndSend();
+                //Statistics.GatherAndSend();
                 return;
             }
             
@@ -453,7 +525,7 @@ namespace EasyImgur
             else
                 ShowBalloonTip(2000, "Failed", "Could not upload album (" + album_response.Status + "): " + album_response.ResponseData.Error.Message, ToolTipIcon.None, true);
 
-            Statistics.GatherAndSend();
+            //Statistics.GatherAndSend();
         }
 
         private void UploadFile( bool _Anonymous, string[] _Paths = null )
@@ -565,7 +637,7 @@ namespace EasyImgur
                 }
             }
 
-            Statistics.GatherAndSend();
+            //Statistics.GatherAndSend();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -728,12 +800,16 @@ namespace EasyImgur
                 buttonRemoveFromImgur.Enabled = false;
                 buttonRemoveFromHistory.Enabled = false;
                 btnOpenImageLinkInBrowser.Enabled = false;
+                button_copyLink.Enabled = false;
+                button_copyMarkdown.Enabled = false;
             }
             else
             {
                 buttonRemoveFromImgur.Enabled = item.Anonymous || (!item.Anonymous && ImgurAPI.HasBeenAuthorized());
                 buttonRemoveFromHistory.Enabled = true;
                 btnOpenImageLinkInBrowser.Enabled = true;
+                button_copyLink.Enabled = true;
+                button_copyMarkdown.Enabled = true;
             }
         }
 
@@ -785,7 +861,7 @@ namespace EasyImgur
             }
             listBoxHistory.EndUpdate();
 
-            Statistics.GatherAndSend();
+            //Statistics.GatherAndSend();
         }
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
@@ -915,6 +991,56 @@ namespace EasyImgur
         private void buttonViewLog_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(Log.LogFile);
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HotKey.UnregisterHotKey(Handle, 101);
+        }
+
+
+        private void checkBox_poet_hotkey_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (checkBox_poet_hotkey.Checked == true)
+            {
+                HotKey.RegisterHotKey(Handle, 101, 0, Keys.F3);
+//                MessageBox.Show("1");
+            }
+            else if (checkBox_poet_hotkey.Checked == false)
+            {
+                HotKey.UnregisterHotKey(Handle, 101);
+//                MessageBox.Show("2");
+            }
+
+        }
+
+        private void button_copyLink_Click(object sender, EventArgs e)
+        {
+            Clipboard.Clear();
+            string a = "";
+            foreach (HistoryItem item in listBoxHistory.SelectedItems)
+            {
+                if (item == null)
+                    return;
+                a = a + "\n" + item.Link;
+            }
+            a = a.Trim();
+            Clipboard.SetText(a);
+            MessageBox.Show(a.ToString());
+        }
+
+        private void button_copyMarkdown_Click(object sender, EventArgs e)
+        {
+            Clipboard.Clear();
+            string a = "";
+            foreach (HistoryItem item in listBoxHistory.SelectedItems)
+            {
+             if (item == null)
+                return;
+             a = a + "\n" + "![](" + item.Link+")";
+            }
+            a = a.Trim();
+            Clipboard.SetText(a);
+            MessageBox.Show(a.ToString());
         }
     }
 }

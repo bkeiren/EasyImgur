@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EasyImgur</RootNamespace>
     <AssemblyName>EasyImgur</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -197,6 +197,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <None Include="ei_logo.png" />
+    <None Include="BlueNoob_Banner.png" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
