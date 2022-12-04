@@ -195,6 +195,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SelectRows.png" />
+    <None Include="Resources\SelectColumns.png" />
+    <None Include="Resources\SelectAll.png" />
+    <None Include="Resources\OpenLink.png" />
+    <None Include="Resources\RemoveFromCollection.png" />
+    <None Include="Resources\Delete.png" />
+    <None Include="Resources\Copy.png" />
     <EmbeddedResource Include="Newtonsoft.Json.dll" />
     <None Include="ei_logo.png" />
     <Content Include="icon.ico" />

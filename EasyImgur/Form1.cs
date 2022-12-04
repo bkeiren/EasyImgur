@@ -757,15 +757,55 @@ namespace EasyImgur
             return FormatInfoString(textBoxDescriptionFormat.Text, _FormattingContext);
         }
 
-        private void buttonRemoveFromImgur_Click(object sender, EventArgs e)
+        private SortedSet<int> getSelectedRowIndicesFromHistoryGridView()
         {
-            int count = listBoxHistory.SelectedItems.Count;
+            SortedSet<int> unique_row_indices = new SortedSet<int>();
+            
+            // Generate a sorted set of unique row indices. This accomplishes multiple goals:
+            // - We want the set to be sorted
+            // - We want to only output a given row index once, even if multiple cells are selected for a given row/column (DataGridView.SelectedRows and DataGridView.SelectedColumns are empty unless an entire row/column is selected)
+            foreach (DataGridViewCell cell in dataGridViewHistory.SelectedCells)
+                unique_row_indices.Add(cell.RowIndex);
+
+            return unique_row_indices;
+        }
+        private SortedSet<int> getSelectedColumnIndicesFromHistoryGridView()
+        {
+            SortedSet<int> unique_col_indices = new SortedSet<int>();
+            
+            // Generate a sorted set of unique column indices. This accomplishes multiple goals:
+            // - We want the set to be sorted
+            // - We want to only output a given column index once, even if multiple cells are selected for a given row/column (DataGridView.SelectedRows and DataGridView.SelectedColumns are empty unless an entire row/column is selected)
+            foreach (DataGridViewCell cell in dataGridViewHistory.SelectedCells)
+                unique_col_indices.Add(cell.ColumnIndex);
+
+            return unique_col_indices;
+        }
+
+
+        // Get a list of HistoryItems that are currently considered to be selected in the history gridview
+        // This method works even if only partial rows are selected. The returned list is always sorted
+        // based on the row index of each item in the history grid, and contains no null entries.
+        private List<HistoryItem> getSelectedHistoryItemsFromHistoryGridView()
+        {
+            List<HistoryItem> selected_items = new List<HistoryItem>();
+            foreach (int row_index in getSelectedRowIndicesFromHistoryGridView())
+                if (dataGridViewHistory.Rows[row_index].DataBoundItem is HistoryItem item)
+                    selected_items.Add(item);
+
+            return selected_items;
+        }
+
+        private void removeItemsFromImgur(List<HistoryItem> itemsToRemove)
+        {
+            int count = itemsToRemove.Count;
             bool isMultipleImages = count > 1;
             int currentCount = 0;
 
             listBoxHistory.BeginUpdate();
-            List<HistoryItem> selectedItems = new List<HistoryItem>(listBoxHistory.SelectedItems.Cast<HistoryItem>());
-            foreach(HistoryItem item in selectedItems)
+            dataGridViewHistory.Enabled = false;
+
+            foreach(HistoryItem item in itemsToRemove)
             {
                 ++currentCount;
 
@@ -783,9 +823,17 @@ namespace EasyImgur
                 else
                     ShowBalloonTip(2000, "Failed", "Failed to remove " + (item.Album ? "album" : "image") + " " + balloon_image_counter_text + " from Imgur", ToolTipIcon.Error);
             }
+            
+            dataGridViewHistory.Enabled = true;
             listBoxHistory.EndUpdate();
 
             Statistics.GatherAndSend();
+        }
+
+        private void buttonRemoveFromImgur_Click(object sender, EventArgs e)
+        {            
+            List<HistoryItem> selectedItems = new List<HistoryItem>(listBoxHistory.SelectedItems.Cast<HistoryItem>());
+            removeItemsFromImgur(selectedItems);
         }
 
         private void buttonForceTokenRefresh_Click(object sender, EventArgs e)
@@ -915,6 +963,98 @@ namespace EasyImgur
         private void buttonViewLog_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(Log.LogFile);
+        }
+
+        private void dataGridViewHistory_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // If a link cell or the thumbnail cell double-clicked, open the link in a browser window
+            if (e.ColumnIndex == linkDataGridViewTextBoxColumn.Index || 
+                e.ColumnIndex == thumbnailDataGridViewImageColumn.Index)
+            {
+                if (dataGridViewHistory.Rows[e.RowIndex].DataBoundItem is HistoryItem item)
+                    System.Diagnostics.Process.Start(item.Link);
+            }
+        }
+
+        private void toolStripButtonHistoryGridCopy_Click(object sender, EventArgs e)
+        {
+            // Copy the contents of all selected cells
+            Clipboard.SetDataObject(dataGridViewHistory.GetClipboardContent());
+        }
+
+        private void toolStripButtonHistoryGridOpenLink_Click(object sender, EventArgs e)
+        {
+            foreach (HistoryItem item in getSelectedHistoryItemsFromHistoryGridView())
+                    System.Diagnostics.Process.Start(item.Link);
+        }
+
+        private void toolStripButtonHistoryGridSelectAll_Click(object sender, EventArgs e)
+        {            
+            dataGridViewHistory.SelectAll();
+        }
+
+        private void toolStripButtonHistoryGridSelectColumn_Click(object sender, EventArgs e)
+        {
+            // Cache the selected rows before changing the selection mode, because that action will reset the selection.
+            SortedSet<int> selected_cols = getSelectedColumnIndicesFromHistoryGridView();
+
+            dataGridViewHistory.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
+
+            foreach (int col_index in selected_cols)
+                dataGridViewHistory.Columns[col_index].Selected = true;
+        }
+
+        private void toolStripButtonHistoryGridSelectRow_Click(object sender, EventArgs e)
+        {
+            // Cache the selected rows before changing the selection mode, because that action will reset the selection.
+            SortedSet<int> selected_rows = getSelectedRowIndicesFromHistoryGridView();
+
+            dataGridViewHistory.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+
+            foreach (int row_index in selected_rows)
+                dataGridViewHistory.Rows[row_index].Selected = true;
+        }
+
+        private void dataGridViewHistory_MouseDown(object sender, MouseEventArgs e)
+        {
+            // In this callback we have to manually simulate the behavior that selecting a header cell will select
+            // an entire column, because the DataGridView class only allows *either* the selection mode of RowHeaderSelect
+            // or the selection mode of ColumnHeaderSelect. Both modes at the same time is not supported, but we 
+            // can fake it here by manually hit testing for row/column index -1 (i.e. the header row/column)
+            // and then changing the selection mode accordingly.
+            // This approach was copied from https://social.msdn.microsoft.com/Forums/windows/en-US/570a032e-75d6-4f36-8cf0-9553dc1f46d2/datagridview-with-columnheaderselect-and-rowheaderselect
+
+            System.Windows.Forms.DataGridView.HitTestInfo hti = dataGridViewHistory.HitTest(e.X, e.Y);
+
+            if (hti.ColumnIndex == -1 && hti.RowIndex >= 0)
+            {
+                // row header click
+                if (dataGridViewHistory.SelectionMode != DataGridViewSelectionMode.RowHeaderSelect)
+                    dataGridViewHistory.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
+            }
+            else if (hti.RowIndex == -1 && hti.ColumnIndex >= 0) 
+            {
+                // column header click
+                if (dataGridViewHistory.SelectionMode != DataGridViewSelectionMode.ColumnHeaderSelect)
+                    dataGridViewHistory.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
+            }
+        }
+
+        private void clearFromHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Disable updates while we're modifying the data source
+            dataGridViewHistory.Enabled = false;
+            
+            List<HistoryItem> selectedItems = getSelectedHistoryItemsFromHistoryGridView();            
+            foreach(HistoryItem item in selectedItems)
+                History.RemoveHistoryItem(item);
+
+            dataGridViewHistory.Enabled = true;
+        }
+
+        private void deleteFromImgurToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            removeItemsFromImgur(getSelectedHistoryItemsFromHistoryGridView());
         }
     }
 }
