@@ -2,6 +2,8 @@
 
 EasyImgur is a small and simple tool to easily upload images to imgur.com from your desktop.
 
+<a href="https://www.buymeacoffee.com/bryankeiren" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Table of Contents
 
 * [Using EasyImgur](#using-easyimgur)
