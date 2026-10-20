@@ -20,60 +20,81 @@ EasyImgur is a small and simple tool to easily upload images to imgur.com from y
 
 ### Downloading and running
 
-[Download EasyImgur](https://github.com/bkeiren/EasyImgur/releases) (zip archive) and extract the archive contents to a folder.
+1. [Download EasyImgur](https://github.com/bkeiren/EasyImgur/releases) (zip archive) and extract its contents to a folder.
+2. Run **EasyImgur.exe**. The EasyImgur icon appears in your system tray:
 
-Run *EasyImgur.exe* to start the application. The EasyImgur icon will appear in your system tray (if this is your first time running EasyImgur, EI will save its location and start automatically next time you start your computer):
-> ![](assets/guide/tray_icon.png)
+   ![EasyImgur icon in the system tray](assets/guide/tray_icon.png)
+
+> [!TIP]
+> The first time you run EasyImgur, it registers itself to start automatically with Windows. You can turn this off with the **Launch EasyImgur at Windows start** setting.
 
 ### Uploading from the tray
 
-Open the EasyImgur menu by right-clicking on the tray icon:
-> ![](assets/guide/tray_icon_context_menu.png)
+Right-click the tray icon to open the EasyImgur menu:
 
-**Upload a file or a clipboard image** (a screenshot or a text URL that you've copied, for example) anonymously by using the *Upload from file...* and *Upload from clipboard* options.
+![EasyImgur tray menu](assets/guide/tray_icon_context_menu.png)
 
-### Uploading with the explorer context menu
+| Menu option | What it uploads |
+|---|---|
+| **Upload from file...** | An image file you pick, uploaded anonymously. |
+| **Upload from clipboard** | The image or image URL on your clipboard (a screenshot or a copied link, for example), uploaded anonymously. |
+| **Upload from file... (to account)** | Same as above, but to your Imgur account. Requires [authorization](#uploading-to-your-imgur-account). |
+| **Upload from clipboard (to account)** | Same as above, but to your Imgur account. Requires [authorization](#uploading-to-your-imgur-account). |
 
-You can also upload images or folders with images using the context menu of your file explorer. Note that you will need to tick **Enable context menu** in the settings to access these features.
+### Uploading from File Explorer
 
-**Upload a file** by right clicking it and selecting **Upload to Imgur** or **Upload to Imgur (anonymous)** from the context menu.
-> ![](assets/guide/file_context_menu.png)
+You can also upload images, or folders of images, straight from the File Explorer context menu.
 
-**Upload an album** from your file explorer by right clicking a folder and selecting **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. Any pictures in the folder (**excluding** the pictures in subfolders) will be uploaded and placed into an album.
-> ![](assets/guide/folder_context_menu.png)
+> [!NOTE]
+> These options only appear after you tick **Enable context menu** in the settings.
 
-## Using EasyImgur to upload images to your Imgur account
+**To upload a file**, right-click it and select **Upload to Imgur** or **Upload to Imgur (anonymous)**:
 
-To upload images to your Imgur account, you must first authorize EasyImgur to access your account.
+![File context menu](assets/guide/file_context_menu.png)
 
-1. Open the settings dialog by selecting *Settings* from the context menu shown when right-clicking on the EasyImgur icon in the tray. This opens the EasyImgur window. Go to the *Account* tab:
-    > ![](assets/guide/settings_account.png)
+**To upload a folder as an album**, right-click it and select **Upload to Imgur as album** or **Upload to Imgur as album (anonymous)**. All images directly inside the folder are uploaded into a single album. Images in subfolders are **not** included.
 
-2. Select *Authorize this app...*. This will open the Imgur application authorization page in your browser. If you are already logged in, you will see this message:
-    > ![](assets/guide/imgur_authorization_page.png)
+![Folder context menu](assets/guide/folder_context_menu.png)
 
-3. Select *Allow* and copy the code that is displayed on the next page.
+## Uploading to your Imgur account
 
-4. Go back to the EasyImgur window. You will see that a popup has been opened:
-    > ![](assets/guide/authorization_pin_dialog.png)
-   
-   Paste the code in the text box and select *OK*. The EasyImgur application may appear unresponsive while it is receiving authorization from Imgur.
+To upload images to your own Imgur account, you first need to authorize EasyImgur to access it.
 
-5. A balloon popup will be shown to inform you that the authorization was successful. The EasyImgur window will now display *Status: Authorized*:
-    > ![](assets/guide/settings_account_authorized.png)
-    
-    **NOTE**: To revoke access at any time, you can visit https://imgur.com/account/settings/apps, where you can manage all apps that have access to your account. Keep in mind that the *Forget Tokens* button in EasyImgur only discards the current codes needed to access your account. **If you suspect that someone has gained access to the authorized tokens, you need to revoke access from the aforementioned Imgur settings page!**
+1. Right-click the EasyImgur tray icon and select **Settings**. In the window that opens, go to the **Account** tab:
 
-6. You can now use the *Upload from file... (to account)* and *Upload from clipboard (to account)* options from the EasyImgur menu.
+   ![Account tab in the settings window](assets/guide/settings_account.png)
 
-**NOTE**: EasyImgur will periodically retrieve new authorization codes from Imgur. When this happens, a balloon popup will appear to inform you that EasyImgur has successfully done so (or not, if that should be the case). This popup can be disabled from the settings tab.
+2. Select **Authorize this app...**. Imgur's authorization page opens in your browser. If you're already logged in, you'll see this:
+
+   ![Imgur authorization page](assets/guide/imgur_authorization_page.png)
+
+3. Select **Allow**, then copy the code shown on the next page.
+
+4. Switch back to EasyImgur, where a popup is now waiting for the code:
+
+   ![Authorization code dialog](assets/guide/authorization_pin_dialog.png)
+
+   Paste the code and select **OK**. EasyImgur may appear unresponsive for a moment while it receives authorization from Imgur.
+
+5. A notification confirms that authorization succeeded, and the Account tab now shows **Status: Authorized**:
+
+   ![Account tab showing Status: Authorized](assets/guide/settings_account_authorized.png)
+
+6. You can now use the **(to account)** upload options in the tray menu.
+
+> [!WARNING]
+> **Forget Tokens** in EasyImgur only discards the codes stored on your computer. It does not revoke EasyImgur's access. If you suspect someone has gained access to your tokens, revoke access on Imgur's [app settings page](https://imgur.com/account/settings/apps), where you can manage every app connected to your account.
+
+> [!NOTE]
+> EasyImgur periodically refreshes its authorization with Imgur and shows a notification each time it does (or if it fails). You can turn these notifications off with the **Show notification on token refresh** setting.
 
 ## Viewing uploaded images
 
-Uploaded images (and their URLs) can be found under the ***History*** tab. From here you can view your previously uploaded images and their details. This tab also contains convenient controls that allow you to:
-  - Remove an uploaded image from Imgur.
-  - Remove an uploaded image from your local history database.
-  - Open an image's link in your browser.
+The **History** tab lists everything you've uploaded, along with each image's URL and details. From there you can:
+
+- Open an image's link in your browser.
+- Delete an image from Imgur.
+- Remove an image from your local history (it stays on Imgur).
 
 ## Settings
 
@@ -97,14 +118,15 @@ EasyImgur has a number of different customizable settings. These can be accessed
 
 ## History
 
-Your upload history with EasyImgur can be accessed through the *History* tab in the EasyImgur settings window:
+Your EasyImgur upload history is on the **History** tab of the settings window. To open it, right-click the EasyImgur tray icon, select **Settings**, then go to the **History** tab:
 
-> ![](assets/guide/settings_history.png)
+![History tab in the settings window](assets/guide/settings_history.png)
 
-This window allows you to:
-- View a list of your uploads
-- View previews and a summary of information of your uploads
-- Remove uploads from Imgur
+From the History tab you can:
+
+- Browse a list of all your uploads
+- See a preview and details for each upload
+- Delete uploads from Imgur
 
 ## Running in portable mode
 
