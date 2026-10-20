@@ -81,52 +81,19 @@ EasyImgur has a number of different customizable settings. These can be accessed
 
 ![General settings tab screenshot](assets/guide/settings_general.png)
 
-#### Copy links to clipboard
-Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V).
-
-#### As HTTPS links
-Determines whether uploaded image links will be put on the clipboard as HTTPS links or HTTP links (if possible at all)
-
-#### Clear clipboard immediately on upload
-Determines whether the clipboard will be cleared after uploading from it.
-
-#### Upload multiple images as gallery
-Determines whether multiple images upload using the file dialog window are uploaded as separate images or contained in an album.
-
-#### Preferred image format
-This option gives a hint to Imgur as to what image format is preferred. Note that it only hints at this by providing the source image in a certain format. Imgur can (and sometimes will) change the format to something else if it chooses to do so.
-
-#### Use this ... format
-These define two strings that are used as the title and description for every uploaded image. The strings can contain special symbols which are converted to set values before uploading. For a complete set of symbols, click the *Format help* button.
-
-##### Example:
-
-Format used:
-
-    Image_%n%_%date%_%time%
-    
-Title of the uploaded image:
-
-    Image_0_19-08-2013_13:37:00
-    
-In this example, `%n%` is converted to an integer denoting how many images have currently been uploaded, `%date` is converted to the current date in DD-MM-YYYY format, and `%time%` is converted to the current time in HH-MM-SS format.
-
-#### Launch EasyImgur at Windows start
-This determines whether EasyImgur should have a registry key set to allow it to be started when Windows is started. Note that if you move the EasyImgur.exe file, the registry path will become incorrect and a manual start of EasyImgur is required to restore it (EasyImgur detects this and can take care of that when it starts).
-
-#### Show notification on token refresh
-If you have authorized EasyImgur to use your Imgur account, it can notify you each time it refreshes its authentication tokens. Enabling this option will allow EasyImgur to show a balloon tooltip pop up from your icon tray each time it refreshes its tokens.
-
-#### Show notification on startup
-EasyImgur will by default show a notification when it starts up to let you know it's ready for use. You can disable this from the settings tab.
-
-#### Enable context menu
-This option determines whether the following options are added to the file context menu (right click menu) to allow even easier uploading!:
-    - Upload to Imgur
-    - Upload to Imgur (anonymous)
-	
-#### Enable telemetry
-This option determines whether EasyImgur will send telemetry data regarding how it's being used. This data is used to determine how we can improve EasyImgur.
+| Setting | Description |
+|---|---|
+| **Copy links to clipboard** | Determines whether links to images that have successfully been uploaded are automatically placed on your clipboard (ready to be pasted somewhere with Ctrl+V). |
+| **As HTTPS links** | Determines whether uploaded image links will be put on the clipboard as HTTPS links or HTTP links (if possible at all). |
+| **Clear clipboard immediately on upload** | Determines whether the clipboard will be cleared after uploading from it. |
+| **Upload multiple images as gallery** | Determines whether multiple images uploaded using the file dialog window are uploaded as separate images or contained in an album. |
+| **Preferred image format** | This option gives a hint to Imgur as to what image format is preferred. Note that it only hints at this by providing the source image in a certain format. Imgur can (and sometimes will) change the format to something else if it chooses to do so. |
+| **Use this ... format** | These define two strings that are used as the title and description for every uploaded image. The strings can contain special symbols which are converted to set values before uploading. For a complete set of symbols, click the *Format help* button.<br><br>**Example:** the format `Image_%n%_%date%_%time%` produces the title `Image_0_19-08-2013_13:37:00`. Here `%n%` is converted to an integer denoting how many images have currently been uploaded, `%date%` is converted to the current date in DD-MM-YYYY format, and `%time%` is converted to the current time in HH-MM-SS format. |
+| **Launch EasyImgur at Windows start** | This determines whether EasyImgur should have a registry key set to allow it to be started when Windows is started. Note that if you move the EasyImgur.exe file, the registry path will become incorrect and a manual start of EasyImgur is required to restore it (EasyImgur detects this and can take care of that when it starts). |
+| **Show notification on token refresh** | If you have authorized EasyImgur to use your Imgur account, it can notify you each time it refreshes its authentication tokens. Enabling this option will allow EasyImgur to show a balloon tooltip pop up from your icon tray each time it refreshes its tokens. |
+| **Show notification on startup** | EasyImgur will by default show a notification when it starts up to let you know it's ready for use. You can disable this from the settings tab. |
+| **Enable context menu** | This option determines whether the following options are added to the file context menu (right click menu) to allow even easier uploading:<br>• Upload to Imgur<br>• Upload to Imgur (anonymous) |
+| **Enable telemetry** | This option determines whether EasyImgur will send telemetry data regarding how it's being used. This data is used to determine how we can improve EasyImgur. |
 
 ## History
 
